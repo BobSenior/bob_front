@@ -1,16 +1,21 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Body, Header, Profile } from "./style";
+import { Route, Routes } from "react-router-dom";
+
+const Apple = lazy(() => import("../../pages/Apple/Apple"));
 
 const Main = () => {
   return (
     <div>
       <Header>
-        <div>
-          <span>밥선배</span>
-          <Profile></Profile>
-        </div>
+        <span>밥선배</span>
+        <Profile></Profile>
       </Header>
-      <Body></Body>
+      <Body>
+        <Routes>
+          <Route path={"/"} element={<Apple />} />
+        </Routes>
+      </Body>
     </div>
   );
 };
