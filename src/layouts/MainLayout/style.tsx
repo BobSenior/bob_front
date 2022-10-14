@@ -8,6 +8,8 @@ export const Header = styled.header`
   text-align: center;
   & span {
     font-size: 30px;
+    color: black;
+    cursor: default;
   }
 `;
 
@@ -21,14 +23,16 @@ export const ProfileImg = styled.img`
 `;
 
 export const Body = styled.body`
-  border-top: 40px;
-  height:4000px;
+  padding-top: 38px;
+  padding-bottom: 35px;
 `;
 
 export const LinkedButton = styled.div`
-  padding: 10px 20px;
+  padding: 15px 30px;
   border-radius: 6px;
   font-size: 0.75em;
+  color: black;
+  cursor: default;
   :hover {
     background-color: slategrey;
   }
@@ -37,30 +41,31 @@ export const LinkedButton = styled.div`
 export const ProfileMenu = styled.div`
   position: absolute;
   top: 35px;
-  right: 30px;
-  diplay: flex;
+  right: 8px;
   flex-direction: column;
   align-items: center;
   background-color: white;
   border-radius: 5px;
-  
+
   ${LinkedButton}
 `;
 
-
 export const Bottom = styled.div`
   display: flex;
-  justify-content: space-around;
   position: fixed;
   bottom: 0;
   width: 100%;
   height: 35px;
-  background-color: #b870e8;
-  
+  background-color: azure;
+  cursor: default;
   & div {
-    min-width: 35px;
+    flex: 1 1 auto;
     height: 100%;
     text-align: center;
-    
+    :hover {
+      color: white;
+      background-color: slategrey;
+      border-radius: 5px;
+    }
   }
 `;
