@@ -9,24 +9,30 @@ import {
 } from "./style";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
+import SearchBox from "../../components/SearchBox";
 
 const emailExample = "lws6665@naver.com";
 
 const Main = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showSearchBar, setShowSearchBar] = useState(false);
   const navigate = useNavigate();
   const onClickProfileImg = useCallback(() => {
     setShowProfileMenu((prevState) => {
       return !prevState;
     });
   }, []);
-
+  const onClickSearchButton = useCallback(() => {
+    setShowSearchBar((prevState) => {
+      return !prevState;
+    });
+  }, []);
   const onClickLogOut = useCallback(() => {
     setShowProfileMenu(false);
   }, []);
 
   return (
-    <div>
+    <>
       <Header>
         <span
           onClick={() => {
@@ -53,6 +59,11 @@ const Main = () => {
             <LinkedButton onClick={onClickLogOut}>로그아웃</LinkedButton>
           </ProfileMenu>
         )}
+        {showSearchBar && (
+          <div>
+            <SearchBox />
+          </div>
+        )}
       </Header>
       <Body>
         <Outlet />
@@ -72,7 +83,7 @@ const Main = () => {
         >
           내 약속
         </div>
-        <div>검색</div>
+        <div onClick={onClickSearchButton}>검색</div>
         <div
           onClick={() => {
             navigate("apple");
@@ -81,7 +92,7 @@ const Main = () => {
           예시
         </div>
       </Bottom>
-    </div>
+    </>
   );
 };
 

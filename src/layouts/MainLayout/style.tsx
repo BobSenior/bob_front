@@ -1,32 +1,5 @@
 import styled from "@emotion/styled/macro";
 
-export const Header = styled.header`
-  background-color: #23a1bd;
-  height: 38px;
-  position: fixed;
-  width: 100%;
-  text-align: center;
-  & span {
-    font-size: 30px;
-    color: black;
-    cursor: default;
-  }
-`;
-
-export const ProfileImg = styled.img`
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  border-radius: 28px;
-  top: 5.5px;
-  right: 8px;
-`;
-
-export const Body = styled.body`
-  padding-top: 38px;
-  padding-bottom: 35px;
-`;
-
 export const LinkedButton = styled.div`
   padding: 15px 30px;
   border-radius: 6px;
@@ -46,8 +19,36 @@ export const ProfileMenu = styled.div`
   align-items: center;
   background-color: white;
   border-radius: 5px;
-
   ${LinkedButton}
+`;
+
+export const Header = styled.header`
+  background-color: #23a1bd;
+  height: 38px;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+
+  & span {
+    font-size: 30px;
+    color: black;
+    cursor: default;
+  }
+  ${ProfileMenu}
+`;
+
+export const ProfileImg = styled.img`
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 28px;
+  top: 5.5px;
+  right: 8px;
+`;
+
+export const Body = styled.body`
+  padding-top: 38px;
+  padding-bottom: 35px;
 `;
 
 export const Bottom = styled.div`
