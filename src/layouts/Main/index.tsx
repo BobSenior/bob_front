@@ -36,7 +36,7 @@ const Main = () => {
       <Header>
         <span
           onClick={() => {
-            navigate("/main");
+            navigate("..");
           }}
         >
           밥선배
@@ -71,7 +71,7 @@ const Main = () => {
       <Bottom>
         <div
           onClick={() => {
-            navigate("main");
+            navigate("");
           }}
         >
           메인
