@@ -1,15 +1,42 @@
 import styled from "@emotion/styled/macro";
-import { jsx, css, Global, ClassNames } from "@emotion/react";
+import { css } from "@emotion/react";
 
-export const SpanFont = css`
-  font-size: 0.2em;
+export const SpanCSS = css`
+  font-size: 0.5em;
+`;
+
+export const HashTagContainer = styled.div`
+  display: flex;
+`;
+
+export const ArrowDiv = styled.div`
+  width: 0;
+  height: 0;
+  border-bottom: 8px solid #23a1bd;
+  border-top: 8px solid transparent;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-radius: 3px;
+`;
+
+export const BottomRightDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  font-size: xx-small;
+`;
+export const BottomLeftDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 0.45em;
+  justify-content: space-around;
 `;
 
 export const TopContext = styled.div`
   display: flex;
   width: 100%;
-  background-color: RGB(35, 161, 189, 15%);
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-end;
   & span {
     display: block;
@@ -18,7 +45,6 @@ export const TopContext = styled.div`
 export const MiddleContext = styled.div`
   display: flex;
   width: fit-content;
-  background-color: RGB(35, 161, 189, 15%);
   align-items: flex-end;
   & span {
     display: block;
@@ -26,21 +52,15 @@ export const MiddleContext = styled.div`
 `;
 export const BottomContext = styled.div`
   display: flex;
-  width: fit-content;
-  flex-direction: column;
   align-content: center;
-  background-color: RGB(35, 161, 189, 15%);
-  & span {
-    display: block;
-    font-size: 0.5em;
-  }
+  justify-content: space-between;
 `;
 
 export const PromiseImg = styled.img`
   display: block;
   width: 80px;
   height: 80px;
-  background-color: red;
+  background-color: #23a1bd;
 `;
 
 export const PromiseContexts = styled.div`
@@ -62,10 +82,18 @@ export const PromiseTail = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  align-items: center;
 `;
 
 export const PBox = styled.div`
-  min-width: 320px;
+  width: 310px;
   min-height: 50px;
   font-family: "HanziPen SC";
+  padding: 5px;
+  border: rgba(0, 0, 0, 0.1) solid 0.5px;
+  border-radius: 3px;
+  height: fit-content;
+  :hover {
+    border: rgba(0, 0, 0, 0.5) solid 0.5px;
+  }
 `;

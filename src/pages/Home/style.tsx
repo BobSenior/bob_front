@@ -58,7 +58,7 @@ export const JoinDiv = styled.div`
   flex-direction: column;
   width: 50%;
   min-width: 320px;
-  padding: 20px 0px;
+  padding: 20px 0;
   row-gap: 5px;
   justify-content: center;
 `;
@@ -73,4 +73,5 @@ export const Button = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 350px;
+  cursor: default;
 `;

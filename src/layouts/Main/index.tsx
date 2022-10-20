@@ -42,7 +42,7 @@ const Main = () => {
       <Header>
         <span
           onClick={() => {
-            navigate("..");
+            navigate("/");
           }}
         >
           밥선배

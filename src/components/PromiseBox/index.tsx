@@ -1,4 +1,14 @@
-import React from "react";
+/** @jsxImportSource @emotion/react */
+import React, {
+  lazy,
+  memo,
+  useState,
+  Suspense,
+  useCallback,
+  MouseEvent,
+  useRef,
+  useMemo,
+} from "react";
 import {
   PBox,
   PromiseContexts,
@@ -8,11 +18,16 @@ import {
   TopContext,
   MiddleContext,
   BottomContext,
-  SpanFont,
+  BottomRightDiv,
+  BottomLeftDiv,
+  HashTagContainer,
+  ArrowDiv,
+  SpanCSS,
 } from "./style";
-import { css } from "@emotion/react";
+import { promiseInfo } from "../../types/db";
+const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 
-const userInfo = {
+const p1: promiseInfo = {
   name: "라이언",
   ID: "22",
   title: "밥먹을 사람!",
@@ -22,34 +37,61 @@ const userInfo = {
 };
 
 const PromiseBox = () => {
+  const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
+  const detailBoxRef = useRef<HTMLDivElement>(null);
+
+  const onClickBox = useCallback(() => {
+    setToggleDetailsBox((prevState) => {
+      return !prevState;
+    });
+  }, []);
+
+  useMemo(() => {
+    window.scrollTo(
+      window.innerWidth,
+      detailBoxRef.current?.offsetTop
+        ? detailBoxRef.current?.offsetTop - 30
+        : window.innerHeight
+    );
+  }, [toggleDetailsBox]);
+
   return (
-    <PBox>
+    <PBox onClick={onClickBox}>
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
           <TopContext>
-            <span style={{ fontSize: "0.3em" }}>제목: </span>
-            <span>{userInfo.title}</span>
-            <span css={SpanFont}>2/4</span>
+            <span>{p1.title}</span>
+            <span>2/4</span>
           </TopContext>
           <MiddleContext>
-            <span style={{ fontSize: "0.3em" }}>글쓴이: </span>
-            <span>{userInfo.name}</span>
-            <span style={{ fontSize: "0.5em" }}>{userInfo.major}</span>
-            <span style={{ fontSize: "0.5em" }}>{userInfo.ID}</span>
+            <span>{p1.name}</span>
+            <span css={SpanCSS}>{p1.major}</span>
+            <span css={SpanCSS}>{p1.ID}</span>
           </MiddleContext>
           <BottomContext>
-            <span>{userInfo.place}</span>
-            <span>{userInfo.time}</span>
+            <BottomLeftDiv>
+              <span>{p1.place}</span>
+              <span>{p1.time}</span>
+            </BottomLeftDiv>
+            <BottomRightDiv>
+              <span>대기자수: 1</span>
+              <span>작성일자</span>
+            </BottomRightDiv>
           </BottomContext>
         </PromiseContexts>
       </PromiseHead>
-      <PromiseTail>
-        <div>!@#</div>
-        <div>12</div>
+      <PromiseTail ref={detailBoxRef}>
+        <HashTagContainer>#123</HashTagContainer>
+        <ArrowDiv />
       </PromiseTail>
+      {toggleDetailsBox && (
+        <Suspense fallback={<div>로딩....</div>}>
+          <PromiseDetailsBox data={p1} />
+        </Suspense>
+      )}
     </PBox>
   );
 };
 
-export default PromiseBox;
+export default memo(PromiseBox);

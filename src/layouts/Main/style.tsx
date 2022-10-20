@@ -4,7 +4,7 @@ export const MainBox = styled.div`
   display: flex;
   justify-content: center;
   & div {
-    max-width: 960px;
+    max-width: 1000px;
   }
 `;
 
@@ -27,11 +27,12 @@ export const ProfileMenu = styled.div`
   right: 8px;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 5px;
   ${Button} {
-    font-size: 0.75em;
+    font-size: 0.8em;
     padding: 15px 30px;
+    width: 100px;
   }
 `;
 
@@ -68,7 +69,7 @@ export const Bottom = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 35px;
+  height: 38px;
   background-color: rgba(255, 255, 255, 0.75);
   cursor: default;
   ${Button}
