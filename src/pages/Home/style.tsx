@@ -24,10 +24,7 @@ export const Section = styled.section`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  padding-top: 80px;
-  padding-right: 24px;
-  padding-bottom: 80px;
-  padding-left: 24px;
+  padding: 80px 24px;
   background-attachment: fixed;
   background-color: #b6d1d7;
   color: #23a1bd;

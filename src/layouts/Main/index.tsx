@@ -3,11 +3,12 @@ import {
   Body,
   Bottom,
   Header,
-  LinkedButton,
   ProfileImg,
   ProfileMenu,
+  MainBox,
+  Button,
 } from "./style";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import SearchBox from "../../components/SearchBox";
 
@@ -17,10 +18,15 @@ const Main = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const navigate = useNavigate();
+
   const onClickProfileImg = useCallback(() => {
     setShowProfileMenu((prevState) => {
       return !prevState;
     });
+  }, []);
+  const onClickProfileButton = useCallback(() => {
+    setShowProfileMenu(false);
+    navigate("profile");
   }, []);
   const onClickSearchButton = useCallback(() => {
     setShowSearchBar((prevState) => {
@@ -32,7 +38,7 @@ const Main = () => {
   }, []);
 
   return (
-    <>
+    <MainBox>
       <Header>
         <span
           onClick={() => {
@@ -47,16 +53,8 @@ const Main = () => {
         ></ProfileImg>
         {showProfileMenu && (
           <ProfileMenu>
-            <Link to={"profile"} style={{ textDecoration: "none" }}>
-              <LinkedButton
-                onClick={() => {
-                  setShowProfileMenu(false);
-                }}
-              >
-                프로필 수정
-              </LinkedButton>
-            </Link>
-            <LinkedButton onClick={onClickLogOut}>로그아웃</LinkedButton>
+            <Button onClick={onClickProfileButton}>프로필 수정</Button>
+            <Button onClick={onClickLogOut}>로그아웃</Button>
           </ProfileMenu>
         )}
         {showSearchBar && (
@@ -69,30 +67,23 @@ const Main = () => {
         <Outlet />
       </Body>
       <Bottom>
-        <div
+        <Button
           onClick={() => {
             navigate("");
           }}
         >
-          메인
-        </div>
-        <div
+          <span>메인</span>
+        </Button>
+        <Button
           onClick={() => {
-            navigate("mypromises");
+            navigate("plans");
           }}
         >
-          내 약속
-        </div>
-        <div onClick={onClickSearchButton}>검색</div>
-        <div
-          onClick={() => {
-            navigate("apple");
-          }}
-        >
-          예시
-        </div>
+          <span>내 약속</span>
+        </Button>
+        <Button onClick={onClickSearchButton}>검색</Button>
       </Bottom>
-    </>
+    </MainBox>
   );
 };
 

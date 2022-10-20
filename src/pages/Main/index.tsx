@@ -1,28 +1,13 @@
 import React from "react";
-import { PromiseDiv, PromiseList } from "./style";
-import SearchBox from "../../components/SearchBox";
+import { PromiseList } from "./style";
+import PromiseBox from "../../components/PromiseBox";
 
 const Main = () => {
   return (
     <PromiseList>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
-      <PromiseDiv></PromiseDiv>
+      <PromiseBox></PromiseBox>
+      <PromiseBox></PromiseBox>
+      <PromiseBox></PromiseBox>
     </PromiseList>
   );
 };

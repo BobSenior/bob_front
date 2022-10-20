@@ -1,13 +1,23 @@
 import styled from "@emotion/styled/macro";
 
-export const LinkedButton = styled.div`
-  padding: 15px 30px;
-  border-radius: 6px;
-  font-size: 0.75em;
-  color: black;
-  cursor: default;
+export const MainBox = styled.div`
+  display: flex;
+  justify-content: center;
+  & div {
+    max-width: 960px;
+  }
+`;
+
+export const Button = styled.div`
+  flex: 1 1 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   :hover {
-    background-color: slategrey;
+    background-color: #23a1bd;
+    color: white;
+    border-radius: 5px;
   }
 `;
 
@@ -19,22 +29,10 @@ export const ProfileMenu = styled.div`
   align-items: center;
   background-color: white;
   border-radius: 5px;
-  ${LinkedButton}
-`;
-
-export const Header = styled.header`
-  background-color: #23a1bd;
-  height: 38px;
-  position: fixed;
-  width: 100%;
-  text-align: center;
-
-  & span {
-    font-size: 30px;
-    color: black;
-    cursor: default;
+  ${Button} {
+    font-size: 0.75em;
+    padding: 15px 30px;
   }
-  ${ProfileMenu}
 `;
 
 export const ProfileImg = styled.img`
@@ -46,7 +44,21 @@ export const ProfileImg = styled.img`
   right: 8px;
 `;
 
-export const Body = styled.body`
+export const Header = styled.div`
+  background-color: rgba(255, 255, 255, 0.75);
+  height: 38px;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  & span {
+    font-size: 30px;
+    color: black;
+    cursor: default;
+  }
+  ${ProfileMenu}
+`;
+
+export const Body = styled.div`
   padding-top: 38px;
   padding-bottom: 35px;
 `;
@@ -57,16 +69,7 @@ export const Bottom = styled.div`
   bottom: 0;
   width: 100%;
   height: 35px;
-  background-color: azure;
+  background-color: rgba(255, 255, 255, 0.75);
   cursor: default;
-  & div {
-    flex: 1 1 auto;
-    height: 100%;
-    text-align: center;
-    :hover {
-      color: white;
-      background-color: slategrey;
-      border-radius: 5px;
-    }
-  }
+  ${Button}
 `;

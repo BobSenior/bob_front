@@ -1,20 +1,11 @@
 import React from "react";
 import { Button, Column, Container, Header, JoinDiv, Section } from "./style";
-import { css } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        color: #23a1bd;
-      `}
-    >
+    <div>
       <Header>
         {/*<nav>*/}
         {/*  <a href="/story">*/}
