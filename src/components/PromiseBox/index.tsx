@@ -27,6 +27,7 @@ const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { ProgressBar } from "react-loader-spinner";
+import { css } from "@emotion/react";
 
 interface props {
   data: promiseInfo;
@@ -99,23 +100,23 @@ const PromiseBox = ({ data, isLoading }: props) => {
         <ArrowDiv />
       </PromiseTail>
       {toggleDetailsBox && (
-        <>
-          <Suspense
-            fallback={
-              <ProgressBar
-                height="80"
-                width="80"
-                ariaLabel="progress-bar-loading"
-                wrapperStyle={{}}
-                wrapperClass="progress-bar-wrapper"
-                borderColor="#F4442E"
-                barColor="#51E5FF"
-              />
-            }
-          >
-            <PromiseDetailsBox data={data} />
-          </Suspense>
-        </>
+        <Suspense
+          fallback={
+            <ProgressBar
+              height="80"
+              width="80"
+              ariaLabel="progress-bar-loading"
+              wrapperStyle={{
+                width: "100%",
+              }}
+              wrapperClass="progress-bar-wrapper"
+              borderColor=""
+              barColor="#23a1bd"
+            />
+          }
+        >
+          <PromiseDetailsBox data={data} />
+        </Suspense>
       )}
     </PBox>
   );

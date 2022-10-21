@@ -1,6 +1,42 @@
-# Getting Started with Create React App
+# 밥선배 프론트 현황(10/21)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 1. 패키지 현황
+
+ "dependencies":\
+    "@emotion/babel-preset-css-prop": "^11.10.0"\
+    "@emotion/styled": "^11.10.4"\
+    "@testing-library/jest-dom": "^5.16.5"\
+    "@testing-library/react": "^13.4.0"\
+    "@testing-library/user-event": "^13.5.0"\
+    "@types/color-hash": "^1.0.2"\
+    "@types/gravatar": "^1.8.3"\
+    "@types/jest": "^27.5.2"\
+    "@types/node": "^16.11.68"\
+    "@types/react": "^18.0.21"\
+    "@types/react-dom": "^18.0.6"\
+    "axios": "^1.1.3"\
+    ["color-hash"](https://github.com/zenozeng/color-hash#readme): "^2.0.1" - 문자열 해쉬로 색 추출\
+    "gravatar": "^1.8.2"\
+    "react": "^18.2.0"\
+    "react-dom": "^18.2.0"\
+    ["react-loading-skeleton"](https://github.com/dvtng/react-loading-skeleton): "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면. 서버 사이드 렌더링 안해서 나중에 뺄 수 있음.\
+    "react-router-dom": "^6.4.2"\
+    "react-scripts": "5.0.1"\
+    "swr": "^1.3.0"\
+    "typescript": "^4.8.4"\
+    "web-vitals": "^2.1.4
+
+ "devDependencies":\
+    "@emotion/react": "^11.10.4"\
+    "prettier": "2.7.1"\
+    ["react-loader-spinner"](https://mhnpd.github.io/react-loader-spinner/): "^5.3.4" - 로딩중에 뜨는 spinner들 모음
+
+### 2. 유의 사항
+
+css props 사용 시 소스파일 맨 위에 아래 줄 추가해야함.\
+`````/** @jsxImportSource @emotion/react */`````
+
+
 
 ## Available Scripts
 

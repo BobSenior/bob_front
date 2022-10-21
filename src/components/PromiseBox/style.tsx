@@ -85,13 +85,16 @@ export const PromiseHead = styled.div`
 export const PromiseTail = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
   align-items: center;
   padding-top: 5px;
 `;
 
 export const PBox = styled.div`
-  width: 310px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: center;
+  width: 320px;
   min-height: 50px;
   font-family: "HanziPen SC";
   padding: 5px;

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useCallback, MouseEvent, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   ContentSection,
   Footer,
@@ -16,7 +16,6 @@ import {
 import { Button } from "../../pages/Home/style";
 import { promiseInfo } from "../../types/db";
 import ColorHash from "color-hash";
-import { css } from "@emotion/react";
 
 interface props {
   data: promiseInfo;
@@ -27,7 +26,7 @@ const PromiseDetailsBox = ({ data }: props) => {
   const [participateIn, setParticipateIn] = useState(false);
   const onClickParticipationButton = useCallback(() => {
     if (participateIn) return;
-    //대충 참가신청 과정
+    //TODO:참가 신청 API 연결 필요
 
     setParticipateIn(true);
   }, []);

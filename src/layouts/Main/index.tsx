@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, Suspense, lazy } from "react";
 import {
   Body,
   Bottom,
@@ -8,9 +8,13 @@ import {
   MainBox,
   Button,
 } from "./style";
-import { Outlet, useNavigate } from "react-router-dom";
+const Promises = lazy(() => import("../../pages/Promises"));
+const Profile = lazy(() => import("../../pages/Profile"));
+const MyPlans = lazy(() => import("../../pages/MyPlans"));
+import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import SearchBox from "../../components/SearchBox";
+import Loading from "../../pages/Loading";
 
 const emailExample = "lws6665@naver.com";
 
@@ -65,7 +69,13 @@ const Main = () => {
         )}
       </Header>
       <Body>
-        <Outlet />
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path={""} element={<Promises />} />
+            <Route path={"profile"} element={<Profile />} />
+            <Route path={"myplans"} element={<MyPlans />} />
+          </Routes>
+        </Suspense>
       </Body>
       <Bottom>
         <Button
