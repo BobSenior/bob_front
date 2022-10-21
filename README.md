@@ -19,7 +19,7 @@
     "gravatar": "^1.8.2"\
     "react": "^18.2.0"\
     "react-dom": "^18.2.0"\
-    ["react-loading-skeleton"](https://github.com/dvtng/react-loading-skeleton): "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면. 서버 사이드 렌더링 안해서 나중에 뺄 수 있음.\
+    ["react-loading-skeleton"](https://github.com/dvtng/react-loading-skeleton): "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면.\
     "react-router-dom": "^6.4.2"\
     "react-scripts": "5.0.1"\
     "swr": "^1.3.0"\
