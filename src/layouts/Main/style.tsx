@@ -46,7 +46,7 @@ export const ProfileImg = styled.img`
 `;
 
 export const Header = styled.div`
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(182, 209, 215, 0.75);
   height: 38px;
   position: fixed;
   width: 100%;
@@ -60,8 +60,11 @@ export const Header = styled.div`
 `;
 
 export const Body = styled.div`
+  display: flex;
+  justify-content: center;
   padding-top: 38px;
   padding-bottom: 35px;
+  width: 100%;
 `;
 
 export const Bottom = styled.div`
@@ -70,7 +73,7 @@ export const Bottom = styled.div`
   bottom: 0;
   width: 100%;
   height: 38px;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(182, 209, 215, 0.75);
   cursor: default;
   ${Button}
 `;

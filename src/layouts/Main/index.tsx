@@ -77,7 +77,7 @@ const Main = () => {
         </Button>
         <Button
           onClick={() => {
-            navigate("plans");
+            navigate("myplans");
           }}
         >
           <span>내 약속</span>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Column, PromiseList } from "./style";
+import { PromisesList, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
 import { promiseInfo } from "../../types/db";
 
@@ -14,7 +14,7 @@ const p1: promiseInfo = {
 
 const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState(3);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const recountColumns = () => {
     let column = Math.floor(window.innerWidth / 320);
     console.log(column);
@@ -29,8 +29,8 @@ const Main = () => {
   }, [window]);
 
   return (
-    <PromiseList>
-      <Column>
+    <PromisesWrapper>
+      <PromisesList>
         <div>
           <label>로딩 체크</label>
           <input
@@ -68,10 +68,8 @@ const Main = () => {
         <PromiseBox data={p1} isLoading={loading} />
         <PromiseBox data={p1} isLoading={loading} />
         <PromiseBox data={p1} isLoading={loading} />
-      </Column>
-      <Column></Column>
-      <Column></Column>
-    </PromiseList>
+      </PromisesList>
+    </PromisesWrapper>
   );
 };
 

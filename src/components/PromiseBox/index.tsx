@@ -4,9 +4,8 @@ import React, {
   memo,
   useState,
   useCallback,
-  MouseEvent,
+  Suspense,
   useRef,
-  useEffect,
 } from "react";
 import {
   PBox,
@@ -27,6 +26,7 @@ import { promiseInfo } from "../../types/db";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { ProgressBar } from "react-loader-spinner";
 
 interface props {
   data: promiseInfo;
@@ -40,19 +40,17 @@ const PromiseBox = ({ data, isLoading }: props) => {
 
   const onClickBox = useCallback(() => {
     setToggleDetailsBox((prevState) => {
+      if (!prevState) {
+        window.scrollTo(
+          window.innerWidth,
+          detailBoxRef.current?.offsetTop
+            ? detailBoxRef.current?.offsetTop - 30
+            : window.innerHeight
+        );
+      }
       return !prevState;
     });
   }, []);
-
-  useEffect(() => {
-    window.scrollTo(
-      window.innerWidth,
-      detailBoxRef.current?.offsetTop
-        ? detailBoxRef.current?.offsetTop - 30
-        : window.innerHeight
-    );
-    return () => {};
-  }, [toggleDetailsBox]);
 
   return (
     <PBox onClick={onClickBox}>
@@ -100,7 +98,25 @@ const PromiseBox = ({ data, isLoading }: props) => {
         </HashTagContainer>
         <ArrowDiv />
       </PromiseTail>
-      {toggleDetailsBox && <PromiseDetailsBox data={data} />}
+      {toggleDetailsBox && (
+        <>
+          <Suspense
+            fallback={
+              <ProgressBar
+                height="80"
+                width="80"
+                ariaLabel="progress-bar-loading"
+                wrapperStyle={{}}
+                wrapperClass="progress-bar-wrapper"
+                borderColor="#F4442E"
+                barColor="#51E5FF"
+              />
+            }
+          >
+            <PromiseDetailsBox data={data} />
+          </Suspense>
+        </>
+      )}
     </PBox>
   );
 };

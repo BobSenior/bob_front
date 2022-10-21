@@ -5,34 +5,61 @@ import {
   Footer,
   HeaderSection,
   MemberSection,
+  PlaceInfoDiv,
+  PushedButton,
   Section,
   TagSection,
+  TimeInfoDiv,
+  TitleHeader,
+  TNPSection,
 } from "./style";
 import { Button } from "../../pages/Home/style";
 import { promiseInfo } from "../../types/db";
-import { RotatingSquare } from "react-loader-spinner";
+import ColorHash from "color-hash";
+import { css } from "@emotion/react";
 
 interface props {
   data: promiseInfo;
 }
+const major = "소프트웨어학부";
 
 const PromiseDetailsBox = ({ data }: props) => {
-  const onClickParticipationButton = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      //대충 참가신청 과정
-    },
-    []
-  );
+  const [participateIn, setParticipateIn] = useState(false);
+  const onClickParticipationButton = useCallback(() => {
+    if (participateIn) return;
+    //대충 참가신청 과정
+
+    setParticipateIn(true);
+  }, []);
 
   return (
-    <div>
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <Section css={HeaderSection}>
-        <h1>Title</h1>
+        <h1>Info</h1>
         <div>
+          <span
+            style={{
+              backgroundColor: new ColorHash().hex(major),
+            }}
+            css={TitleHeader}
+          >
+            {major}
+          </span>
           <span>{data.title}</span>
-          <span>소프트웨어</span>
         </div>
+      </Section>
+      <Section css={TNPSection}>
+        <PlaceInfoDiv>
+          <button>(대충 피커 모양)</button>
+          {data.place}
+        </PlaceInfoDiv>
+        <TimeInfoDiv>
+          <span>{data.time}</span>
+        </TimeInfoDiv>
       </Section>
       <Section css={MemberSection}>
         <h1>Members</h1>
@@ -45,17 +72,12 @@ const PromiseDetailsBox = ({ data }: props) => {
         <h1>tags</h1>
       </Section>
       <Footer>
-        <Button style={{ width: "100%" }} onClick={onClickParticipationButton}>
-          <RotatingSquare
-            height="50"
-            width="50"
-            color="#ffffff"
-            ariaLabel="rotating-square-loading"
-            strokeWidth="8"
-            wrapperStyle={{}}
-            wrapperClass=""
-            visible={true}
-          />
+        <Button
+          style={{ width: "100%" }}
+          css={participateIn ? PushedButton : null}
+          onClick={onClickParticipationButton}
+        >
+          {!participateIn ? "참가신청" : "참가신청완료"}
         </Button>
       </Footer>
     </div>

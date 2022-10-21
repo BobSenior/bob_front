@@ -7,19 +7,19 @@ const Loading = () => {
   return (
     <div
       css={css`
-        width: 100%;
-        height: 100%;
         display: flex;
+        width: 100%;
+        height: ${window.innerHeight}px;
         justify-content: center;
         align-items: center;
       `}
     >
       <ColorRing
         visible={true}
-        height="80"
-        width="80"
+        height="180"
+        width="180"
         ariaLabel="blocks-loading"
-        wrapperStyle={{}}
+        wrapperStyle={{ display: "block" }}
         wrapperClass="blocks-wrapper"
         colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
       />
