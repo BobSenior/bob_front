@@ -7,6 +7,8 @@ export const SpanCSS = css`
 
 export const HashTagContainer = styled.div`
   display: flex;
+  column-gap: 0.5em;
+  font-size: 0.75em;
 `;
 
 export const ArrowDiv = styled.div`
@@ -38,12 +40,14 @@ export const TopContext = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: flex-end;
+  font-size: 1em;
   & span {
     display: block;
   }
 `;
 export const MiddleContext = styled.div`
   display: flex;
+  flex-direction: row;
   width: fit-content;
   align-items: flex-end;
   & span {
@@ -83,6 +87,7 @@ export const PromiseTail = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
+  padding-top: 5px;
 `;
 
 export const PBox = styled.div`

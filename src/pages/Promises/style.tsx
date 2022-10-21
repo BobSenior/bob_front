@@ -4,5 +4,11 @@ export const PromiseList = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 5px;
+  column-gap: 5px;
+`;
+
+export const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
 `;

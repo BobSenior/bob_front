@@ -3,11 +3,10 @@ import React, {
   lazy,
   memo,
   useState,
-  Suspense,
   useCallback,
   MouseEvent,
   useRef,
-  useMemo,
+  useEffect,
 } from "react";
 import {
   PBox,
@@ -26,18 +25,17 @@ import {
 } from "./style";
 import { promiseInfo } from "../../types/db";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-const p1: promiseInfo = {
-  name: "라이언",
-  ID: "22",
-  title: "밥먹을 사람!",
-  major: "소프트웨어학부",
-  place: "흑석동",
-  time: "10월 30일",
-};
+interface props {
+  data: promiseInfo;
+  isLoading: boolean;
+}
 
-const PromiseBox = () => {
+const PromiseBox = ({ data, isLoading }: props) => {
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
+
   const detailBoxRef = useRef<HTMLDivElement>(null);
 
   const onClickBox = useCallback(() => {
@@ -46,13 +44,14 @@ const PromiseBox = () => {
     });
   }, []);
 
-  useMemo(() => {
+  useEffect(() => {
     window.scrollTo(
       window.innerWidth,
       detailBoxRef.current?.offsetTop
         ? detailBoxRef.current?.offsetTop - 30
         : window.innerHeight
     );
+    return () => {};
   }, [toggleDetailsBox]);
 
   return (
@@ -60,36 +59,48 @@ const PromiseBox = () => {
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
-          <TopContext>
-            <span>{p1.title}</span>
-            <span>2/4</span>
-          </TopContext>
-          <MiddleContext>
-            <span>{p1.name}</span>
-            <span css={SpanCSS}>{p1.major}</span>
-            <span css={SpanCSS}>{p1.ID}</span>
-          </MiddleContext>
-          <BottomContext>
-            <BottomLeftDiv>
-              <span>{p1.place}</span>
-              <span>{p1.time}</span>
-            </BottomLeftDiv>
-            <BottomRightDiv>
-              <span>대기자수: 1</span>
-              <span>작성일자</span>
-            </BottomRightDiv>
-          </BottomContext>
+          {isLoading ? (
+            <Skeleton count={3} width={"100%"} height={"1.4em"} />
+          ) : (
+            <>
+              <TopContext>
+                <span>{data.title}</span>
+                <span>{`2/4`}</span>
+              </TopContext>
+              <MiddleContext>
+                <span>{data.name}</span>
+                <span css={SpanCSS}>{data.major}</span>
+                <span css={SpanCSS}>{data.ID}</span>
+              </MiddleContext>
+              <BottomContext>
+                <BottomLeftDiv>
+                  <span>{data.place}</span>
+                  <span>{data.time}</span>
+                </BottomLeftDiv>
+                <BottomRightDiv>
+                  <span>대기자수: 1</span>
+                  <span>작성일자</span>
+                </BottomRightDiv>
+              </BottomContext>
+            </>
+          )}
         </PromiseContexts>
       </PromiseHead>
       <PromiseTail ref={detailBoxRef}>
-        <HashTagContainer>#123</HashTagContainer>
+        <HashTagContainer>
+          {isLoading ? (
+            <Skeleton width={"5em"} height={"1.2em"} count={3} inline={true} />
+          ) : (
+            <>
+              <div>#저녁</div>
+              <div>#김치</div>
+              <div>#밥</div>
+            </>
+          )}
+        </HashTagContainer>
         <ArrowDiv />
       </PromiseTail>
-      {toggleDetailsBox && (
-        <Suspense fallback={<div>로딩....</div>}>
-          <PromiseDetailsBox data={p1} />
-        </Suspense>
-      )}
+      {toggleDetailsBox && <PromiseDetailsBox data={data} />}
     </PBox>
   );
 };

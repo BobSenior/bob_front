@@ -15,9 +15,9 @@ import SearchBox from "../../components/SearchBox";
 const emailExample = "lws6665@naver.com";
 
 const Main = () => {
+  const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const navigate = useNavigate();
 
   const onClickProfileImg = useCallback(() => {
     setShowProfileMenu((prevState) => {
@@ -47,6 +47,7 @@ const Main = () => {
         >
           밥선배
         </span>
+
         <ProfileImg
           src={gravatar.url(emailExample, { s: "28px", d: "identicon" })}
           onClick={onClickProfileImg}
