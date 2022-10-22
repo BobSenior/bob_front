@@ -37,6 +37,16 @@ css props 사용 시 소스파일 맨 위에 아래 줄 추가해야함.\
 `````/** @jsxImportSource @emotion/react */`````
 
 
+### 3. 태그 속성 타입 정리
+
+태그명(tag)|속성(attribute)|타입(type)
+|:---|:---|:---|
+form|onSubmit|FormEvent
+*|onClick|MouseEvent\<HTMLElement\>
+input|onChange|ChangeEvent\<HTMLInputElement\>
+*|children|ReactNode
+
+
 
 ## Available Scripts
 
