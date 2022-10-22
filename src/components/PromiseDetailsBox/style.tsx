@@ -1,13 +1,39 @@
 import styled from "@emotion/styled/macro";
 import { css } from "@emotion/react";
+import { motion } from "framer-motion";
 
-export const PlaceInfoDiv = styled.div`
+export const InNOut = {
+  In: {
+    backgroundColor: "rgb(114,141,208)",
+  },
+  Out: {},
+};
+
+export const MembersDiv = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   justify-items: center;
+  row-gap: 8px;
+  column-gap: 3px;
 `;
-export const TimeInfoDiv = styled.div``;
 
-export const PushedButton = css`
-  background-color: slategrey;
+export const PlaceInfoDiv = styled(motion.div)`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(255, 255, 255, 30%);
+  border-radius: 7px;
+`;
+
+export const TimeInfoDiv = styled.div`
+  background-color: rgba(255, 255, 255, 30%);
+  border-radius: 7px;
+`;
+
+export const MapButton = styled.img`
+  height: 2em;
+  width: 1.5em;
 `;
 
 export const TitleHeader = css`
@@ -15,11 +41,12 @@ export const TitleHeader = css`
   font-size: 0.65em;
 `;
 export const TNPSection = css`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   justify-content: space-around;
-  background-color: #b6d1d7;
+  background-color: rgba(200, 200, 200, 0.7);
   border-radius: 5px;
+  padding: 5px 10px;
 `;
 
 export const HeaderSection = css`
@@ -34,8 +61,15 @@ export const HeaderSection = css`
     }
   }
 `;
-export const MemberSection = css``;
-export const ContentSection = css``;
+
+export const ContentSection = css`
+  padding: 0 10px;
+  & p {
+    align-self: flex-start;
+    font-size: 0.9em;
+    word-break: break-word;
+  }
+`;
 export const TagSection = css``;
 
 export const Section = styled.section`

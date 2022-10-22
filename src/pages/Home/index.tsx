@@ -1,9 +1,11 @@
 import React from "react";
-import { Button, Column, Container, Header, JoinDiv, Section } from "./style";
+import { Column, Container, Header, JoinDiv, Section } from "./style";
 import { useNavigate } from "react-router-dom";
+import ColoredBtn from "../../assets/buttons/ColoredBtn";
 
 const Home = () => {
   const navigate = useNavigate();
+
   return (
     <div>
       <Header>
@@ -26,27 +28,45 @@ const Home = () => {
             <h4>선배! 밥 사주세요.</h4>
           </Column>
           <JoinDiv>
-            <Button
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
               onClick={() => {
                 navigate("/login");
               }}
+              animate={""}
+              variants={""}
+              isHover={true}
+              isTap={true}
             >
-              <span>로그인 하러가기</span>
-            </Button>
-            <Button
+              <span>로그인</span>
+            </ColoredBtn>
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
               onClick={() => {
                 navigate("/signup");
               }}
+              animate={""}
+              variants={""}
+              isHover={true}
+              isTap={true}
             >
-              <span>회원가입 하러가기</span>
-            </Button>
-            <Button
+              <span>회원가입</span>
+            </ColoredBtn>
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
               onClick={() => {
                 navigate("/main");
               }}
+              animate={""}
+              variants={""}
+              isHover={true}
+              isTap={true}
             >
               <span>(개발용)메인으로 가기</span>
-            </Button>
+            </ColoredBtn>
           </JoinDiv>
         </Container>
       </Section>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PromisesList, PromisesWrapper } from "./style";
+import { PromisesColumn, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
 import { promiseInfo } from "../../types/db";
 
@@ -30,7 +30,7 @@ const Main = () => {
 
   return (
     <PromisesWrapper>
-      <PromisesList>
+      <PromisesColumn>
         <div>
           <label>로딩 체크</label>
           <input
@@ -68,7 +68,9 @@ const Main = () => {
         <PromiseBox data={p1} isLoading={loading} />
         <PromiseBox data={p1} isLoading={loading} />
         <PromiseBox data={p1} isLoading={loading} />
-      </PromisesList>
+      </PromisesColumn>
+      <PromisesColumn></PromisesColumn>
+      <PromisesColumn></PromisesColumn>
     </PromisesWrapper>
   );
 };

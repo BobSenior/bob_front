@@ -1,24 +1,48 @@
 /** @jsxImportSource @emotion/react */
 import { PlansHeader, PlansWrapper } from "./style";
-import { Button } from "../../layouts/Main/style";
 import { lazy } from "react";
-import { PromisesList } from "../Promises/style";
-import Loading from "../Loading";
+import { PromisesColumn, PromisesWrapper } from "../Promises/style";
+import { useNavigate, useParams } from "react-router-dom";
+import LayoutBtn from "../../assets/buttons/LayoutBtn";
 const PlanBox = lazy(() => import("../../components/PlanBox"));
 
 const MyPlans = () => {
+  const { page } = useParams();
+  const navigate = useNavigate();
+
   return (
     <PlansWrapper>
       <PlansHeader>
-        <Button>내 약속</Button>
-        <Button>대기중인 약속</Button>
+        <LayoutBtn
+          text={"참가 중"}
+          fontSize={"1em"}
+          height={"100%"}
+          width={"100%"}
+          onClick={() => {
+            navigate("../myplans/participate");
+          }}
+          animate={page === "participate" ? "pushed" : ""}
+        />
+        <LayoutBtn
+          text={"대기 중"}
+          fontSize={"1em"}
+          height={"100%"}
+          width={"100%"}
+          onClick={() => {
+            navigate("../myplans/waiting");
+          }}
+          animate={page === "waiting" ? "pushed" : ""}
+        />
       </PlansHeader>
-      <PromisesList>
-        <PlanBox />
-        <PlanBox />
-        <PlanBox />
-        <PlanBox />
-      </PromisesList>
+      <PromisesWrapper>
+        {page === "waiting" && (
+          <>
+            <PromisesColumn>
+              <PlanBox />
+            </PromisesColumn>
+          </>
+        )}
+      </PromisesWrapper>
     </PlansWrapper>
   );
 };

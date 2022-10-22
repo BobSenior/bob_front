@@ -1,9 +1,15 @@
 import styled from "@emotion/styled/macro";
 import { css } from "@emotion/react";
+import { motion } from "framer-motion";
 
-export const SpanCSS = css`
-  font-size: 0.5em;
-`;
+export const variants = {
+  rollDown: {
+    rotate: 180,
+    backgroundColor: "rgb(200,200,200,0.5)",
+    borderRadius: "7px",
+  },
+  rollUp: {},
+};
 
 export const HashTagContainer = styled.div`
   display: flex;
@@ -11,14 +17,9 @@ export const HashTagContainer = styled.div`
   font-size: 0.75em;
 `;
 
-export const ArrowDiv = styled.div`
-  width: 0;
-  height: 0;
-  border-bottom: 8px solid #23a1bd;
-  border-top: 8px solid transparent;
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  border-radius: 3px;
+export const ArrowImg = styled(motion.img)`
+  height: 1.2em;
+  width: 2.2em;
 `;
 
 export const BottomRightDiv = styled.div`
@@ -50,9 +51,6 @@ export const MiddleContext = styled.div`
   flex-direction: row;
   width: fit-content;
   align-items: flex-end;
-  & span {
-    display: block;
-  }
 `;
 export const BottomContext = styled.div`
   display: flex;
@@ -85,18 +83,17 @@ export const PromiseHead = styled.div`
 export const PromiseTail = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding-top: 5px;
 `;
 
-export const PBox = styled.div`
+export const PBox = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: stretch;
   align-content: center;
   width: 320px;
   min-height: 50px;
-  font-family: "HanziPen SC";
+  font-family: "Apple LiGothic";
   padding: 5px;
   border: rgba(0, 0, 0, 0.1) solid 0.5px;
   border-radius: 3px;

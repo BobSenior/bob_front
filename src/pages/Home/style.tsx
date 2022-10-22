@@ -62,16 +62,3 @@ export const JoinDiv = styled.div`
   row-gap: 5px;
   justify-content: center;
 `;
-
-export const Button = styled.div`
-  display: flex;
-  width: 80%;
-  height: 50px;
-  background-color: #23a1bd;
-  color: white;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-  max-width: 350px;
-  cursor: default;
-`;

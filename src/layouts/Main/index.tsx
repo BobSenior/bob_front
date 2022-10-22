@@ -6,15 +6,16 @@ import {
   ProfileImg,
   ProfileMenu,
   MainBox,
-  Button,
 } from "./style";
 const Promises = lazy(() => import("../../pages/Promises"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const MyPlans = lazy(() => import("../../pages/MyPlans"));
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useParams } from "react-router-dom";
 import gravatar from "gravatar";
 import SearchBox from "../../components/SearchBox";
 import Loading from "../../pages/Loading";
+import LayoutBtn from "../../assets/buttons/LayoutBtn";
+import Compose from "../../pages/Compose";
 
 const emailExample = "lws6665@naver.com";
 
@@ -28,11 +29,15 @@ const Main = () => {
       return !prevState;
     });
   }, []);
-  const onClickProfileButton = useCallback(() => {
+  const onClickComposeBtn = useCallback(() => {
+    setShowProfileMenu(false);
+    navigate("compose");
+  }, []);
+  const onClickProfileBtn = useCallback(() => {
     setShowProfileMenu(false);
     navigate("profile");
   }, []);
-  const onClickSearchButton = useCallback(() => {
+  const onClickSearchBtn = useCallback(() => {
     setShowSearchBar((prevState) => {
       return !prevState;
     });
@@ -58,8 +63,30 @@ const Main = () => {
         ></ProfileImg>
         {showProfileMenu && (
           <ProfileMenu>
-            <Button onClick={onClickProfileButton}>프로필 수정</Button>
-            <Button onClick={onClickLogOut}>로그아웃</Button>
+            <LayoutBtn
+              text={"새 약속 만들기"}
+              fontSize={"1em"}
+              height={""}
+              width={""}
+              onClick={onClickComposeBtn}
+              animate={""}
+            />
+            <LayoutBtn
+              text={"프로필 수정"}
+              fontSize={"1em"}
+              height={""}
+              width={""}
+              onClick={onClickProfileBtn}
+              animate={""}
+            />
+            <LayoutBtn
+              text={"로그아웃"}
+              fontSize={"1em"}
+              height={""}
+              width={""}
+              onClick={onClickLogOut}
+              animate={""}
+            />
           </ProfileMenu>
         )}
         {showSearchBar && (
@@ -73,26 +100,40 @@ const Main = () => {
           <Routes>
             <Route path={""} element={<Promises />} />
             <Route path={"profile"} element={<Profile />} />
-            <Route path={"myplans"} element={<MyPlans />} />
+            <Route path={"myplans/:page"} element={<MyPlans />} />
+            <Route path={"compose/:id"} element={<Compose />} />
           </Routes>
         </Suspense>
       </Body>
       <Bottom>
-        <Button
+        <LayoutBtn
+          text={"메인"}
+          fontSize={"1em"}
+          height={"100%"}
+          width={"100%"}
           onClick={() => {
             navigate("");
           }}
-        >
-          <span>메인</span>
-        </Button>
-        <Button
+          animate={""}
+        />
+        <LayoutBtn
+          text={"내 약속"}
+          fontSize={"1em"}
+          height={"100%"}
+          width={"100%"}
           onClick={() => {
-            navigate("myplans");
+            navigate("myplans/participate");
           }}
-        >
-          <span>내 약속</span>
-        </Button>
-        <Button onClick={onClickSearchButton}>검색</Button>
+          animate={""}
+        />
+        <LayoutBtn
+          text={"검색"}
+          fontSize={"1em"}
+          height={"100%"}
+          width={"100%"}
+          onClick={onClickSearchBtn}
+          animate={""}
+        />
       </Bottom>
     </MainBox>
   );

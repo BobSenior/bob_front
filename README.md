@@ -1,4 +1,4 @@
-# 밥선배 프론트 현황(10/21)
+# 밥선배 프론트 현황(10/22)
 
 ### 1. 패키지 현황
 
@@ -16,6 +16,7 @@
     "@types/react-dom": "^18.0.6"\
     "axios": "^1.1.3"\
     ["color-hash"](https://github.com/zenozeng/color-hash#readme): "^2.0.1" - 문자열 해쉬로 색 추출\
+    ["framer-motion"](https://www.framer.com/docs/): "^7.6.1" - 애니메이션 추가\
     "gravatar": "^1.8.2"\
     "react": "^18.2.0"\
     "react-dom": "^18.2.0"\
@@ -39,14 +40,12 @@ css props 사용 시 소스파일 맨 위에 아래 줄 추가해야함.\
 
 ### 3. 태그 속성 타입 정리
 
-태그명(tag)|속성(attribute)|타입(type)
-|:---|:---|:---|
-form|onSubmit|FormEvent
-*|onClick|MouseEvent\<HTMLElement\>
-input|onChange|ChangeEvent\<HTMLInputElement\>
-*|children|ReactNode
-
-
+| 태그명(tag) | 속성(attribute) | 타입(type)                        |
+|:---------|:--------------|:--------------------------------|
+| form     | onSubmit      | FormEvent                       |
+| *        | onClick       | MouseEvent\<HTMLElement\>       |
+| input    | onChange      | ChangeEvent\<HTMLInputElement\> |
+| *        | children      | ReactNode                       |
 
 ## Available Scripts
 

@@ -1,38 +1,24 @@
 import styled from "@emotion/styled/macro";
+import { motion } from "framer-motion";
 
 export const MainBox = styled.div`
   display: flex;
   justify-content: center;
   & div {
-    max-width: 1000px;
+    max-width: 1200px;
   }
 `;
 
-export const Button = styled.div`
-  flex: 1 1 auto;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  :hover {
-    background-color: #23a1bd;
-    color: white;
-    border-radius: 5px;
-  }
-`;
-
-export const ProfileMenu = styled.div`
+export const ProfileMenu = styled(motion.div)`
   position: absolute;
-  top: 35px;
+  top: 38px;
   right: 8px;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgb(201, 221, 226, 50%);
   border-radius: 5px;
-  ${Button} {
-    font-size: 0.8em;
+  & div {
     padding: 15px 30px;
-    width: 100px;
   }
 `;
 
@@ -53,27 +39,23 @@ export const Header = styled.div`
   text-align: center;
   & span {
     font-size: 30px;
-    color: black;
     cursor: default;
   }
   ${ProfileMenu}
 `;
 
 export const Body = styled.div`
-  display: flex;
-  justify-content: center;
   padding-top: 38px;
   padding-bottom: 35px;
   width: 100%;
 `;
 
 export const Bottom = styled.div`
-  display: flex;
   position: fixed;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   bottom: 0;
   width: 100%;
   height: 38px;
   background-color: rgba(182, 209, 215, 0.75);
-  cursor: default;
-  ${Button}
 `;

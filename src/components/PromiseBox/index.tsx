@@ -19,15 +19,16 @@ import {
   BottomRightDiv,
   BottomLeftDiv,
   HashTagContainer,
-  ArrowDiv,
-  SpanCSS,
+  ArrowImg,
+  variants,
 } from "./style";
 import { promiseInfo } from "../../types/db";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { ProgressBar } from "react-loader-spinner";
-import { css } from "@emotion/react";
+import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
+import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
 
 interface props {
   data: promiseInfo;
@@ -36,25 +37,31 @@ interface props {
 
 const PromiseBox = ({ data, isLoading }: props) => {
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
-
   const detailBoxRef = useRef<HTMLDivElement>(null);
 
   const onClickBox = useCallback(() => {
     setToggleDetailsBox((prevState) => {
-      if (!prevState) {
-        window.scrollTo(
-          window.innerWidth,
-          detailBoxRef.current?.offsetTop
-            ? detailBoxRef.current?.offsetTop - 30
-            : window.innerHeight
-        );
-      }
+      //닫혀있을 때 클릭 시 스크롤 업.
+      // if (!prevState) {
+      //   window.scrollTo(
+      //     window.innerWidth,
+      //     detailBoxRef.current?.offsetTop
+      //       ? detailBoxRef.current?.offsetTop - 30
+      //       : window.innerHeight
+      //   );
+      // }
       return !prevState;
     });
   }, []);
+  const onClickMemberSpanBtn = useCallback((e: any) => {
+    e.stopPropagation();
+  }, []);
 
   return (
-    <PBox onClick={onClickBox}>
+    <PBox
+      onClick={onClickBox}
+      whileHover={{ scale: 1.075, backgroundColor: "#ffffff" }}
+    >
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
@@ -67,9 +74,14 @@ const PromiseBox = ({ data, isLoading }: props) => {
                 <span>{`2/4`}</span>
               </TopContext>
               <MiddleContext>
-                <span>{data.name}</span>
-                <span css={SpanCSS}>{data.major}</span>
-                <span css={SpanCSS}>{data.ID}</span>
+                <MemberSpanBtn
+                  onClick={onClickMemberSpanBtn}
+                  major={data.major}
+                >
+                  {data.name}
+                  <span>{data.major}</span>
+                  <span>{data.ID}</span>
+                </MemberSpanBtn>
               </MiddleContext>
               <BottomContext>
                 <BottomLeftDiv>
@@ -97,7 +109,11 @@ const PromiseBox = ({ data, isLoading }: props) => {
             </>
           )}
         </HashTagContainer>
-        <ArrowDiv />
+        <ArrowImg
+          src={ArrowSvg}
+          variants={variants}
+          animate={toggleDetailsBox ? "rollDown" : "rollUp"}
+        />
       </PromiseTail>
       {toggleDetailsBox && (
         <Suspense

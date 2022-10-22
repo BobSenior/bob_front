@@ -11,14 +11,13 @@ export const PlansHeader = styled.div`
     background-color: ghostwhite;
   }
 `;
-export const PlansBody = styled.div``;
+export const PlansBody = styled.div`
+  max-width: 700px;
+`;
 
 export const PlansWrapper = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
-  //flex-direction: column;
-  //align-items: center;
-  max-width: 800px;
   width: 100%;
 `;
