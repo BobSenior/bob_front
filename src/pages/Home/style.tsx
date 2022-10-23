@@ -46,7 +46,7 @@ export const Column = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   width: 50%;
-  min-width: 320px;
+  min-width: 300px;
   flex-direction: column;
   & > h1 {
     font-size: 86px;

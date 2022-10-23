@@ -15,6 +15,7 @@ const App = () => {
         {/*<Route path={"signUp"} element={<SignUp />} />*/}
         <Route path={"main/*"} element={<MainLayout />} />
         <Route path={"test"} element={<Loading />} />
+        <Route path={"*"} element={<div>404 error</div>} />
       </Routes>
     </Suspense>
   );

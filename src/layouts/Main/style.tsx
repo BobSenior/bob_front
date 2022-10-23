@@ -1,5 +1,5 @@
 import styled from "@emotion/styled/macro";
-import { motion } from "framer-motion";
+import { css } from "@emotion/react";
 
 export const MainBox = styled.div`
   display: flex;
@@ -9,13 +9,13 @@ export const MainBox = styled.div`
   }
 `;
 
-export const ProfileMenu = styled(motion.div)`
+export const ProfileMenu = css`
   position: absolute;
-  top: 38px;
-  right: 8px;
+  top: 40px;
+  right: 5px;
   display: flex;
   flex-direction: column;
-  background-color: rgb(201, 221, 226, 50%);
+  background-color: #b6d1d7;
   border-radius: 5px;
   & div {
     padding: 15px 30px;
@@ -41,7 +41,6 @@ export const Header = styled.div`
     font-size: 30px;
     cursor: default;
   }
-  ${ProfileMenu}
 `;
 
 export const Body = styled.div`

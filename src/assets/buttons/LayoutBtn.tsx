@@ -38,8 +38,11 @@ const LayoutBtn = ({
         cursor: default;
       `}
       onClick={onClick}
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ scale: 1.05, backgroundColor: "#23a1bd", color: "white" }}
+      whileTap={{ scale: 0.9 }}
+      whileHover={{
+        backgroundColor: "#23a1bd",
+        color: "#ffffff",
+      }}
       animate={animate}
       variants={pushedVariants}
     >

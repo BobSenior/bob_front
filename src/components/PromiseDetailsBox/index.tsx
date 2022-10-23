@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useCallback, useState } from "react";
+import { memo, useCallback, useContext, useRef, useState } from "react";
 import {
   ContentSection,
   Footer,
@@ -19,6 +19,8 @@ import ColorHash from "color-hash";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
+import MapModalContext from "../../hooks/MapModalContext";
+
 interface props {
   data: promiseInfo;
 }
@@ -26,6 +28,9 @@ const major = "소프트웨어학부";
 
 const PromiseDetailsBox = ({ data }: props) => {
   const [participateIn, setParticipateIn] = useState(false);
+  const { setShowMapModal, setAddress } = useContext(MapModalContext);
+  const placeInfoRef = useRef(null);
+
   const onClickParticipationButton = useCallback(() => {
     setParticipateIn((prevState) => {
       if (prevState) {
@@ -58,9 +63,15 @@ const PromiseDetailsBox = ({ data }: props) => {
         </div>
       </Section>
       <Section css={TNPSection}>
-        <PlaceInfoDiv whileTap={{ scale: 0.85 }}>
+        <PlaceInfoDiv
+          whileTap={{ scale: 0.85 }}
+          onClick={() => {
+            setAddress(data.place ? data.place : "");
+            setShowMapModal(true);
+          }}
+        >
           <MapButton src={PickerSvg} />
-          <span>{data.place}</span>
+          <span ref={placeInfoRef}>{data.place}</span>
         </PlaceInfoDiv>
         <TimeInfoDiv>
           <span>{data.time}</span>
@@ -82,7 +93,7 @@ const PromiseDetailsBox = ({ data }: props) => {
       </Section>
       <Section css={ContentSection}>
         <h1>Contents</h1>
-        <p>{"hihi~"}</p>
+        <p>{"hi hi~"}</p>
       </Section>
       <Section css={TagSection}>
         <h1>tags</h1>
@@ -90,7 +101,7 @@ const PromiseDetailsBox = ({ data }: props) => {
       <Footer>
         <ColoredBtn
           width={"100%"}
-          height={"30px"}
+          height={"35px"}
           onClick={onClickParticipationButton}
           animate={participateIn ? "In" : "Out"}
           variants={InNOut}
@@ -104,4 +115,4 @@ const PromiseDetailsBox = ({ data }: props) => {
   );
 };
 
-export default PromiseDetailsBox;
+export default memo(PromiseDetailsBox);

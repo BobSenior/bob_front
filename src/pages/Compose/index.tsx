@@ -1,14 +1,20 @@
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
+
+interface composeData {
+  title: string | null;
+  place: string | null;
+  time: string | null;
+  maxMember: number;
+  contents: string | null;
+  onlyForMyMajor: boolean;
+  onlyForAnonymous: boolean;
+}
 
 const Compose = () => {
   const { id } = useParams();
+  const { cache, mutate } = useSWRConfig();
 
-  if (!id) {
-    console.log("error");
-    return <Navigate to={"/1"} />;
-  } else {
-    console.log(id);
-  }
   return <div></div>;
 };
 export default Compose;

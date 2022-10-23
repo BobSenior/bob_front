@@ -20,7 +20,7 @@ const MemberSpanBtn = ({ children, onClick, major }: props) => {
           ${labelColor.at(0)},
           ${labelColor.at(1)},
           ${labelColor.at(2)},
-          0.1
+          0.2
         );
         border-radius: 3px;
         font-size: 0.9em;

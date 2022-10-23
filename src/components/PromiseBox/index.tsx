@@ -1,12 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {
-  lazy,
-  memo,
-  useState,
-  useCallback,
-  Suspense,
-  useRef,
-} from "react";
+import React, { lazy, memo, useState, useCallback, Suspense } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -32,12 +25,11 @@ import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
 
 interface props {
   data: promiseInfo;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const PromiseBox = ({ data, isLoading }: props) => {
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
-  const detailBoxRef = useRef<HTMLDivElement>(null);
 
   const onClickBox = useCallback(() => {
     setToggleDetailsBox((prevState) => {
@@ -58,10 +50,7 @@ const PromiseBox = ({ data, isLoading }: props) => {
   }, []);
 
   return (
-    <PBox
-      onClick={onClickBox}
-      whileHover={{ scale: 1.075, backgroundColor: "#ffffff" }}
-    >
+    <PBox onClick={onClickBox}>
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
@@ -97,7 +86,7 @@ const PromiseBox = ({ data, isLoading }: props) => {
           )}
         </PromiseContexts>
       </PromiseHead>
-      <PromiseTail ref={detailBoxRef}>
+      <PromiseTail>
         <HashTagContainer>
           {isLoading ? (
             <Skeleton width={"5em"} height={"1.2em"} count={3} inline={true} />
