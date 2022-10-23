@@ -122,7 +122,7 @@ const Main = () => {
             <Routes>
               <Route path={""} element={<Promises />} />
               <Route path={"profile"} element={<Profile />} />
-              <Route path={"plans/:id/*"} element={<Plans />} />
+              <Route path={"plans/:id/:plan"} element={<Plans />} />
               <Route path={"compose/:id"} element={<Compose />} />
               <Route path={"*"} element={<div>404 error</div>} />
             </Routes>

@@ -1,18 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import { PlansHeader } from "./style";
-import { lazy } from "react";
-import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { lazy, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { css } from "@emotion/react";
+import Loading from "../../pages/Loading";
 const Participating = lazy(() => import("../../pages/Participating"));
 const Waiting = lazy(() => import("../../pages/Waiting"));
 const Plans = () => {
   const { id, plan } = useParams();
   const navigate = useNavigate();
 
+  const renderDiv = useMemo(() => {
+    if (plan === "participating") return <Participating />;
+    else if (plan === "waiting") return <Waiting />;
+    else return <Loading />;
+  }, [plan]);
   return (
     <>
-      <PlansHeader
+      <div
         css={css`
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -45,12 +50,8 @@ const Plans = () => {
           }}
           animate={plan === "waiting" ? "pushed" : ""}
         />
-      </PlansHeader>
-      <Routes>
-        <Route path={"participating"} element={<Participating />} />
-        <Route path={"waiting"} element={<Waiting />} />
-        <Route path={"*"} element={<div>404error</div>} />
-      </Routes>
+      </div>
+      {renderDiv}
     </>
   );
 };
