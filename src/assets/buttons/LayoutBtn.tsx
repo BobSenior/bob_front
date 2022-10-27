@@ -5,11 +5,11 @@ import { MouseEvent } from "react";
 
 interface props {
   text: string;
-  fontSize: string;
-  height: string;
-  width: string;
+  fontSize?: string;
+  height?: string;
+  width?: string;
   onClick: (e: MouseEvent<HTMLElement>) => void;
-  animate: string;
+  animate?: string;
 }
 
 const pushedVariants = {

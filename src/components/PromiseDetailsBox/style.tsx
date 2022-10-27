@@ -81,7 +81,10 @@ export const Section = styled.section`
   flex-direction: column;
   justify-items: center;
   align-items: center;
+  padding-top: 7px;
 `;
 export const Footer = styled.div`
   display: flex;
 `;
+
+export const DetailWrapper = styled.div``;

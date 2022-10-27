@@ -1,10 +1,4 @@
-import React, {
-  MouseEvent,
-  useCallback,
-  useState,
-  Suspense,
-  lazy,
-} from "react";
+import React, { useCallback, useState, Suspense, lazy } from "react";
 import {
   Body,
   Bottom,
@@ -12,21 +6,22 @@ import {
   ProfileImg,
   MainBox,
   ProfileMenu,
+  HeaderSpan,
 } from "./style";
 const Promises = lazy(() => import("../../pages/Promises"));
 const Profile = lazy(() => import("../../pages/Profile"));
-const Plans = lazy(() => import("../Plans"));
+const Plans = lazy(() => import("../../pages/Plans"));
 const Compose = lazy(() => import("../../pages/Compose"));
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
-import SearchBox from "../../components/SearchBox";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import ListMenu from "../../components/ListMenu";
 import Modal from "../../components/Modal";
 import MapModalContext from "../../hooks/MapModalContext";
+import SearchBar from "../../components/SearchBar";
 
-const emailExample = "123@naver.com";
+const emailExample = "123";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -35,85 +30,62 @@ const Main = () => {
   const [showMapModal, setShowMapModal] = useState(false);
   const [address, setAddress] = useState<string>("");
 
-  const closeAllModal = useCallback(() => {
+  const closeAllModals = useCallback(() => {
     setShowProfileMenu(false);
     setShowSearchBar(false);
     setShowMapModal(false);
   }, [showProfileMenu, showSearchBar, showMapModal]);
 
-  const onClickProfileImg = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setShowProfileMenu((prevState) => {
-      return !prevState;
-    });
-  }, []);
-  const onClickComposeBtn = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setShowProfileMenu(false);
-    navigate("compose");
-  }, []);
-  const onClickProfileBtn = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setShowProfileMenu(false);
-    navigate("profile");
-  }, []);
-  const onClickSearchBtn = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setShowSearchBar((prevState) => {
-      return !prevState;
-    });
-  }, []);
-  const onClickLogOut = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    setShowProfileMenu(false);
-  }, []);
-
   return (
     <MapModalContext.Provider
       value={{ showMapModal, setShowMapModal, address, setAddress }}
     >
-      <MainBox onClick={closeAllModal}>
+      <MainBox>
         <Header>
-          <span
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            밥선배
-          </span>
+          {showSearchBar ? (
+            <SearchBar />
+          ) : (
+            <HeaderSpan
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              밥선배
+            </HeaderSpan>
+          )}
           <ProfileImg
             src={gravatar.url(emailExample, { s: "28px", d: "identicon" })}
-            onClick={onClickProfileImg}
-          ></ProfileImg>
-          {showSearchBar && (
-            <div>
-              <SearchBox />
-            </div>
-          )}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowProfileMenu((prevState) => !prevState);
+            }}
+          />
           <ListMenu isVisible={showProfileMenu} styleCSS={ProfileMenu}>
             <LayoutBtn
               text={"새 약속 만들기"}
               fontSize={"1em"}
-              height={""}
-              width={""}
-              onClick={onClickComposeBtn}
-              animate={""}
+              onClick={(e) => {
+                e.stopPropagation();
+                closeAllModals();
+                navigate("compose");
+              }}
             />
             <LayoutBtn
               text={"프로필 수정"}
               fontSize={"1em"}
-              height={""}
-              width={""}
-              onClick={onClickProfileBtn}
-              animate={""}
+              onClick={(e) => {
+                e.stopPropagation();
+                closeAllModals();
+                navigate("profile");
+              }}
             />
             <LayoutBtn
               text={"로그아웃"}
               fontSize={"1em"}
-              height={""}
-              width={""}
-              onClick={onClickLogOut}
-              animate={""}
+              onClick={(e) => {
+                e.stopPropagation();
+                closeAllModals();
+              }}
             />
           </ListMenu>
         </Header>
@@ -121,8 +93,9 @@ const Main = () => {
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route path={""} element={<Promises />} />
+              <Route path={"search/:input"} element={<Promises />} />
+              <Route path={"plans/:plan"} element={<Plans />} />
               <Route path={"profile"} element={<Profile />} />
-              <Route path={"plans/:id/:plan"} element={<Plans />} />
               <Route path={"compose/:id"} element={<Compose />} />
               <Route path={"*"} element={<div>404 error</div>} />
             </Routes>
@@ -131,31 +104,26 @@ const Main = () => {
         <Bottom>
           <LayoutBtn
             text={"메인"}
-            fontSize={"1em"}
-            height={"100%"}
-            width={"100%"}
             onClick={() => {
+              closeAllModals();
               navigate("");
             }}
-            animate={""}
           />
           <LayoutBtn
             text={"내 약속"}
-            fontSize={"1em"}
-            height={"100%"}
-            width={"100%"}
             onClick={() => {
-              navigate(`plans/${emailExample}/participating`);
+              closeAllModals();
+              navigate(`plans/participating`);
             }}
-            animate={""}
           />
           <LayoutBtn
             text={"검색"}
-            fontSize={"1em"}
-            height={"100%"}
-            width={"100%"}
-            onClick={onClickSearchBtn}
-            animate={""}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSearchBar((prevState) => {
+                return !prevState;
+              });
+            }}
           />
         </Bottom>
       </MainBox>

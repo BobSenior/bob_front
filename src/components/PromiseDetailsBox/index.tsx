@@ -2,6 +2,7 @@
 import { memo, useCallback, useContext, useRef, useState } from "react";
 import {
   ContentSection,
+  DetailWrapper,
   Footer,
   HeaderSection,
   InNOut,
@@ -43,7 +44,7 @@ const PromiseDetailsBox = ({ data }: props) => {
   }, []);
 
   return (
-    <div
+    <DetailWrapper
       onClick={(e) => {
         e.stopPropagation();
       }}
@@ -111,7 +112,7 @@ const PromiseDetailsBox = ({ data }: props) => {
           <span>{participateIn ? "신청취소" : "참가신청"}</span>
         </ColoredBtn>
       </Footer>
-    </div>
+    </DetailWrapper>
   );
 };
 

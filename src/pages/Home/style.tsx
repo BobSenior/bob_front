@@ -24,7 +24,7 @@ export const Section = styled.section`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 80px 24px;
+  padding: 60px 24px;
   background-attachment: fixed;
   background-color: #b6d1d7;
   color: #23a1bd;
@@ -34,7 +34,7 @@ export const Section = styled.section`
 `;
 export const Container = styled.div`
   display: flex;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
   width: 100%;
   align-items: stretch;
   justify-content: center;

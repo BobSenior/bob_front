@@ -1,5 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import React, { lazy, memo, useState, useCallback, Suspense } from "react";
+import React, {
+  MouseEvent,
+  lazy,
+  memo,
+  useState,
+  useCallback,
+  Suspense,
+} from "react";
 import {
   PBox,
   PromiseContexts,
@@ -15,52 +22,41 @@ import {
   ArrowImg,
   variants,
 } from "./style";
-import { promiseInfo } from "../../types/db";
-const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { ProgressBar } from "react-loader-spinner";
+const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
 import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
+import { promiseInfo } from "../../types/db";
+import HashTag from "../HashTag";
 
 interface props {
   data: promiseInfo;
-  isLoading?: boolean;
 }
 
-const PromiseBox = ({ data, isLoading }: props) => {
+const PromiseBox = ({ data }: props) => {
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
 
-  const onClickBox = useCallback(() => {
-    setToggleDetailsBox((prevState) => {
-      //닫혀있을 때 클릭 시 스크롤 업.
-      // if (!prevState) {
-      //   window.scrollTo(
-      //     window.innerWidth,
-      //     detailBoxRef.current?.offsetTop
-      //       ? detailBoxRef.current?.offsetTop - 30
-      //       : window.innerHeight
-      //   );
-      // }
-      return !prevState;
-    });
+  const onClickPBox = useCallback(() => {
+    if (data) setToggleDetailsBox((prevState) => !prevState);
   }, []);
-  const onClickMemberSpanBtn = useCallback((e: any) => {
+  const onClickMemberSpanBtn = useCallback((e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
   }, []);
 
   return (
-    <PBox onClick={onClickBox}>
+    <PBox onClick={onClickPBox}>
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
-          {isLoading ? (
+          {!data ? (
             <Skeleton count={3} width={"100%"} height={"1.4em"} />
           ) : (
             <>
               <TopContext>
                 <span>{data.title}</span>
-                <span>{`2/4`}</span>
+                <span style={{ fontSize: "0.7em" }}>{`2/4`}</span>
               </TopContext>
               <MiddleContext>
                 <MemberSpanBtn
@@ -88,13 +84,19 @@ const PromiseBox = ({ data, isLoading }: props) => {
       </PromiseHead>
       <PromiseTail>
         <HashTagContainer>
-          {isLoading ? (
+          {!data ? (
             <Skeleton width={"5em"} height={"1.2em"} count={3} inline={true} />
           ) : (
             <>
-              <div>#저녁</div>
-              <div>#김치</div>
-              <div>#밥</div>
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
             </>
           )}
         </HashTagContainer>

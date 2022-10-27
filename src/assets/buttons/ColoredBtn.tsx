@@ -8,10 +8,10 @@ interface props {
   width: string;
   height: string;
   onClick: (e: MouseEvent<HTMLElement>) => void;
-  animate: string;
-  variants: any;
-  isHover: boolean;
-  isTap: boolean;
+  animate?: string;
+  variants?: any;
+  isHover?: boolean;
+  isTap?: boolean;
 }
 
 const ColoredBtn = ({

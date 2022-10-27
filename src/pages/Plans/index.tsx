@@ -1,8 +1,10 @@
+import { useNavigate, useParams } from "react-router-dom";
+import LayoutBtn from "../../assets/buttons/LayoutBtn";
+import { PlansHeader, PlansWrapper } from "./style";
 import React, { useEffect, useMemo, useState } from "react";
-import { PromisesColumn, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
 import { promiseInfo } from "../../types/db";
-import { useParams } from "react-router-dom";
+import { PromisesColumn, PromisesWrapper } from "../Promises/style";
 
 const p2: promiseInfo[] = [
   {
@@ -39,13 +41,14 @@ const p2: promiseInfo[] = [
   },
 ];
 
-const Promises = () => {
+const Plans = () => {
+  const { plan } = useParams();
+  const navigate = useNavigate();
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
-  const { input } = useParams();
 
   const recountColumns = () => {
-    let column = Math.floor(window.innerWidth / 350);
-    setNumOfColumns(column > 3 ? 3 : column);
+    let column = Math.floor(window.innerWidth / 400);
+    setNumOfColumns(column > 2 ? 2 : column);
   };
 
   const columnDivs = useMemo(() => {
@@ -69,15 +72,30 @@ const Promises = () => {
   }, [window]);
 
   return (
-    <>
-      <div>{input}</div>
+    <PlansWrapper>
+      <PlansHeader>
+        <LayoutBtn
+          text={"참가 중"}
+          onClick={() => {
+            navigate(`../plans/participating`);
+          }}
+          animate={plan === "participating" ? "pushed" : ""}
+        />
+        <LayoutBtn
+          text={"대기 중"}
+          onClick={() => {
+            navigate(`../plans/waiting`);
+          }}
+          animate={plan === "waiting" ? "pushed" : ""}
+        />
+      </PlansHeader>
       <PromisesWrapper>
         {columnDivs.map((value) => {
           return <PromisesColumn>{value}</PromisesColumn>;
         })}
       </PromisesWrapper>
-    </>
+    </PlansWrapper>
   );
 };
 
-export default Promises;
+export default Plans;

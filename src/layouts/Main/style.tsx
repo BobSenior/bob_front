@@ -11,8 +11,8 @@ export const MainBox = styled.div`
 
 export const ProfileMenu = css`
   position: absolute;
-  top: 40px;
-  right: 5px;
+  top: 39px;
+  right: 3px;
   display: flex;
   flex-direction: column;
   background-color: #b6d1d7;
@@ -22,6 +22,11 @@ export const ProfileMenu = css`
   }
 `;
 
+export const HeaderSpan = styled.span`
+  font-size: 30px;
+  cursor: default;
+`;
+
 export const ProfileImg = styled.img`
   position: absolute;
   width: 28px;
@@ -29,6 +34,7 @@ export const ProfileImg = styled.img`
   border-radius: 28px;
   top: 5.5px;
   right: 8px;
+  cursor: pointer;
 `;
 
 export const Header = styled.div`
@@ -37,10 +43,6 @@ export const Header = styled.div`
   position: fixed;
   width: 100%;
   text-align: center;
-  & span {
-    font-size: 30px;
-    cursor: default;
-  }
 `;
 
 export const Body = styled.div`

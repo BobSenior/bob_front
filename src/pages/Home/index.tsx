@@ -1,5 +1,6 @@
 import React from "react";
-import { Column, Container, Header, JoinDiv, Section } from "./style";
+import { motion } from "framer-motion";
+import { Column, Container, JoinDiv, Section } from "./style";
 import { useNavigate } from "react-router-dom";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 
@@ -8,24 +9,46 @@ const Home = () => {
 
   return (
     <div>
-      <Header>
-        {/*<nav>*/}
-        {/*  <a href="/story">*/}
-        {/*    <span>Out Story</span>*/}
-        {/*  </a>*/}
-        {/*  <a href="/collection">*/}
-        {/*    <span>Collection</span>*/}
-        {/*  </a>*/}
-        {/*  <a href="/contact">*/}
-        {/*    <span>Contact</span>*/}
-        {/*  </a>*/}
-        {/*</nav>*/}
-      </Header>
+      {/*<Header>*/}
+      {/*  /!*<nav>*!/*/}
+      {/*  /!*  <a href="/story">*!/*/}
+      {/*  /!*    <span>Out Story</span>*!/*/}
+      {/*  /!*  </a>*!/*/}
+      {/*  /!*  <a href="/collection">*!/*/}
+      {/*  /!*    <span>Collection</span>*!/*/}
+      {/*  /!*  </a>*!/*/}
+      {/*  /!*  <a href="/contact">*!/*/}
+      {/*  /!*    <span>Contact</span>*!/*/}
+      {/*  /!*  </a>*!/*/}
+      {/*  /!*</nav>*!/*/}
+      {/*</Header>*/}
       <Section>
         <Container>
           <Column>
-            <h1>밥선배</h1>
-            <h4>선배! 밥 사주세요.</h4>
+            <motion.h4
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ marginBottom: 0 }}
+            >
+              선배랑 밥먹고 싶을 때,
+            </motion.h4>
+            <motion.h4
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              style={{ marginBottom: 0 }}
+            >
+              후배 밥 사주고 싶을 때,
+            </motion.h4>
+            <motion.h1
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              style={{ marginBottom: "10px" }}
+            >
+              밥선배
+            </motion.h1>
           </Column>
           <JoinDiv>
             <ColoredBtn
@@ -34,8 +57,6 @@ const Home = () => {
               onClick={() => {
                 navigate("/login");
               }}
-              animate={""}
-              variants={""}
               isHover={true}
               isTap={true}
             >
@@ -47,8 +68,6 @@ const Home = () => {
               onClick={() => {
                 navigate("/signup");
               }}
-              animate={""}
-              variants={""}
               isHover={true}
               isTap={true}
             >
@@ -60,8 +79,6 @@ const Home = () => {
               onClick={() => {
                 navigate("/main");
               }}
-              animate={""}
-              variants={""}
               isHover={true}
               isTap={true}
             >

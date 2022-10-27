@@ -6,7 +6,7 @@ import { css } from "@emotion/react";
 interface props {
   isVisible: boolean;
   children: ReactNode;
-  onClickForClose: (e: MouseEvent<HTMLElement>) => void;
+  onClickForClose?: (e: MouseEvent<HTMLElement>) => void;
 }
 
 const Modal = ({ isVisible, children, onClickForClose }: props) => {
@@ -25,9 +25,7 @@ const Modal = ({ isVisible, children, onClickForClose }: props) => {
             z-index: 1022;
             background-color: rgba(255, 255, 255, 0.5);
           `}
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.2 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.2 }}
