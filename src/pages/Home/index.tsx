@@ -1,61 +1,89 @@
 import React from "react";
-import { Button, Column, Container, Header, JoinDiv, Section } from "./style";
-import { css } from "@emotion/react";
+import { motion } from "framer-motion";
+import { Column, Container, JoinDiv, Section } from "./style";
 import { useNavigate } from "react-router-dom";
+import ColoredBtn from "../../assets/buttons/ColoredBtn";
 
 const Home = () => {
   const navigate = useNavigate();
+
   return (
-    <div
-      css={css`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        color: #23a1bd;
-      `}
-    >
-      <Header>
-        {/*<nav>*/}
-        {/*  <a href="/story">*/}
-        {/*    <span>Out Story</span>*/}
-        {/*  </a>*/}
-        {/*  <a href="/collection">*/}
-        {/*    <span>Collection</span>*/}
-        {/*  </a>*/}
-        {/*  <a href="/contact">*/}
-        {/*    <span>Contact</span>*/}
-        {/*  </a>*/}
-        {/*</nav>*/}
-      </Header>
+    <div>
+      {/*<Header>*/}
+      {/*  /!*<nav>*!/*/}
+      {/*  /!*  <a href="/story">*!/*/}
+      {/*  /!*    <span>Out Story</span>*!/*/}
+      {/*  /!*  </a>*!/*/}
+      {/*  /!*  <a href="/collection">*!/*/}
+      {/*  /!*    <span>Collection</span>*!/*/}
+      {/*  /!*  </a>*!/*/}
+      {/*  /!*  <a href="/contact">*!/*/}
+      {/*  /!*    <span>Contact</span>*!/*/}
+      {/*  /!*  </a>*!/*/}
+      {/*  /!*</nav>*!/*/}
+      {/*</Header>*/}
       <Section>
         <Container>
           <Column>
-            <h1>밥선배</h1>
-            <h4>선배! 밥 사주세요.</h4>
+            <motion.h4
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ marginBottom: 0 }}
+            >
+              선배랑 밥먹고 싶을 때,
+            </motion.h4>
+            <motion.h4
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              style={{ marginBottom: 0 }}
+            >
+              후배 밥 사주고 싶을 때,
+            </motion.h4>
+            <motion.h1
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              style={{ marginBottom: "10px" }}
+            >
+              밥선배
+            </motion.h1>
           </Column>
           <JoinDiv>
-            <Button
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
               onClick={() => {
                 navigate("/login");
               }}
+              isHover={true}
+              isTap={true}
             >
-              <span>로그인 하러가기</span>
-            </Button>
-            <Button
+              <span>로그인</span>
+            </ColoredBtn>
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
               onClick={() => {
                 navigate("/signup");
               }}
+              isHover={true}
+              isTap={true}
             >
-              <span>회원가입 하러가기</span>
-            </Button>
-            <Button
+              <span>회원가입</span>
+            </ColoredBtn>
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
               onClick={() => {
                 navigate("/main");
               }}
+              isHover={true}
+              isTap={true}
             >
               <span>(개발용)메인으로 가기</span>
-            </Button>
+            </ColoredBtn>
           </JoinDiv>
         </Container>
       </Section>

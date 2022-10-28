@@ -1,40 +1,30 @@
 import styled from "@emotion/styled/macro";
+import { css } from "@emotion/react";
 
-export const LinkedButton = styled.div`
-  padding: 15px 30px;
-  border-radius: 6px;
-  font-size: 0.75em;
-  color: black;
-  cursor: default;
-  :hover {
-    background-color: slategrey;
+export const MainBox = styled.div`
+  display: flex;
+  justify-content: center;
+  & div {
+    max-width: 1200px;
   }
 `;
 
-export const ProfileMenu = styled.div`
+export const ProfileMenu = css`
   position: absolute;
-  top: 35px;
-  right: 8px;
+  top: 39px;
+  right: 3px;
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: white;
+  background-color: #b6d1d7;
   border-radius: 5px;
-  ${LinkedButton}
+  & div {
+    padding: 15px 30px;
+  }
 `;
 
-export const Header = styled.header`
-  background-color: #23a1bd;
-  height: 38px;
-  position: fixed;
-  width: 100%;
-  text-align: center;
-
-  & span {
-    font-size: 30px;
-    color: black;
-    cursor: default;
-  }
-  ${ProfileMenu}
+export const HeaderSpan = styled.span`
+  font-size: 30px;
+  cursor: default;
 `;
 
 export const ProfileImg = styled.img`
@@ -44,29 +34,29 @@ export const ProfileImg = styled.img`
   border-radius: 28px;
   top: 5.5px;
   right: 8px;
+  cursor: pointer;
 `;
 
-export const Body = styled.body`
+export const Header = styled.div`
+  background-color: rgba(182, 209, 215, 0.75);
+  height: 38px;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+`;
+
+export const Body = styled.div`
   padding-top: 38px;
   padding-bottom: 35px;
+  width: 100%;
 `;
 
 export const Bottom = styled.div`
-  display: flex;
   position: fixed;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   bottom: 0;
   width: 100%;
-  height: 35px;
-  background-color: azure;
-  cursor: default;
-  & div {
-    flex: 1 1 auto;
-    height: 100%;
-    text-align: center;
-    :hover {
-      color: white;
-      background-color: slategrey;
-      border-radius: 5px;
-    }
-  }
+  height: 38px;
+  background-color: rgba(182, 209, 215, 0.75);
 `;

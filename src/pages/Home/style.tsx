@@ -24,10 +24,7 @@ export const Section = styled.section`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  padding-top: 80px;
-  padding-right: 24px;
-  padding-bottom: 80px;
-  padding-left: 24px;
+  padding: 60px 24px;
   background-attachment: fixed;
   background-color: #b6d1d7;
   color: #23a1bd;
@@ -37,7 +34,7 @@ export const Section = styled.section`
 `;
 export const Container = styled.div`
   display: flex;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
   width: 100%;
   align-items: stretch;
   justify-content: center;
@@ -49,7 +46,7 @@ export const Column = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   width: 50%;
-  min-width: 320px;
+  min-width: 300px;
   flex-direction: column;
   & > h1 {
     font-size: 86px;
@@ -61,19 +58,7 @@ export const JoinDiv = styled.div`
   flex-direction: column;
   width: 50%;
   min-width: 320px;
-  padding: 20px 0px;
+  padding: 20px 0;
   row-gap: 5px;
   justify-content: center;
-`;
-
-export const Button = styled.div`
-  display: flex;
-  width: 80%;
-  height: 50px;
-  background-color: #23a1bd;
-  color: white;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-  max-width: 350px;
 `;

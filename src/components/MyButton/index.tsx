@@ -1,16 +1,12 @@
-import React,{FC} from "react";
+import React, { MouseEvent } from "react";
 
 interface Props {
-    contents : String;
-    onClick : ()=>void;
-  }
+  contents: String | null;
+  onClick: (e: MouseEvent<HTMLElement>) => void;
+}
 
-
-const MyButton: FC<Props> = ({contents,onClick}) =>{
-    return(
-        <button onClick={onClick}>{contents}</button>
-    );
+const MyButton = ({ contents, onClick }: Props) => {
+  return <button onClick={onClick}>{contents}</button>;
 };
-
 
 export default MyButton;

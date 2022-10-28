@@ -1,33 +1,23 @@
-import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { Route, Routes } from "react-router-dom";
+import Loading from "./pages/Loading";
 
-import MainLayout from "./layouts/Main";
-import Home from "./pages/Home";
-import Apple from "./pages/Apple/Apple";
-import MyPromises from "./pages/MyPromises";
-import Profile from "./pages/Profile";
-import Main from "./pages/Main";
-import Login from "./pages/LogIn";
-import SignUp from "./pages/SignUp";
-import SignUp2 from "./pages/SignUp2";
+const MainLayout = lazy(() => import("./layouts/Main"));
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <Suspense fallback={<Loading />}>
       <Routes>
         <Route path={"/"} element={<Home />} />
         <Route path={"login"} element={<Login />} />
-        <Route path={"signup"} element={<SignUp />} />
-        <Route path={"/signup2"} element={<SignUp2 />} />
-        <Route path={"main"} element={<MainLayout />}>
-          <Route path={""} element={<Main />} />
-          <Route path={"profile"} element={<Profile />} />
-          <Route path={"mypromises"} element={<MyPromises />} />
-          <Route path={"apple"} element={<Apple />} />
-          <Route path={"signup"} element={<SignUp />} />
-        </Route>
+        {/*<Route path={"signUp"} element={<SignUp />} />*/}
+        <Route path={"main/*"} element={<MainLayout />} />
+        <Route path={"test"} element={<Loading />} />
+        <Route path={"*"} element={<div>404 error</div>} />
       </Routes>
-    </BrowserRouter>
+    </Suspense>
   );
 };
 
