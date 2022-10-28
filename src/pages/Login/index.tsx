@@ -1,20 +1,27 @@
-import REACT,{useCallback,useState} from 'react';
-import { useNavigate,Navigate } from 'react-router-dom';
+import REACT, { useCallback, useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 //import axios from 'axios';
-import { ArrowBotton, BottomButton, Header,Input,LinkContainer,Form,Finding_string } from './styles';
+import {
+  ArrowBotton,
+  BottomButton,
+  Header,
+  Input,
+  LinkContainer,
+  Form,
+  Finding_string,
+} from "./styles";
 //import useSWR from 'swr';
-import MyHeader from '../../components/MyHeader';
-import MyButton from '../../components/MyButton';
-import { Link } from 'react-router-dom';
+import MyHeader from "../../components/MyHeader";
+import MyButton from "../../components/MyButton";
+import { Link } from "react-router-dom";
 
-const Login = ()=>{
+const Login = () => {
+  const navigate = useNavigate();
+  const [logInError, setLogInError] = useState(false);
+  //const [id, onChangeId] = useInput('');
+  //const [password, onChangePassword] = useInput('');
 
-    const navigate = useNavigate();
-    const [logInError,setLogInError] = useState(false);
-    //const [id, onChangeId] = useInput('');
-    //const [password, onChangePassword] = useInput('');
-   
-    /*const onSubmit = useCallback(
+  /*const onSubmit = useCallback(
         (e:any)=>{
             e.preventDefault();
             setLogInError(false);
@@ -35,7 +42,7 @@ const Login = ()=>{
         }
     ,[id,password]);*/
 
-   /* if(data === undefined){
+  /* if(data === undefined){
         return <div>로딩중...</div>
     }
 
@@ -43,23 +50,21 @@ const Login = ()=>{
         return <Navigate to="/"></Navigate>;
     }*/
 
-
-    return (
-        <div>
-            <Header>밥선배</Header>
-            <Form>
-            <Input value={'아이디'}/>
-            <Input value={'비밀번호'}/>
-            <Finding_string>아이디/비밀번호 찾기</Finding_string>
-            </Form>
-            <LinkContainer>
-             밥선배에 처음이신가요?&nbsp;
-             <Link to='/signup'>회원가입</Link>
-            </LinkContainer>
-            <BottomButton>로그인</BottomButton>
-        </div>
-    )
-
-}
+  return (
+    <div>
+      <Header>밥선배</Header>
+      <Form>
+        <Input value={"아이디"} />
+        <Input value={"비밀번호"} />
+        <Finding_string>아이디/비밀번호 찾기</Finding_string>
+        <LinkContainer>
+          밥선배에 처음이신가요?&nbsp;
+          <Link to="/signup">회원가입</Link>
+        </LinkContainer>
+        <BottomButton>로그인</BottomButton>
+      </Form>
+    </div>
+  );
+};
 
 export default Login;
