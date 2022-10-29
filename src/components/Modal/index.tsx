@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { memo, ReactNode, MouseEvent } from "react";
 import { css } from "@emotion/react";
 

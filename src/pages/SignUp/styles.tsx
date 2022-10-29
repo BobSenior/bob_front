@@ -67,13 +67,37 @@ export const InputBox = styled.input`
   box-sizing: border-box;
   margin: 0 0 20px;
   color: #b4b4b4;
-  font-size: 22px;
+  font-size: 20px;
   height: 50px;
   width: 80%;
   margin-left: 10%;
+  &:focus {
+    color: black;
+  }
+`;
+
+export const YearSelector = styled.select`
+  background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg)
+    no-repeat 95% 50%;
+  border-radius: 2px;
+  padding-left: 7px;
+  --saf-0: rgba(var(--sk_foreground_high_solid, 134, 134, 134), 1);
+  border: 3px solid var(--saf-0);
+  transition: border 80ms ease-out, box-shadow 80ms ease-out;
+  box-sizing: border-box;
+  width: 80%;
+  height: 50px;
+  margin-left: 10%;
+  font-size: 20px;
+  padding-left: 8px;
+  padding-right: 101px;
+  &:focus {
+    color: black;
+  }
 `;
 
 export const ArrowButton = styled.button`
+  padding-left: 8px;
   background-image: url(${Down});
   background-color: white;
   border: none;
@@ -93,10 +117,42 @@ export const GlassButton = styled.button`
   border: none;
   position: absolute;
   border-radius: 5px;
-  top: 72px;
+  top: 71112px;
   width: 30px;
   height: 32px;
   right: 11%;
   color: #61dafb;
   cursor: pointer;
+`;
+
+export const CheckButton = styled.button`
+  font-weight: bold;
+  position: absolute;
+  background-color: #b4b4b4;
+  border: none;
+  outline: none;
+  border-radius: 1px;
+  top: 63px;
+  margin-left: 10%;
+  min-width: 100px;
+  height: 50px;
+  width: 15%;
+  color: white;
+  cursor: pointer;
+`;
+
+export const Error = styled.div`
+  color: #e01e5a;
+  font-weight: bold;
+  margin-left: 10px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  width: 60%;
+  font-size: 15px;
+`;
+
+export const CheckIcon = styled.svg`
+  fill: none;
+  stroke: white;
+  stroke-width: 2px;
 `;

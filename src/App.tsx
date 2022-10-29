@@ -4,7 +4,8 @@ import Loading from "./pages/Loading";
 
 const MainLayout = lazy(() => import("./layouts/Main"));
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./pages/Login"));
+const Login = lazy(() => import("./pages/LogIn"));
+const Signup = lazy(() => import("./pages/SignUp"));
 
 const App = () => {
   return (
@@ -12,7 +13,7 @@ const App = () => {
       <Routes>
         <Route path={"/"} element={<Home />} />
         <Route path={"login"} element={<Login />} />
-        {/*<Route path={"signUp"} element={<SignUp />} />*/}
+        <Route path={"signup"} element={<Signup />} />
         <Route path={"main/*"} element={<MainLayout />} />
         <Route path={"test"} element={<Loading />} />
         <Route path={"*"} element={<div>404 error</div>} />

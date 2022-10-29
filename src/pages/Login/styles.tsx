@@ -66,7 +66,7 @@ export const Finding_string = styled.div`
 
 export const BottomButton = styled.button`
   position: relative;
-  top: 50px;
+  top: 30px;
   width: 750%;
   max-width: 80%;
   color: #fff;
