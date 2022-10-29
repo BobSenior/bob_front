@@ -11,40 +11,26 @@ import {
   TopContext,
 } from "../PromiseBox/style";
 import { promiseInfo } from "../../types/db";
-import React, { memo, ReactNode } from "react";
-import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
+import React, { memo } from "react";
+import MemberBtn from "../MemberBtn";
 
-const p1: promiseInfo = {
-  name: "라이언",
-  ID: "22",
-  title: "밥먹을 사람!",
-  major: "소프트웨어학부",
-  place: "흑석동",
-  time: "10월 30일",
-};
+interface props {
+  data: promiseInfo;
+}
 
-const PlanBox = () => {
+const PlanBox = ({ data }: props) => {
   return (
     <PBox>
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
           <TopContext>
-            <span>{p1.title}</span>
+            <span>{data.title}</span>
           </TopContext>
           <MiddleContext>
-            <MemberSpanBtn onClick={() => {}} major={p1.major}>
-              {p1.name}
-              <span>{p1.major}</span>
-              <span>{p1.ID}</span>
-            </MemberSpanBtn>
+            <MemberBtn name={data.name} major={data.major} ID={data.ID} />
           </MiddleContext>
-          <BottomContext>
-            <BottomLeftDiv>
-              <span>{p1.place}</span>
-              <span>{p1.time}</span>
-            </BottomLeftDiv>
-          </BottomContext>
+          <BottomContext></BottomContext>
         </PromiseContexts>
       </PromiseHead>
       <PromiseTail></PromiseTail>

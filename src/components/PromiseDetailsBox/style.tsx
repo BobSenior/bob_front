@@ -24,6 +24,7 @@ export const PlaceInfoDiv = styled(motion.div)`
   gap: 5px;
   background-color: rgba(255, 255, 255, 30%);
   border-radius: 7px;
+  cursor: pointer;
 `;
 
 export const TimeInfoDiv = styled.div`
@@ -40,6 +41,7 @@ export const TitleHeader = css`
   border-radius: 6px;
   font-size: 0.65em;
 `;
+
 export const TNPSection = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -70,7 +72,6 @@ export const ContentSection = css`
     word-break: break-word;
   }
 `;
-export const TagSection = css``;
 
 export const Section = styled.section`
   & h1 {

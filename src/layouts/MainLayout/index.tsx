@@ -1,4 +1,4 @@
-import React, { useCallback, useState, Suspense, lazy } from "react";
+import React, { useCallback, useState, Suspense, lazy, useEffect } from "react";
 import {
   Body,
   Bottom,
@@ -8,10 +8,11 @@ import {
   ProfileMenu,
   HeaderSpan,
 } from "./style";
-const Promises = lazy(() => import("../../pages/Promises"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const Plans = lazy(() => import("../../pages/Plans"));
 const Compose = lazy(() => import("../../pages/Compose"));
+const Main = lazy(() => import("../../pages/Main"));
+const Search = lazy(() => import("../../pages/Search"));
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
@@ -23,8 +24,9 @@ import SearchBar from "../../components/SearchBar";
 
 const emailExample = "123";
 
-const Main = () => {
+const MainLayout = () => {
   const navigate = useNavigate();
+  const [numOfColumns, setNumOfColumns] = useState<number>(1);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showMapModal, setShowMapModal] = useState(false);
@@ -35,6 +37,18 @@ const Main = () => {
     setShowSearchBar(false);
     setShowMapModal(false);
   }, [showProfileMenu, showSearchBar, showMapModal]);
+
+  const recountColumns = () => {
+    setNumOfColumns(Math.floor(window.innerWidth / 400));
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", recountColumns);
+    recountColumns();
+    return () => {
+      window.removeEventListener("resize", recountColumns);
+    };
+  }, [window]);
 
   return (
     <MapModalContext.Provider
@@ -92,11 +106,21 @@ const Main = () => {
         <Body>
           <Suspense fallback={<Loading />}>
             <Routes>
-              <Route path={""} element={<Promises />} />
-              <Route path={"search/:input"} element={<Promises />} />
-              <Route path={"plans/:plan"} element={<Plans />} />
+              <Route
+                index
+                element={
+                  <Main numOfColumns={numOfColumns > 3 ? 3 : numOfColumns} />
+                }
+              />
+              <Route path={"search/:input"} element={<Search />} />
+              <Route
+                path={"plans/:plan"}
+                element={
+                  <Plans numOfColumns={numOfColumns > 2 ? 2 : numOfColumns} />
+                }
+              />
               <Route path={"profile"} element={<Profile />} />
-              <Route path={"compose/:id"} element={<Compose />} />
+              <Route path={"compose"} element={<Compose />} />
               <Route path={"*"} element={<div>404 error</div>} />
             </Routes>
           </Suspense>
@@ -139,4 +163,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainLayout;

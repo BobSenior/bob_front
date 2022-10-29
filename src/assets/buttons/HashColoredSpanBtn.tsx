@@ -10,7 +10,7 @@ interface props {
   major?: string;
 }
 
-const MemberSpanBtn = ({ children, onClick, major }: props) => {
+const HashColoredSpanBtn = ({ children, onClick, major }: props) => {
   const labelColor = new ColorHash().rgb(major ? major : "");
   return (
     <motion.span
@@ -25,9 +25,7 @@ const MemberSpanBtn = ({ children, onClick, major }: props) => {
         border-radius: 3px;
         font-size: 0.9em;
         cursor: pointer;
-        & span {
-          font-size: 0.45em;
-        }
+        padding: 1.5px 3px;
       `}
       whileTap={{ scale: 0.9 }}
     >
@@ -35,4 +33,4 @@ const MemberSpanBtn = ({ children, onClick, major }: props) => {
     </motion.span>
   );
 };
-export default MemberSpanBtn;
+export default HashColoredSpanBtn;

@@ -52,7 +52,7 @@ export const MiddleContext = styled.div`
   align-items: flex-end;
 `;
 export const BottomContext = styled.div`
-  display: flex;
+  //display: flex;
   justify-content: space-between;
 `;
 
@@ -68,7 +68,7 @@ export const PromiseContexts = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
   flex-grow: 1;
-  row-gap: 5px;
+  row-gap: 3px;
   align-content: stretch;
 `;
 

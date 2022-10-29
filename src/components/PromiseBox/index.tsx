@@ -17,7 +17,6 @@ import {
   MiddleContext,
   BottomContext,
   BottomRightDiv,
-  BottomLeftDiv,
   HashTagContainer,
   ArrowImg,
   variants,
@@ -27,9 +26,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { ProgressBar } from "react-loader-spinner";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
-import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
 import { promiseInfo } from "../../types/db";
 import HashTag from "../HashTag";
+import MemberBtn from "../MemberBtn";
 
 interface props {
   data: promiseInfo;
@@ -59,20 +58,9 @@ const PromiseBox = ({ data }: props) => {
                 <span style={{ fontSize: "0.7em" }}>{`2/4`}</span>
               </TopContext>
               <MiddleContext>
-                <MemberSpanBtn
-                  onClick={onClickMemberSpanBtn}
-                  major={data.major}
-                >
-                  {data.name}
-                  <span>{data.major}</span>
-                  <span>{data.ID}</span>
-                </MemberSpanBtn>
+                <MemberBtn name={data.name} major={data.major} ID={data.ID} />
               </MiddleContext>
               <BottomContext>
-                <BottomLeftDiv>
-                  <span>{data.place}</span>
-                  <span>{data.time}</span>
-                </BottomLeftDiv>
                 <BottomRightDiv>
                   <span>대기자수: 1</span>
                   <span>작성일자</span>

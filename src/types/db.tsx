@@ -1,6 +1,6 @@
 export interface promiseInfo {
   name: string;
-  ID: string;
+  ID: number;
   title: string | null;
   major: string;
   place: string | null;

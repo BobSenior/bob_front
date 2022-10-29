@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { memo, useCallback, useContext, useRef, useState } from "react";
+import { memo, useCallback, useContext, useState } from "react";
 import {
   ContentSection,
   DetailWrapper,
@@ -10,7 +10,6 @@ import {
   MembersDiv,
   PlaceInfoDiv,
   Section,
-  TagSection,
   TimeInfoDiv,
   TitleHeader,
   TNPSection,
@@ -19,8 +18,8 @@ import { promiseInfo } from "../../types/db";
 import ColorHash from "color-hash";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
-import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
 import MapModalContext from "../../hooks/MapModalContext";
+import MemberBtn from "../MemberBtn";
 
 interface props {
   data: promiseInfo;
@@ -30,7 +29,6 @@ const major = "소프트웨어학부";
 const PromiseDetailsBox = ({ data }: props) => {
   const [participateIn, setParticipateIn] = useState(false);
   const { setShowMapModal, setAddress } = useContext(MapModalContext);
-  const placeInfoRef = useRef(null);
 
   const onClickParticipationButton = useCallback(() => {
     setParticipateIn((prevState) => {
@@ -72,7 +70,7 @@ const PromiseDetailsBox = ({ data }: props) => {
           }}
         >
           <MapButton src={PickerSvg} />
-          <span ref={placeInfoRef}>{data.place}</span>
+          <span>{data.place}</span>
         </PlaceInfoDiv>
         <TimeInfoDiv>
           <span>{data.time}</span>
@@ -81,23 +79,12 @@ const PromiseDetailsBox = ({ data }: props) => {
       <Section>
         <h1>Members</h1>
         <MembersDiv>
-          <MemberSpanBtn onClick={() => {}} major={major}>
-            어피치1<span>소프트웨어학부</span>
-          </MemberSpanBtn>
-          <MemberSpanBtn onClick={() => {}} major={major}>
-            어피치1<span>소프트웨어학부</span>
-          </MemberSpanBtn>
-          <MemberSpanBtn onClick={() => {}} major={major}>
-            어피치1<span>소프트웨어학부</span>
-          </MemberSpanBtn>
+          <MemberBtn name={data.name} major={data.major} ID={data.ID} />
         </MembersDiv>
       </Section>
       <Section css={ContentSection}>
         <h1>Contents</h1>
         <p>{"hi hi~"}</p>
-      </Section>
-      <Section css={TagSection}>
-        <h1>tags</h1>
       </Section>
       <Footer>
         <ColoredBtn
