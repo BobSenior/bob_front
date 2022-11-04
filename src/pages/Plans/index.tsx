@@ -5,6 +5,7 @@ import { PlansHeader, PlansWrapper } from "./style";
 import { promiseInfo } from "../../types/db";
 import { PromisesColumn, PromisesWrapper } from "../Main/style";
 import PlanBox from "../../components/PlanBox";
+import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 
 const p2: promiseInfo[] = [
   {
@@ -41,13 +42,10 @@ const p2: promiseInfo[] = [
   },
 ];
 
-interface props {
-  numOfColumns: number;
-}
-
-const Plans = ({ numOfColumns }: props) => {
+const Plans = () => {
   const { plan } = useParams();
   const navigate = useNavigate();
+  const [numOfColumns, setNumOfColumns] = useState<number>(1);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
@@ -55,11 +53,29 @@ const Plans = ({ numOfColumns }: props) => {
 
     p2.forEach((value, index) => {
       tempColDivs[index % numOfColumns].push(
-        <PlanBox data={value} key={index} />
+        <PlanBox data={value} key={generateUniqueID()} />
       );
     });
     return tempColDivs;
   }, [numOfColumns]);
+
+  const recountColumns = () => {
+    let num = Math.floor(window.innerWidth / 400);
+    if (num > 2) {
+      num = 2;
+    } else if (num < 1) {
+      num = 1;
+    }
+    setNumOfColumns(num);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", recountColumns);
+    recountColumns();
+    return () => {
+      window.removeEventListener("resize", recountColumns);
+    };
+  }, [window]);
 
   return (
     <PlansWrapper>
@@ -81,7 +97,9 @@ const Plans = ({ numOfColumns }: props) => {
       </PlansHeader>
       <PromisesWrapper>
         {columnDivs.map((value) => {
-          return <PromisesColumn>{value}</PromisesColumn>;
+          return (
+            <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
+          );
         })}
       </PromisesWrapper>
     </PlansWrapper>

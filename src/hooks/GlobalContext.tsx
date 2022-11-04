@@ -15,7 +15,6 @@ const MapModalContextState = {
   setAddress: () => {},
 };
 
-const MapModalContext =
-  createContext<MapModalContextType>(MapModalContextState);
+const GlobalContext = createContext<MapModalContextType>(MapModalContextState);
 
-export default MapModalContext;
+export default GlobalContext;

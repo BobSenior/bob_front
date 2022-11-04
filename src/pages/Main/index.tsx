@@ -1,7 +1,8 @@
-import React, { useMemo } from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { PromisesColumn, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
 import { promiseInfo } from "../../types/db";
+import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 
 const p2: promiseInfo[] = [
   {
@@ -11,6 +12,7 @@ const p2: promiseInfo[] = [
     major: "미디어커뮤니테이션학부",
     place: "흑석동",
     time: "10월 30일",
+    createdAt: "2022-10-30",
   },
   {
     name: "라이언",
@@ -38,30 +40,48 @@ const p2: promiseInfo[] = [
   },
 ];
 
-interface props {
-  numOfColumns: number;
-}
+const Main = () => {
+  const [numOfColumns, setNumOfColumns] = useState<number>(1);
 
-const Main = ({ numOfColumns }: props) => {
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
 
     p2.forEach((value, index) => {
       tempColDivs[index % numOfColumns].push(
-        <PromiseBox data={value} key={index} />
+        <PromiseBox data={value} key={generateUniqueID()} />
       );
     });
     return tempColDivs;
   }, [numOfColumns]);
 
+  const recountColumns = useCallback(() => {
+    let num = Math.floor(window.innerWidth / 350);
+    if (num > 3) {
+      num = 3;
+    } else if (num < 1) {
+      num = 1;
+    }
+    setNumOfColumns(num);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", recountColumns);
+    recountColumns();
+    return () => {
+      window.removeEventListener("resize", recountColumns);
+    };
+  }, [window.innerWidth]);
+
   return (
     <PromisesWrapper>
       {columnDivs.map((value) => {
-        return <PromisesColumn>{value}</PromisesColumn>;
+        return (
+          <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
+        );
       })}
     </PromisesWrapper>
   );
 };
 
-export default Main;
+export default memo(Main);

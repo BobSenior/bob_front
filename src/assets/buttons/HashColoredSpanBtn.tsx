@@ -7,19 +7,19 @@ import ColorHash from "color-hash";
 interface props {
   children: ReactNode;
   onClick?: (e: MouseEvent<HTMLElement>) => void;
-  major?: string;
+  coloringText?: string;
 }
 
-const HashColoredSpanBtn = ({ children, onClick, major }: props) => {
-  const labelColor = new ColorHash().rgb(major ? major : "");
+const HashColoredSpanBtn = ({ children, onClick, coloringText }: props) => {
+  const labelColor = new ColorHash().rgb(coloringText ? coloringText : "");
   return (
     <motion.span
       onClick={onClick}
       css={css`
         background-color: rgba(
-          ${major ? labelColor.at(0) : 0},
-          ${major ? labelColor.at(1) : 0},
-          ${major ? labelColor.at(2) : 0},
+          ${coloringText ? labelColor.at(0) : 0},
+          ${coloringText ? labelColor.at(1) : 0},
+          ${coloringText ? labelColor.at(2) : 0},
           0.2
         );
         border-radius: 3px;

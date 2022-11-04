@@ -9,19 +9,6 @@ export const MainBox = styled.div`
   }
 `;
 
-export const ProfileMenu = css`
-  position: absolute;
-  top: 39px;
-  right: 3px;
-  display: flex;
-  flex-direction: column;
-  background-color: #b6d1d7;
-  border-radius: 5px;
-  & div {
-    padding: 15px 30px;
-  }
-`;
-
 export const HeaderSpan = styled.span`
   font-size: 30px;
   cursor: default;

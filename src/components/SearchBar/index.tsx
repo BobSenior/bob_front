@@ -38,7 +38,8 @@ const SearchBox = () => {
           </form>
         ) : (
           <ResultSpan
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setShowInput(true);
             }}
           >

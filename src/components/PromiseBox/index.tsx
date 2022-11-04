@@ -1,12 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {
-  MouseEvent,
-  lazy,
-  memo,
-  useState,
-  useCallback,
-  Suspense,
-} from "react";
+import React, { lazy, useState, useCallback, Suspense } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -29,6 +22,8 @@ import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
 import { promiseInfo } from "../../types/db";
 import HashTag from "../HashTag";
 import MemberBtn from "../MemberBtn";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
 
 interface props {
   data: promiseInfo;
@@ -39,9 +34,6 @@ const PromiseBox = ({ data }: props) => {
 
   const onClickPBox = useCallback(() => {
     if (data) setToggleDetailsBox((prevState) => !prevState);
-  }, []);
-  const onClickMemberSpanBtn = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
   }, []);
 
   return (
@@ -63,7 +55,7 @@ const PromiseBox = ({ data }: props) => {
               <BottomContext>
                 <BottomRightDiv>
                   <span>대기자수: 1</span>
-                  <span>작성일자</span>
+                  <span>{dayjs().locale("ko").format()}</span>
                 </BottomRightDiv>
               </BottomContext>
             </>
@@ -117,4 +109,4 @@ const PromiseBox = ({ data }: props) => {
   );
 };
 
-export default memo(PromiseBox);
+export default PromiseBox;

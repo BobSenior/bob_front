@@ -32,7 +32,7 @@ export const TimeInfoDiv = styled.div`
   border-radius: 7px;
 `;
 
-export const MapButton = styled.img`
+export const PickerImg = styled.img`
   height: 2em;
   width: 1.5em;
 `;
