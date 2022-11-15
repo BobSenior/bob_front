@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { AnimatePresence, motion } from "framer-motion";
-import { memo, ReactNode, MouseEvent } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ReactNode, MouseEvent } from "react";
 import { css } from "@emotion/react";
 
 interface props {
@@ -63,9 +63,8 @@ const Modal = ({ isVisible, children, onClickForClose }: props) => {
                 font-size: 25px;
                 cursor: pointer;
               `}
-              whileHover={{
-                scale: 1.4,
-              }}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.8 }}
               onClick={onClickForClose}
             >
               &times;
@@ -78,4 +77,4 @@ const Modal = ({ isVisible, children, onClickForClose }: props) => {
   );
 };
 
-export default memo(Modal);
+export default Modal;

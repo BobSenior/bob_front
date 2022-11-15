@@ -35,7 +35,7 @@ const ColoredBtn = ({
         border-radius: 10px;
         justify-content: center;
         align-items: center;
-        cursor: grab;
+        cursor: pointer;
       `}
       onClick={onClick}
       whileHover={isHover ? { scale: 1.05 } : undefined}

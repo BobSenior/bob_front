@@ -1,16 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { memo, useCallback, useContext, useRef, useState } from "react";
+import { useCallback, useContext, useState, MouseEvent } from "react";
 import {
   ContentSection,
   DetailWrapper,
   Footer,
   HeaderSection,
   InNOut,
-  MapButton,
+  PickerImg,
   MembersDiv,
   PlaceInfoDiv,
   Section,
-  TagSection,
   TimeInfoDiv,
   TitleHeader,
   TNPSection,
@@ -19,8 +18,8 @@ import { promiseInfo } from "../../types/db";
 import ColorHash from "color-hash";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
-import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
-import MapModalContext from "../../hooks/MapModalContext";
+import GlobalContext from "../../hooks/GlobalContext";
+import MemberBtn from "../MemberBtn";
 
 interface props {
   data: promiseInfo;
@@ -29,26 +28,31 @@ const major = "소프트웨어학부";
 
 const PromiseDetailsBox = ({ data }: props) => {
   const [participateIn, setParticipateIn] = useState(false);
-  const { setShowMapModal, setAddress } = useContext(MapModalContext);
-  const placeInfoRef = useRef(null);
+  const { setShowMapModal, setAddress } = useContext(GlobalContext);
 
-  const onClickParticipationButton = useCallback(() => {
-    setParticipateIn((prevState) => {
-      if (prevState) {
-        //TODO:참가 신청 취소 API 연결 필요
-      } else {
-        //TODO:참가 신청 API 연결 필요
-      }
-      return !prevState;
-    });
+  const onClickParticipationButton = useCallback(
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      setParticipateIn((prevState) => {
+        if (prevState) {
+          //TODO:참가 신청 취소 API 연결 필요
+        } else {
+          //TODO:참가 신청 API 연결 필요
+        }
+        return !prevState;
+      });
+    },
+    []
+  );
+
+  const onClickPlaceInfoDiv = useCallback((e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setAddress(data.place ? data.place : "");
+    setShowMapModal(true);
   }, []);
 
   return (
-    <DetailWrapper
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
+    <DetailWrapper onClick={(e) => e.stopPropagation()}>
       <Section css={HeaderSection}>
         <h1>Info</h1>
         <div>
@@ -64,15 +68,9 @@ const PromiseDetailsBox = ({ data }: props) => {
         </div>
       </Section>
       <Section css={TNPSection}>
-        <PlaceInfoDiv
-          whileTap={{ scale: 0.85 }}
-          onClick={() => {
-            setAddress(data.place ? data.place : "");
-            setShowMapModal(true);
-          }}
-        >
-          <MapButton src={PickerSvg} />
-          <span ref={placeInfoRef}>{data.place}</span>
+        <PlaceInfoDiv whileTap={{ scale: 0.85 }} onClick={onClickPlaceInfoDiv}>
+          <PickerImg src={PickerSvg} />
+          <span>{data.place}</span>
         </PlaceInfoDiv>
         <TimeInfoDiv>
           <span>{data.time}</span>
@@ -81,23 +79,12 @@ const PromiseDetailsBox = ({ data }: props) => {
       <Section>
         <h1>Members</h1>
         <MembersDiv>
-          <MemberSpanBtn onClick={() => {}} major={major}>
-            어피치1<span>소프트웨어학부</span>
-          </MemberSpanBtn>
-          <MemberSpanBtn onClick={() => {}} major={major}>
-            어피치1<span>소프트웨어학부</span>
-          </MemberSpanBtn>
-          <MemberSpanBtn onClick={() => {}} major={major}>
-            어피치1<span>소프트웨어학부</span>
-          </MemberSpanBtn>
+          <MemberBtn name={data.name} major={data.major} ID={data.ID} />
         </MembersDiv>
       </Section>
       <Section css={ContentSection}>
         <h1>Contents</h1>
         <p>{"hi hi~"}</p>
-      </Section>
-      <Section css={TagSection}>
-        <h1>tags</h1>
       </Section>
       <Footer>
         <ColoredBtn
@@ -116,4 +103,4 @@ const PromiseDetailsBox = ({ data }: props) => {
   );
 };
 
-export default memo(PromiseDetailsBox);
+export default PromiseDetailsBox;

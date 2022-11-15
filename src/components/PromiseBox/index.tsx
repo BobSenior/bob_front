@@ -1,12 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, {
-  MouseEvent,
-  lazy,
-  memo,
-  useState,
-  useCallback,
-  Suspense,
-} from "react";
+import React, { lazy, useState, useCallback, Suspense } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -17,7 +10,6 @@ import {
   MiddleContext,
   BottomContext,
   BottomRightDiv,
-  BottomLeftDiv,
   HashTagContainer,
   ArrowImg,
   variants,
@@ -27,9 +19,11 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { ProgressBar } from "react-loader-spinner";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
-import MemberSpanBtn from "../../assets/buttons/MemberSpanBtn";
 import { promiseInfo } from "../../types/db";
 import HashTag from "../HashTag";
+import MemberBtn from "../MemberBtn";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
 
 interface props {
   data: promiseInfo;
@@ -40,9 +34,6 @@ const PromiseBox = ({ data }: props) => {
 
   const onClickPBox = useCallback(() => {
     if (data) setToggleDetailsBox((prevState) => !prevState);
-  }, []);
-  const onClickMemberSpanBtn = useCallback((e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
   }, []);
 
   return (
@@ -59,23 +50,12 @@ const PromiseBox = ({ data }: props) => {
                 <span style={{ fontSize: "0.7em" }}>{`2/4`}</span>
               </TopContext>
               <MiddleContext>
-                <MemberSpanBtn
-                  onClick={onClickMemberSpanBtn}
-                  major={data.major}
-                >
-                  {data.name}
-                  <span>{data.major}</span>
-                  <span>{data.ID}</span>
-                </MemberSpanBtn>
+                <MemberBtn name={data.name} major={data.major} ID={data.ID} />
               </MiddleContext>
               <BottomContext>
-                <BottomLeftDiv>
-                  <span>{data.place}</span>
-                  <span>{data.time}</span>
-                </BottomLeftDiv>
                 <BottomRightDiv>
                   <span>대기자수: 1</span>
-                  <span>작성일자</span>
+                  <span>{dayjs().locale("ko").format()}</span>
                 </BottomRightDiv>
               </BottomContext>
             </>
@@ -129,4 +109,4 @@ const PromiseBox = ({ data }: props) => {
   );
 };
 
-export default memo(PromiseBox);
+export default PromiseBox;
