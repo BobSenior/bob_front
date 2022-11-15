@@ -5,7 +5,7 @@ import FindingIdPw from "./pages/FindingIdPw";
 
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./pages/LogIn"));
+const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/SignUp"));
 
 const App = () => {

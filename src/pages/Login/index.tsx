@@ -9,7 +9,7 @@ import {
   LinkContainer,
   Form,
   Finding_string,
-} from "../LogIn/styles";
+} from "../Login/styles";
 //import useSWR from 'swr';
 import MyHeader from "../../components/MyHeader";
 import MyButton from "../../components/MyButton";

@@ -14,8 +14,8 @@ import {
 } from "./styles";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
-import { BottomButton } from "../LogIn/styles";
 import image from "../../../public/bob.png";
+import { BottomButton } from "../Login/styles";
 
 const SignUp = () => {
   const navigate = useNavigate();
