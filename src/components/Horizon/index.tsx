@@ -8,8 +8,10 @@ const HorizonLine: FC<Props> = ({ text }) => {
   return (
     <div
       style={{
+        position: "relative",
         width: "90%",
-        marginLeft: "5%",
+        left: "5%",
+        marginTop: "30px",
         textAlign: "center",
         borderBottom: "1px solid #aaa",
         lineHeight: "0.1em",

@@ -18,6 +18,8 @@ import { Link } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
   const [logInError, setLogInError] = useState(false);
+  const [id, setId] = useState("");
+  const [password, setPassword] = useState("");
   //const [id, onChangeId] = useInput('');
   //const [password, onChangePassword] = useInput('');
 
@@ -54,9 +56,24 @@ const Login = () => {
     <div>
       <Header>밥선배</Header>
       <Form>
-        <Input value={"아이디"} />
-        <Input value={"비밀번호"} />
-        <Finding_string>아이디/비밀번호 찾기</Finding_string>
+        <Input
+          value={id}
+          placeholder={"아이디"}
+          onChange={(e) => {
+            setId(e.target.value);
+          }}
+        />
+        <Input
+          value={password}
+          placeholder={"비밀번호"}
+          type={"password"}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+        <Finding_string onClick={() => navigate(`/finding`)}>
+          아이디/비밀번호 찾기
+        </Finding_string>
         <LinkContainer>
           밥선배에 처음이신가요?&nbsp;
           <Link to="/signup">회원가입</Link>

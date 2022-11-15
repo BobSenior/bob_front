@@ -77,6 +77,7 @@ export const InputBox = styled.input`
 `;
 
 export const YearSelector = styled.select`
+  appearance: none;
   background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg)
     no-repeat 95% 50%;
   border-radius: 2px;
