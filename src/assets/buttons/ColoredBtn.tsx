@@ -30,7 +30,7 @@ const ColoredBtn = ({
         display: flex;
         width: ${width};
         height: ${height};
-        background-color: #23a1bd;
+        background-color: var(--basic-color);
         color: white;
         border-radius: 10px;
         justify-content: center;
@@ -39,7 +39,9 @@ const ColoredBtn = ({
       `}
       onClick={onClick}
       whileHover={isHover ? { scale: 1.05 } : undefined}
-      whileTap={isTap ? { scale: 0.9, backgroundColor: "#1256bb" } : undefined}
+      whileTap={
+        isTap ? { scale: 0.9, backgroundColor: "var(--bold-color)" } : undefined
+      }
       animate={animate}
       variants={variants}
     >

@@ -77,6 +77,10 @@ const PromiseBox = ({ data }: props) => {
               <HashTag text={"흑석역"} />
               <HashTag text={"흑석역"} />
               <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
+              <HashTag text={"흑석역"} />
             </>
           )}
         </HashTagContainer>
@@ -98,7 +102,7 @@ const PromiseBox = ({ data }: props) => {
               }}
               wrapperClass="progress-bar-wrapper"
               borderColor=""
-              barColor="#23a1bd"
+              barColor="var(--basic-color)"
             />
           }
         >

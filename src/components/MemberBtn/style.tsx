@@ -15,16 +15,23 @@ export const ProfileScriptBox = styled.div`
 export const ProfileImg = styled.img`
   width: 50px;
   height: 50px;
-  background-color: red;
+  border-radius: 50px;
+  background-color: var(--basic-color);
 `;
 
-export const MemberInfoDiv = styled(motion.div)`
+export const MemberInfoPopUp = styled(motion.div)`
   position: absolute;
   z-index: 500;
-  background-color: rgba(182, 209, 215, 0.8);
+  gap: 0;
+`;
+
+export const MemberInfoDiv = styled.div`
+  position: relative;
+  top: -5px;
+  background-color: var(--basic-back-color);
   width: 250px;
-  height: 50px;
   display: flex;
   border-radius: 10px;
   padding: 10px 10px;
+  column-gap: 5px;
 `;

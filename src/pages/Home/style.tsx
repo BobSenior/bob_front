@@ -26,8 +26,8 @@ export const Section = styled.section`
   flex-wrap: wrap;
   padding: 60px 24px;
   background-attachment: fixed;
-  background-color: #b6d1d7;
-  color: #23a1bd;
+  background-color: var(--basic-back-color);
+  color: var(--basic-color);
   background-repeat: no-repeat;
   background-size: cover;
   background-position-x: 20%;
