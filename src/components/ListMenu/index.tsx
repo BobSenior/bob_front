@@ -11,13 +11,13 @@ interface props {
 
 const ProfileMenu = css`
   position: absolute;
+  z-index: 1025;
   top: 39px;
   right: 3px;
   display: flex;
   flex-direction: column;
-  background-color: #b6d1d7;
+  background-color: var(--basic-back-color);
   border-radius: 5px;
-  z-index: 1025;
   & div {
     padding: 15px 30px;
   }

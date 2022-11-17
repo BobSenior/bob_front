@@ -52,7 +52,6 @@ export const MiddleContext = styled.div`
   align-items: flex-end;
 `;
 export const BottomContext = styled.div`
-  //display: flex;
   justify-content: space-between;
 `;
 
@@ -60,7 +59,7 @@ export const PromiseImg = styled.img`
   display: block;
   width: 75px;
   height: 75px;
-  background-color: #23a1bd;
+  background-color: var(--basic-color);
 `;
 
 export const PromiseContexts = styled.div`
@@ -80,7 +79,7 @@ export const PromiseHead = styled.div`
 
 export const PromiseTail = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-top: 5px;
   align-items: flex-end;
 `;
@@ -90,7 +89,7 @@ export const PBox = styled.div`
   flex-direction: column;
   align-items: stretch;
   align-content: center;
-  min-width: 320px;
+  min-width: 280px;
   min-height: 50px;
   padding: 5px;
   border: rgba(0, 0, 0, 0.1) solid 0.5px;

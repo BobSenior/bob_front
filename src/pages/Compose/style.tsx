@@ -9,7 +9,7 @@ export const spring = {
 };
 export const HandleVariant = {
   on: {
-    backgroundColor: "#23a1bd",
+    backgroundColor: "var(--basic-color)",
   },
   off: {
     backgroundColor: "rgba(75,75,75,0.7)",
@@ -25,7 +25,7 @@ export const SwitchVariant = {
 };
 export const SpanVariant = {
   on: {
-    color: "#23a1bd",
+    color: "var(--basic-color)",
   },
   off: {
     color: "#808080FF",

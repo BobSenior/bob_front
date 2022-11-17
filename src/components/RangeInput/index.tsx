@@ -17,7 +17,7 @@ const RangeInputCSS = css`
   -webkit-appearance: none;
   border-radius: 5px;
   background-color: rgba(182, 209, 215, 0.3);
-  accent-color: #23a1bd;
+  accent-color: var(--basic-color);
 `;
 
 interface props {

@@ -1,4 +1,4 @@
-# 밥선배 프론트 현황(10/31)
+# 밥선배 프론트 현황(11/15)
 
 ### 1. 패키지 현황
 
@@ -20,6 +20,7 @@
     ["framer-motion"](https://www.framer.com/docs/): "^7.6.1" - 애니메이션 추가\
     "gravatar": "^1.8.2"\
     "react": "^18.2.0"\
+    "react-custom-scrollbars-2": "^4.5.0" - 스크롤바 추가\
     "react-dom": "^18.2.0"\
     ["react-loading-skeleton"](https://github.com/dvtng/react-loading-skeleton): "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면.\
     "react-router-dom": "^6.4.2"\

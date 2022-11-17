@@ -14,7 +14,7 @@ interface props {
 
 const pushedVariants = {
   pushed: {
-    backgroundColor: "#23a1bd",
+    backgroundColor: "var(--basic-color)",
   },
 };
 
@@ -40,7 +40,7 @@ const LayoutBtn = ({
       onClick={onClick}
       whileTap={{ scale: 0.9 }}
       whileHover={{
-        backgroundColor: "#23a1bd",
+        backgroundColor: "var(--basic-color)",
         color: "#ffffff",
       }}
       animate={animate}

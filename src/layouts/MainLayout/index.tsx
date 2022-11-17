@@ -5,6 +5,7 @@ const Plans = lazy(() => import("../../pages/Plans"));
 const Compose = lazy(() => import("../../pages/Compose"));
 const Main = lazy(() => import("../../pages/Main"));
 const Search = lazy(() => import("../../pages/Search"));
+import ChatRoom from "../../components/ChatRoom";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
@@ -66,6 +67,7 @@ const MainLayout = () => {
               <Route path={"plans/:plan"} element={<Plans />} />
               <Route path={"search/:input"} element={<Search />} />
               <Route path={"profile"} element={<Profile />} />
+              <Route path={"chat_test"} element={<ChatRoom />} />
               <Route path={"compose"} element={<Compose />} />
               <Route path={"*"} element={<div>404 error</div>} />
             </Routes>
@@ -82,6 +84,12 @@ const MainLayout = () => {
             text={"내 약속"}
             onClick={() => {
               navigate(`plans/participating`);
+            }}
+          />
+          <LayoutBtn
+            text={"채팅 테스트"}
+            onClick={() => {
+              navigate(`chat_test`);
             }}
           />
           <LayoutBtn

@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import {
   BottomContext,
   MiddleContext,
@@ -11,6 +12,24 @@ import {
 import { promiseInfo } from "../../types/db";
 import React, { memo } from "react";
 import MemberBtn from "../MemberBtn";
+import { css } from "@emotion/react";
+
+const TailCSS = css`
+  & span {
+    font-size: 0.75em;
+  }
+  & div {
+    display: flex;
+    align-items: center;
+  }
+  &div {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    border: 1px solid #9b9b9b;
+    padding: 3px;
+  }
+`;
 
 interface props {
   data: promiseInfo;
@@ -31,7 +50,50 @@ const PlanBox = ({ data }: props) => {
           <BottomContext></BottomContext>
         </PromiseContexts>
       </PromiseHead>
-      <PromiseTail></PromiseTail>
+      <PromiseTail css={TailCSS}>
+        <div>
+          <svg width="20" height="20">
+            <circle
+              cx="10"
+              cy="10"
+              r="7"
+              stroke="black"
+              stroke-width="2"
+              fill="var(--basic-color)"
+            />
+            Sorry, your browser does not support inline SVG.
+          </svg>
+          <span>모집 중</span>
+        </div>
+        <div>
+          <svg width="20" height="20">
+            <circle
+              cx="10"
+              cy="10"
+              r="7"
+              stroke="black"
+              stroke-width="2"
+              fill="var(--basic-color)"
+            />
+            Sorry, your browser does not support inline SVG.
+          </svg>
+          <span>약속 잡는 중</span>
+        </div>
+        <div>
+          <svg width="20" height="20">
+            <circle
+              cx="10"
+              cy="10"
+              r="7"
+              stroke="black"
+              stroke-width="2"
+              fill="var(--basic-color)"
+            />
+            Sorry, your browser does not support inline SVG.
+          </svg>
+          <span>약속 완료</span>
+        </div>
+      </PromiseTail>
     </PBox>
   );
 };

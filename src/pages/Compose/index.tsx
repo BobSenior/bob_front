@@ -44,12 +44,13 @@ const Compose = () => {
   const [maxMember, setMaxMember] = useState<number>(2);
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
   const [onlyForAnonymous, setOnlyForAnonymous] = useState<boolean>(false);
-  const [disableSubmit, setDisableSubmit] = useState<boolean>(false);
+  const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
 
   const onSubmitComposeForm = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
       console.log("제출");
+      //TODO: form제출
       console.log({ formData, maxMember, onlyForSameMajor, onlyForAnonymous });
     },
     [formData, maxMember, onlyForSameMajor, onlyForAnonymous]
