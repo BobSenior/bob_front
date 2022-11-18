@@ -28,6 +28,7 @@ const ColoredBtn = ({
     <motion.div
       css={css`
         display: flex;
+        flex-direction: column;
         width: ${width};
         height: ${height};
         background-color: var(--basic-color);

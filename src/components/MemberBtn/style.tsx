@@ -29,8 +29,9 @@ export const MemberInfoDiv = styled.div`
   position: relative;
   top: -5px;
   background-color: var(--basic-back-color);
-  width: 250px;
+  min-width: 200px;
   display: flex;
+  align-items: center;
   border-radius: 10px;
   padding: 10px 10px;
   column-gap: 5px;

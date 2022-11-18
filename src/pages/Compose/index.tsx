@@ -145,6 +145,21 @@ const Compose = () => {
               );
             })}
           </HashTagContainer>
+          <Label>종류</Label>
+          <fieldset>
+            <div>
+              <input type={"radio"} name={"category"} />
+              <label htmlFor={"category1"}>같이먹자</label>
+            </div>
+            <div>
+              <input type={"radio"} name={"category"} />
+              <label htmlFor={"category2"}>내가산다</label>
+            </div>
+            <div>
+              <input type={"radio"} name={"category"} />
+              <label htmlFor={"category3"}>사주세요</label>
+            </div>
+          </fieldset>
           <Label>최대 인원수</Label>
           <RangeInput value={maxMember} setValue={setMaxMember} />
           <Label>추가 설정</Label>

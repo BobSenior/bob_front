@@ -11,6 +11,9 @@ import {
 } from "./style";
 import { AnimatePresence } from "framer-motion";
 import gravatar from "gravatar";
+import ColoredBtn from "../../assets/buttons/ColoredBtn";
+import EnterSvg from "../../assets/icons/enter-outline.svg";
+import CopySvg from "../../assets/icons/copy-outline.svg";
 
 interface props {
   name: string;
@@ -78,12 +81,27 @@ const MemberBtn = ({ name, major, ID }: props) => {
                 src={gravatar.url(name, { s: "50px", d: "identicon" })}
               />
               <ProfileScriptBox>
-                <span>{name}</span>
-                <div>
+                <span style={{ cursor: "pointer", width: "fit-content" }}>
+                  {name}
+                  <i style={{ color: "dimgray", fontSize: "0.8em" }}>@{ID}</i>
+                  <img
+                    src={CopySvg}
+                    width={"12px"}
+                    height={"12px"}
+                    style={{ margin: "0 5px" }}
+                  />
+                </span>
+                <span style={{ fontSize: "0.7em" }}>
                   {major}
-                  {ID}
-                </div>
+                  <i>{ID}</i>
+                </span>
               </ProfileScriptBox>
+              <ColoredBtn width={"45px"} height={"50px"} onClick={() => {}}>
+                <img src={EnterSvg} width={"25px"} height={"25px"} />
+                <span style={{ fontSize: "0.15em", color: "black" }}>
+                  더보기
+                </span>
+              </ColoredBtn>
             </MemberInfoDiv>
           </MemberInfoPopUp>
         )}

@@ -1,5 +1,19 @@
-import React, { useCallback, useState, Suspense, lazy } from "react";
-import { Body, Bottom, Header, ProfileImg, MainBox, HeaderSpan } from "./style";
+import React, {
+  useCallback,
+  useState,
+  Suspense,
+  lazy,
+  MouseEvent,
+  useMemo,
+} from "react";
+import {
+  Body,
+  Bottom,
+  Header,
+  MainBox,
+  IconsContainer,
+  AlarmMark,
+} from "./style";
 const Profile = lazy(() => import("../../pages/Profile"));
 const Plans = lazy(() => import("../../pages/Plans"));
 const Compose = lazy(() => import("../../pages/Compose"));
@@ -11,22 +25,45 @@ import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import ListMenu from "../../components/ListMenu";
-import Modal from "../../components/Modal";
 import GlobalContext from "../../hooks/GlobalContext";
 import SearchBar from "../../components/SearchBar";
+import AlarmSvg from "../../assets/icons/notifications-outline.svg";
+import ListAlarm from "../../components/ListAlarm";
+import { AnimatePresence } from "framer-motion";
+import MapModal from "../../components/MapModal/MapModal";
 
 const emailExample = "123";
 
 const MainLayout = () => {
   const navigate = useNavigate();
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showMapModal, setShowMapModal] = useState(false);
+  const [showListModal, setShowListModal] = useState(0);
   const [address, setAddress] = useState<string>("");
+  const [alarmCount, setAlarmCount] = useState(1);
 
   const closeAllModals = useCallback(() => {
-    setShowProfileMenu(false);
-    setShowSearchBar(false);
+    setShowListModal(0);
+  }, []);
+
+  const ListModal = useMemo(() => {
+    switch (showListModal) {
+      case 1:
+        return <ListAlarm />;
+      case 2:
+        return <ListMenu />;
+      default:
+        return null;
+    }
+  }, [showListModal]);
+
+  const onClickAlarmBtn = useCallback((e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setShowListModal((prevState) => (prevState === 1 ? 0 : 1));
+  }, []);
+  const onClickAvatarBtn = useCallback((e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    setShowListModal((prevState) => (prevState === 2 ? 0 : 2));
   }, []);
 
   return (
@@ -43,22 +80,32 @@ const MainLayout = () => {
           {showSearchBar ? (
             <SearchBar />
           ) : (
-            <HeaderSpan
+            <span
+              className={"header-span"}
               onClick={() => {
                 navigate("/");
               }}
             >
               밥선배
-            </HeaderSpan>
+              <i>중앙대학교</i>
+            </span>
           )}
-          <ProfileImg
-            src={gravatar.url(emailExample, { s: "28px", d: "identicon" })}
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowProfileMenu((prevState) => !prevState);
-            }}
-          />
-          <ListMenu isVisible={showProfileMenu} />
+          <IconsContainer>
+            <button onClick={onClickAlarmBtn}>
+              {alarmCount > 0 && <AlarmMark></AlarmMark>}
+              <img className={"alarm-image"} src={AlarmSvg} />
+            </button>
+            <button onClick={onClickAvatarBtn}>
+              <img
+                className={"avatar-image"}
+                src={gravatar.url(emailExample, {
+                  s: "32px",
+                  d: "identicon",
+                })}
+              />
+            </button>
+          </IconsContainer>
+          <AnimatePresence>{ListModal}</AnimatePresence>
         </Header>
         <Body>
           <Suspense fallback={<Loading />}>
@@ -103,12 +150,12 @@ const MainLayout = () => {
           />
         </Bottom>
       </MainBox>
-      <Modal
+      <MapModal
         isVisible={showMapModal}
-        onClickForClose={() => setShowMapModal(false)}
-      >
-        {address}
-      </Modal>
+        onClickForClose={() => {
+          setShowMapModal(false);
+        }}
+      />
     </GlobalContext.Provider>
   );
 };

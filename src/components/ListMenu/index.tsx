@@ -5,10 +5,6 @@ import { css } from "@emotion/react";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { useNavigate } from "react-router-dom";
 
-interface props {
-  isVisible: boolean;
-}
-
 const ProfileMenu = css`
   position: absolute;
   z-index: 1025;
@@ -23,36 +19,32 @@ const ProfileMenu = css`
   }
 `;
 
-const ListMenu = ({ isVisible }: props) => {
+const ListMenu = () => {
   const navigate = useNavigate();
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 100 }}
-          css={ProfileMenu}
-        >
-          <LayoutBtn
-            text={"새 약속 만들기"}
-            fontSize={"1em"}
-            onClick={() => {
-              navigate("../main/compose");
-            }}
-          />
-          <LayoutBtn
-            text={"프로필 수정"}
-            fontSize={"1em"}
-            onClick={() => {
-              navigate("../main/profile");
-            }}
-          />
-          <LayoutBtn text={"로그아웃"} fontSize={"1em"} onClick={() => {}} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0, scale: 0, y: -70, x: 40 }}
+      animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+      exit={{ opacity: 0, scale: 0, y: -70, x: 40 }}
+      css={ProfileMenu}
+    >
+      <LayoutBtn
+        text={"새 약속 만들기"}
+        fontSize={"1em"}
+        onClick={() => {
+          navigate("../main/compose");
+        }}
+      />
+      <LayoutBtn
+        text={"프로필 수정"}
+        fontSize={"1em"}
+        onClick={() => {
+          navigate("../main/profile");
+        }}
+      />
+      <LayoutBtn text={"로그아웃"} fontSize={"1em"} onClick={() => {}} />
+    </motion.div>
   );
 };
 

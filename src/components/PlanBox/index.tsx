@@ -58,7 +58,7 @@ const PlanBox = ({ data }: props) => {
               cy="10"
               r="7"
               stroke="black"
-              stroke-width="2"
+              strokeWidth="2"
               fill="var(--basic-color)"
             />
             Sorry, your browser does not support inline SVG.
@@ -72,7 +72,7 @@ const PlanBox = ({ data }: props) => {
               cy="10"
               r="7"
               stroke="black"
-              stroke-width="2"
+              strokeWidth="2"
               fill="var(--basic-color)"
             />
             Sorry, your browser does not support inline SVG.
@@ -86,7 +86,7 @@ const PlanBox = ({ data }: props) => {
               cy="10"
               r="7"
               stroke="black"
-              stroke-width="2"
+              strokeWidth="2"
               fill="var(--basic-color)"
             />
             Sorry, your browser does not support inline SVG.
