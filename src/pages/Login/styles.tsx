@@ -8,8 +8,6 @@ export const Header = styled.header`
   height: 11px;
   left: 10%;
   top: 10px;
-  font-family: Slack-Larsseit, Helvetica Neue, Helvetica, Segoe UI, Tahoma,
-    Arial, sans-serif;
   color: #23a1bd;
   font-weight: 700;
   font-size: 40px;
@@ -103,7 +101,7 @@ export const LinkContainer = styled.p`
   max-width: 4500px;
   & a {
     position: relative;
-    top: 0px;
+    top: 0;
     color: #34a9ab;
     text-decoration: none;
     font-weight: 700;

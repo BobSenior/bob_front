@@ -1,5 +1,4 @@
 import styled from "@emotion/styled/macro";
-import { css } from "@emotion/react";
 
 export const MainBox = styled.div`
   display: flex;
@@ -28,9 +27,9 @@ export const IconsContainer = styled.div`
   margin-right: 10px;
 
   & button {
-    width: 32px;
-    height: 32px;
-    border-radius: 32px;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
     border: none;
     background-color: rgba(0, 0, 0, 0);
     padding: 0;

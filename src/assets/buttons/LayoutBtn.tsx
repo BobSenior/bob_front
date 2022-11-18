@@ -27,15 +27,18 @@ const LayoutBtn = ({
   animate,
 }: props) => {
   return (
-    <motion.div
+    <motion.button
       css={css`
-        height: ${height};
-        width: ${width};
+        height: ${height ?? "100%"};
+        width: ${width ?? "100%"};
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 5px;
         cursor: default;
+        border: none;
+        background-color: rgba(0, 0, 0, 0);
+        font-size: large;
       `}
       onClick={onClick}
       whileTap={{ scale: 0.9 }}
@@ -53,7 +56,7 @@ const LayoutBtn = ({
       >
         {text}
       </span>
-    </motion.div>
+    </motion.button>
   );
 };
 

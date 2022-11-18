@@ -82,6 +82,7 @@ const Plans = () => {
       <PlansHeader>
         <LayoutBtn
           text={"참가 중"}
+          height={"38px"}
           onClick={() => {
             navigate(`../plans/participating`);
           }}
@@ -89,6 +90,7 @@ const Plans = () => {
         />
         <LayoutBtn
           text={"대기 중"}
+          height={"38px"}
           onClick={() => {
             navigate(`../plans/waiting`);
           }}

@@ -93,15 +93,20 @@ const MainLayout = () => {
           <IconsContainer>
             <button onClick={onClickAlarmBtn}>
               {alarmCount > 0 && <AlarmMark></AlarmMark>}
-              <img className={"alarm-image"} src={AlarmSvg} />
+              <img
+                className={"alarm-image"}
+                src={AlarmSvg}
+                alt={"알람 아이콘"}
+              />
             </button>
             <button onClick={onClickAvatarBtn}>
               <img
                 className={"avatar-image"}
                 src={gravatar.url(emailExample, {
-                  s: "32px",
+                  s: "30px",
                   d: "identicon",
                 })}
+                alt={"아바타 아이콘"}
               />
             </button>
           </IconsContainer>

@@ -1,4 +1,4 @@
-# 밥선배 프론트 현황(11/15)
+# 밥선배 프론트 현황(11/19)
 
 ### 1. 패키지 현황
 
@@ -15,25 +15,28 @@
     "@types/react": "^18.0.21"\
     "@types/react-dom": "^18.0.6"\
     "axios": "^1.1.3"\
-    ["color-hash"](https://github.com/zenozeng/color-hash#readme): "^2.0.1" - 문자열 해쉬로 색 추출\
+    "[color-hash](https://github.com/zenozeng/color-hash#readme)": "^2.0.1" - 문자열 해쉬로 색 추출\
     "dayjs": "^1.11.6"\
-    ["framer-motion"](https://www.framer.com/docs/): "^7.6.1" - 애니메이션 추가\
+    "[framer-motion](https://www.framer.com/docs/)": "^7.6.1" - 애니메이션 추가\
     "gravatar": "^1.8.2"\
     "react": "^18.2.0"\
     "react-custom-scrollbars-2": "^4.5.0" - 스크롤바 추가\
     "react-dom": "^18.2.0"\
-    ["react-loading-skeleton"](https://github.com/dvtng/react-loading-skeleton): "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면.\
+    "[react-kakao-maps-sdk](https://react-kakao-maps-sdk.jaeseokim.dev/)": "^1.1.5" - 카카오맵 관련 api\
+    "[react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)": "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면.\
     "react-router-dom": "^6.4.2"\
     "react-scripts": "5.0.1"\
-    ["react-textarea-autosize"](https://www.npmjs.com/package/react-textarea-autosize): "^8.3.4" - 입력값에 따라 자동으로 사이즈 조절되는 textarea\
+    "[react-textarea-autosize](https://www.npmjs.com/package/react-textarea-autosize)": "^8.3.4" - 입력값에 따라 자동으로 사이즈 조절되는 textarea\
+    "[socket.io-client](https://socket.io/)": "^2.4.0" - 웹소켓(소켓io) 클라이언트 용(추구 버전 업그레이드 예정)\
     "swr": "^1.3.0"\
     "typescript": "^4.8.4"\
     "web-vitals": "^2.1.4
 
  "devDependencies":\
     "@emotion/react": "^11.10.4"\
+    "@types/socket.io-client": "^1.4.35"\
     "prettier": "2.7.1"\
-    ["react-loader-spinner"](https://mhnpd.github.io/react-loader-spinner/): "^5.3.4" - 로딩중에 뜨는 spinner들 모음
+    "[react-loader-spinner](https://mhnpd.github.io/react-loader-spinner/)": "^5.3.4" - 로딩중에 뜨는 spinner들 모음
 
 ### 2. 유의 사항
 

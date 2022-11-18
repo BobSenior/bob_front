@@ -1,4 +1,4 @@
-import REACT, { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 //import axios from 'axios';
 import {
@@ -45,7 +45,6 @@ const Login = () => {
   /* if(data === undefined){
         return <div>로딩중...</div>
     }
-
     if(data){
         return <Navigate to="/"></Navigate>;
     }*/
