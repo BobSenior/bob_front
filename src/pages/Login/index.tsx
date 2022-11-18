@@ -11,8 +11,6 @@ import {
   Finding_string,
 } from "../Login/styles";
 //import useSWR from 'swr';
-import MyHeader from "../../components/MyHeader";
-import MyButton from "../../components/MyButton";
 import { Link } from "react-router-dom";
 
 const Login = () => {
