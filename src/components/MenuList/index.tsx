@@ -1,13 +1,13 @@
 import React from "react";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { useNavigate } from "react-router-dom";
-import { LisModalContainer } from "../ListAlarm/style";
+import { ListModalContainer } from "../AlarmList/style";
 
 const ListMenu = () => {
   const navigate = useNavigate();
 
   return (
-    <LisModalContainer
+    <ListModalContainer
       initial={{ opacity: 0, scale: 0, y: -70, x: 40 }}
       animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
       exit={{ opacity: 0, scale: 0, y: -70, x: 40 }}
@@ -27,7 +27,7 @@ const ListMenu = () => {
         }}
       />
       <LayoutBtn text={"로그아웃"} fontSize={"1em"} onClick={() => {}} />
-    </LisModalContainer>
+    </ListModalContainer>
   );
 };
 

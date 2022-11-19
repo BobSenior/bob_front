@@ -7,7 +7,7 @@ export const PlansHeader = styled.div`
   grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: 0.8px;
-  z-index: 100;
+  background-color: white;
   & div {
     height: 40px;
     font-size: 1.5em;

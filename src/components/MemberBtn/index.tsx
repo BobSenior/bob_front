@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import HashColoredSpanBtn from "../../assets/buttons/HashColoredSpanBtn";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { css } from "@emotion/react";
 import React, { useRef, useState } from "react";
 import {
@@ -14,6 +15,7 @@ import gravatar from "gravatar";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import EnterSvg from "../../assets/icons/enter-outline.svg";
 import CopySvg from "../../assets/icons/copy-outline.svg";
+import { toast } from "react-toastify";
 
 interface props {
   name: string;
@@ -81,16 +83,33 @@ const MemberBtn = ({ name, major, ID }: props) => {
                 src={gravatar.url(name, { s: "50px", d: "identicon" })}
               />
               <ProfileScriptBox>
-                <span style={{ cursor: "pointer", width: "fit-content" }}>
-                  {name}
-                  <i style={{ color: "dimgray", fontSize: "0.8em" }}>@{ID}</i>
-                  <img
-                    src={CopySvg}
-                    width={"12px"}
-                    height={"12px"}
-                    style={{ margin: "0 5px" }}
-                  />
-                </span>
+                <CopyToClipboard
+                  text={name + "@" + ID}
+                  onCopy={() => {
+                    toast.success("복사완료!", {
+                      position: "bottom-left",
+                      autoClose: 300,
+                      hideProgressBar: true,
+                      closeOnClick: true,
+                      pauseOnHover: false,
+                      draggable: false,
+                      progress: undefined,
+                      theme: "light",
+                      style: { width: "150px" },
+                    });
+                  }}
+                >
+                  <span style={{ cursor: "pointer", width: "fit-content" }}>
+                    {name}
+                    <i style={{ color: "dimgray", fontSize: "0.8em" }}>@{ID}</i>
+                    <img
+                      src={CopySvg}
+                      width={"12px"}
+                      height={"12px"}
+                      style={{ margin: "0 5px" }}
+                    />
+                  </span>
+                </CopyToClipboard>
                 <span style={{ fontSize: "0.7em" }}>
                   {major}
                   <i>{ID}</i>

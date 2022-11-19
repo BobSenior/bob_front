@@ -24,13 +24,15 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
-import ListMenu from "../../components/ListMenu";
+import MenuList from "../../components/MenuList";
 import GlobalContext from "../../hooks/GlobalContext";
 import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
-import ListAlarm from "../../components/ListAlarm";
+import AlarmList from "../../components/AlarmList";
 import { AnimatePresence } from "framer-motion";
 import MapModal from "../../components/MapModal/MapModal";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const emailExample = "123";
 
@@ -49,9 +51,9 @@ const MainLayout = () => {
   const ListModal = useMemo(() => {
     switch (showListModal) {
       case 1:
-        return <ListAlarm />;
+        return <AlarmList />;
       case 2:
-        return <ListMenu />;
+        return <MenuList />;
       default:
         return null;
     }
@@ -106,7 +108,7 @@ const MainLayout = () => {
                   s: "30px",
                   d: "identicon",
                 })}
-                alt={"아바타 아이콘"}
+                alt={"avatar icon"}
               />
             </button>
           </IconsContainer>
@@ -154,6 +156,7 @@ const MainLayout = () => {
             }}
           />
         </Bottom>
+        <ToastContainer />
       </MainBox>
       <MapModal
         isVisible={showMapModal}

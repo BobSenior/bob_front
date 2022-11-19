@@ -14,9 +14,10 @@ export const ChatRoomHeader = styled.header`
   align-items: center;
   background-color: var(--basic-color);
   height: 38px;
-  & img {
+  & .back-arrow-image {
     width: 32px;
     height: 32px;
     cursor: pointer;
+    margin-left: 5px;
   }
 `;

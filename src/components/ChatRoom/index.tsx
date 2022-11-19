@@ -19,7 +19,11 @@ const ChatRoom = ({ closeChatRoom }: props) => {
     <PlansWrapper className={"chat-page-wrapper"}>
       <ChatRoomContainer className={"chat-room-container"}>
         <ChatRoomHeader>
-          <img src={BackArrowSvg} onClick={onClickBackArrow} />
+          <img
+            className={"back-arrow-image"}
+            src={BackArrowSvg}
+            onClick={onClickBackArrow}
+          />
         </ChatRoomHeader>
         <ChatList />
         <ChatBox chat={""} onSubmitForm={() => {}} onChangeChat={() => {}} />

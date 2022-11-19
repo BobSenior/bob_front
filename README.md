@@ -13,6 +13,7 @@
     "@types/jest": "^27.5.2"\
     "@types/node": "^16.11.68"\
     "@types/react": "^18.0.21"\
+    "@types/react-copy-to-clipboard": "^5.0.4"\
     "@types/react-dom": "^18.0.6"\
     "axios": "^1.1.3"\
     "[color-hash](https://github.com/zenozeng/color-hash#readme)": "^2.0.1" - 문자열 해쉬로 색 추출\
@@ -20,6 +21,7 @@
     "[framer-motion](https://www.framer.com/docs/)": "^7.6.1" - 애니메이션 추가\
     "gravatar": "^1.8.2"\
     "react": "^18.2.0"\
+    "[react-copy-to-clipboard](https://www.npmjs.com/package/react-copy-to-clipboard)": "^5.1.0" - 클립보드로 복사\
     "react-custom-scrollbars-2": "^4.5.0" - 스크롤바 추가\
     "react-dom": "^18.2.0"\
     "[react-kakao-maps-sdk](https://react-kakao-maps-sdk.jaeseokim.dev/)": "^1.1.5" - 카카오맵 관련 api\
@@ -27,6 +29,7 @@
     "react-router-dom": "^6.4.2"\
     "react-scripts": "5.0.1"\
     "[react-textarea-autosize](https://www.npmjs.com/package/react-textarea-autosize)": "^8.3.4" - 입력값에 따라 자동으로 사이즈 조절되는 textarea\
+    "[react-toastify](https://www.npmjs.com/package/react-toastify)": "^9.1.1" - 토스트 모달\
     "[socket.io-client](https://socket.io/)": "^2.4.0" - 웹소켓(소켓io) 클라이언트 용(추구 버전 업그레이드 예정)\
     "swr": "^1.3.0"\
     "typescript": "^4.8.4"\

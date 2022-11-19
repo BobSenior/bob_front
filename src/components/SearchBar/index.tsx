@@ -1,5 +1,5 @@
 import { Input, ResultSpan, SearchWrapper } from "./style";
-import React, { FormEvent, memo, useCallback, useRef, useState } from "react";
+import React, { FormEvent, memo, useCallback, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
