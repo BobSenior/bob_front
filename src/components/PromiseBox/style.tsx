@@ -92,11 +92,7 @@ export const PBox = styled.div`
   min-width: 280px;
   min-height: 50px;
   padding: 5px;
-  border: rgba(0, 0, 0, 0.1) solid 0.5px;
-  border-bottom: rgba(0, 0, 0, 0.3) solid 1px;
-  border-right: rgba(0, 0, 0, 0.3) solid 1px;
-  border-radius: 3px;
-  :hover {
-    border: rgba(0, 0, 0, 0.5) solid 1px;
-  }
+  border: rgba(0, 0, 0, 20%) solid 0.3px;
+  border-radius: 10px;
+  user-select: none;
 `;

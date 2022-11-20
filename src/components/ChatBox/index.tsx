@@ -1,106 +1,63 @@
-import { ChatArea } from "../ChatBox/styles";
-import React, { FormEvent, useCallback, useEffect, useRef } from "react";
-import { useParams } from "react-router";
+import { ChatBoxContainer, ChatInputArea, Form, SendButton } from "./styles";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  forwardRef,
+  KeyboardEvent,
+  useCallback,
+} from "react";
+import { AnimatePresence } from "framer-motion";
+import SendSvg from "../../assets/icons/send-sharp.svg";
+import { HandleVariant } from "../../pages/Compose/style";
 
 interface Props {
   chat: string;
+  onKeyDownChat?: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
   onSubmitForm: (e: FormEvent) => void;
-  onChangeChat: (e: any) => void;
+  onChangeChat: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
 }
-const ChatBox = ({ chat, onSubmitForm, onChangeChat, placeholder }: Props) => {
-  const { workspace } = useParams<{ workspace: string }>();
-  // const { data: memberData } = useWorkspaceMemberData<IUser[]>(workspace);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  useEffect(() => {
-    if (textareaRef.current) {
-      // autosize(textareaRef.current);
-    }
-  }, []);
-
-  const onKeydownChat = useCallback(
-    (e: any) => {
-      if (e.key === "Enter") {
-        if (!e.shiftKey) {
+const ChatBox = forwardRef<HTMLTextAreaElement, Props>(
+  (
+    { chat, onKeyDownChat, onSubmitForm, onChangeChat, placeholder },
+    textareaRef
+  ) => {
+    const onKeydownChat = useCallback(
+      (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
-          onSubmitForm(e);
+          if (chat?.trim()) onSubmitForm(e);
         }
-      }
-    },
-    [onSubmitForm]
-  );
+      },
+      [onSubmitForm]
+    );
 
-  // const renderSuggestion = useCallback(
-  //   (
-  //     suggestion: SuggestionDataItem,
-  //     search: string,
-  //     highlightedDisplay: React.ReactNode,
-  //     index: number,
-  //     focus: boolean
-  //   ): React.ReactNode => {
-  //     if (!memberData) return;
-  //     return (
-  //       <EachMention focus={focus}>
-  //         <img
-  //           src={gravatar.url(memberData[index].email, {
-  //             s: "20px",
-  //             d: "retro",
-  //           })}
-  //           alt={memberData[index].nickname}
-  //         />
-  //         <span>{highlightedDisplay}</span>
-  //       </EachMention>
-  //     );
-  //   },
-  //   [memberData]
-  // );
-
-  return (
-    <ChatArea>
-      <form onSubmit={onSubmitForm}>
-        <textarea />
-        {/*<MentionsTextarea*/}
-        {/*  id="editor-chat"*/}
-        {/*  value={chat}*/}
-        {/*  onChange={onChangeChat}*/}
-        {/*  onKeyPress={onKeydownChat}*/}
-        {/*  placeholder={placeholder}*/}
-        {/*  inputRef={textareaRef}*/}
-        {/*  allowSuggestionsAboveCursor*/}
-        {/*>*/}
-        {/*<Mention*/}
-        {/*  appendSpaceOnAdd*/}
-        {/*  trigger="@"*/}
-        {/*  data={*/}
-        {/*    memberData?.map((v: any) => ({*/}
-        {/*      id: v.id,*/}
-        {/*      display: v.nickname,*/}
-        {/*    })) || []*/}
-        {/*  }*/}
-        {/*  renderSuggestion={renderSuggestion}*/}
-        {/*/>*/}
-        {/*</MentionsTextarea>*/}
-        <div>
-          <button
-            className={
-              "c-button-unstyled c-icon_button c-icon_button--light c-icon_button--size_medium c-texty_input__button c-texty_input__button--send" +
-              (chat?.trim() ? "" : " c-texty_input__button--disabled")
-            }
-            data-qa="texty_send_button"
-            aria-label="Send message"
-            data-sk="tooltip_parent"
-            type="submit"
-            disabled={!chat?.trim()}
-          >
-            <i
-              className="c-icon c-icon--paperplane-filled"
-              aria-hidden="true"
+    return (
+      <AnimatePresence>
+        <ChatBoxContainer>
+          <Form onSubmit={onSubmitForm}>
+            <ChatInputArea
+              value={chat}
+              ref={textareaRef}
+              placeholder={placeholder}
+              onKeyPress={onKeydownChat}
+              onChange={onChangeChat}
             />
-          </button>
-        </div>
-      </form>
-    </ChatArea>
-  );
-};
+            <SendButton
+              aria-label="Send message"
+              type="submit"
+              disabled={!chat?.trim()}
+              animate={!chat?.trim() ? "off" : "on"}
+              variants={HandleVariant}
+              transition={{ duration: 0.1 }}
+            >
+              <img src={SendSvg} width={"22px"} height={"22px"} alt={"send"} />
+            </SendButton>
+          </Form>
+        </ChatBoxContainer>
+      </AnimatePresence>
+    );
+  }
+);
 
 export default ChatBox;

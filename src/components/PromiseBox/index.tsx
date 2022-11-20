@@ -22,8 +22,7 @@ import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
 import { promiseInfo } from "../../types/db";
 import HashTag from "../HashTag";
 import MemberBtn from "../MemberBtn";
-import dayjs from "dayjs";
-import "dayjs/locale/ko";
+import dayjsAll from "../../utils/dayjsAll";
 
 interface props {
   data: promiseInfo;
@@ -55,7 +54,7 @@ const PromiseBox = ({ data }: props) => {
               <BottomContext>
                 <BottomRightDiv>
                   <span>대기자수: 1</span>
-                  <span>{dayjs().locale("ko").format()}</span>
+                  <span>{dayjsAll("2022-11-19 15:50:00").fromNow}</span>
                 </BottomRightDiv>
               </BottomContext>
             </>

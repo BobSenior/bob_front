@@ -26,6 +26,7 @@ const HashColoredSpanBtn = ({ children, onClick, coloringText }: props) => {
         font-size: 0.9em;
         cursor: pointer;
         padding: 1.5px 3px;
+        user-select: none;
       `}
       whileTap={{ scale: 0.9 }}
     >

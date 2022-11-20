@@ -49,6 +49,7 @@ export const ComposeWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 38px;
 `;
 
 export const SwitchDiv = styled(motion.div)`
@@ -105,6 +106,7 @@ export const TextArea = styled(TextAreaAutosize)`
   border: none;
   border-bottom: 1px solid black;
   width: 100%;
+  resize: none;
   :focus {
     outline: none;
     background-color: rgba(255, 255, 255, 100);

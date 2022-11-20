@@ -18,7 +18,6 @@ import {
 } from "./style";
 import { Input } from "../../components/SearchBar/style";
 import { HashTagContainer } from "../../components/PromiseBox/style";
-import HashTag from "../../components/HashTag";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import RangeInput from "../../components/RangeInput";
 
@@ -122,7 +121,6 @@ const Compose = () => {
             value={formData.title}
             onChange={onInputTitle}
             style={{ width: "100%", fontSize: "16px" }}
-            autoFocus={true}
             placeholder={"제목을 입력해주세요."}
           />
 
@@ -134,17 +132,36 @@ const Compose = () => {
             onPointerOut={onPointerOutContext}
             placeholder={"내용을 입력해주세요."}
           />
-          <HashTagContainer style={{ paddingTop: "10px" }}>
-            {formData.tags?.map((value) => {
-              return (
-                <HashTag
-                  key={generateUniqueID()}
-                  text={value}
-                  unClickable={true}
-                />
-              );
-            })}
-          </HashTagContainer>
+          {formData.tags ? (
+            <HashTagContainer style={{ paddingTop: "10px" }}>
+              {formData.tags?.map((value) => {
+                return (
+                  <span
+                    style={{
+                      fontSize: "1.2em",
+                      margin: "2px",
+                      padding: "1.5px 5px",
+                      backgroundColor: "lightgray",
+                    }}
+                    key={generateUniqueID()}
+                  >
+                    #{value}
+                  </span>
+                );
+              })}
+            </HashTagContainer>
+          ) : (
+            <span
+              style={{
+                fontSize: "0.8em",
+                marginTop: "7px",
+                color: "grey",
+              }}
+            >
+              #로 해시태그를 추가할 수 있어요.
+            </span>
+          )}
+
           <Label>종류</Label>
           <fieldset>
             <div>

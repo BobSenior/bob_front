@@ -1,11 +1,17 @@
 import { ChatContainer, ChatUserDiv, ChatWrapper } from "../Chat/styles";
-import React, { memo } from "react";
+import React, { memo, useRef, useState } from "react";
 import gravatar from "gravatar";
 import dayjs from "dayjs";
-import MemberBtn from "../MemberBtn";
+import dayjsAll from "../../utils/dayjsAll";
 
-const Chat = () => {
+interface Props {
+  chat?: string;
+}
+
+const Chat = ({ chat }: Props) => {
   // const user = "Sender" in data ? data.Sender : data.User;
+  const chatOwner = useRef<string>("Receiver");
+
   const user = {
     email: "123@gmail.com",
     nickname: "abc",
@@ -25,24 +31,29 @@ const Chat = () => {
     </>
   );
   return (
-    <ChatWrapper>
+    <ChatWrapper
+      style={{
+        flexDirection:
+          chatOwner.current === "Sender" ? "row-reverse" : undefined,
+      }}
+    >
       <ChatContainer>
-        <ChatUserDiv>
-          <img
-            src={gravatar.url(user.email, { s: "32px", d: "retro" })}
-            alt={user.nickname + "'s avatar"}
-          />
-          <b className={"user-name"}>{user.nickname}</b>
-          <span className={"user-major"}>
-            {user.major}
-            {"12"}
-          </span>
-        </ChatUserDiv>
-        <pre>{result}</pre>
+        {chatOwner.current != "Sender" && (
+          <ChatUserDiv>
+            <img
+              src={gravatar.url(user.email, { s: "32px", d: "retro" })}
+              alt={user.nickname + "'s avatar"}
+            />
+            <b className={"user-name"}>{user.nickname}</b>
+            <span className={"user-major"}>
+              {user.major}
+              {"12"}
+            </span>
+          </ChatUserDiv>
+        )}
+        <pre>{chat ?? result}</pre>
       </ChatContainer>
-      <span className={"chat-time"}>
-        {dayjs(data.createdAt).format("HH:MM")}
-      </span>
+      <span className={"chat-time"}>{dayjsAll(data.createdAt).hourmin}</span>
     </ChatWrapper>
   );
 };

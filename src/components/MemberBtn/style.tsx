@@ -25,7 +25,7 @@ export const MemberInfoPopUp = styled(motion.div)`
   gap: 0;
 `;
 
-export const MemberInfoDiv = styled.div`
+export const MemberInfoDiv = styled(motion.div)`
   position: relative;
   top: -5px;
   background-color: var(--basic-back-color);

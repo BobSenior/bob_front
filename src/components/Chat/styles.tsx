@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const ChatUserDiv = styled.div`
   display: grid;
-  margin: 10px 7px;
+  margin: 10px 7px 0;
   column-gap: 10px;
   align-items: center;
   width: fit-content;
@@ -38,19 +38,17 @@ export const ChatWrapper = styled.div`
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
-  min-width: 250px;
   background-color: rgba(245, 222, 179, 0.3);
   border-radius: 15px;
-
   & pre {
     font-family: inherit;
     white-space: pre-wrap;
     word-break: break-all;
     overflow: auto;
     padding: 5px;
-    margin: 0 10px 10px;
+    margin: 10px;
     background-color: white;
     height: fit-content;
+    max-width: 60vw;
   }
 `;

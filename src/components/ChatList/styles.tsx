@@ -1,9 +1,10 @@
 import styled from "@emotion/styled/macro";
 
 export const ChatZone = styled.div`
-  width: 100%;
-  display: flex;
-  flex: 1;
+  & .scrollBarDiv {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export const Section = styled.section`

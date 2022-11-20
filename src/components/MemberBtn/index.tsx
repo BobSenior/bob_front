@@ -63,6 +63,7 @@ const MemberBtn = ({ name, major, ID }: props) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, y: 20 }}
             exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.3 }}
             onClick={(e) => {
               e.stopPropagation();
             }}
@@ -78,7 +79,12 @@ const MemberBtn = ({ name, major, ID }: props) => {
               />
               Sorry, your browser does not support inline SVG.
             </svg>
-            <MemberInfoDiv>
+            <MemberInfoDiv
+              initial={{ boxShadow: "0px 0px 0 rgba(50,50,50,0.2)" }}
+              animate={{ boxShadow: "5px 3px 0 rgba(50,50,50,0.2)" }}
+              exit={{ boxShadow: "0px 0px 0 rgba(50,50,50,0.2)" }}
+              transition={{ duration: 1 }}
+            >
               <ProfileImg
                 src={gravatar.url(name, { s: "50px", d: "identicon" })}
               />
@@ -88,7 +94,7 @@ const MemberBtn = ({ name, major, ID }: props) => {
                   onCopy={() => {
                     toast.success("복사완료!", {
                       position: "bottom-left",
-                      autoClose: 300,
+                      autoClose: 1000,
                       hideProgressBar: true,
                       closeOnClick: true,
                       pauseOnHover: false,

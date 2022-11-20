@@ -30,7 +30,7 @@ import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { AnimatePresence } from "framer-motion";
-import MapModal from "../../components/MapModal/MapModal";
+import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -82,12 +82,7 @@ const MainLayout = () => {
           {showSearchBar ? (
             <SearchBar />
           ) : (
-            <span
-              className={"header-span"}
-              onClick={() => {
-                navigate("/");
-              }}
-            >
+            <span className={"header-span"} onClick={() => navigate("/")}>
               밥선배
               <i>중앙대학교</i>
             </span>
@@ -131,18 +126,21 @@ const MainLayout = () => {
           <LayoutBtn
             text={"메인"}
             onClick={() => {
+              setShowSearchBar(false);
               navigate("");
             }}
           />
           <LayoutBtn
             text={"내 약속"}
             onClick={() => {
+              setShowSearchBar(false);
               navigate(`plans/participating`);
             }}
           />
           <LayoutBtn
             text={"채팅 테스트"}
             onClick={() => {
+              setShowSearchBar(false);
               navigate(`chat_test`);
             }}
           />
@@ -156,9 +154,9 @@ const MainLayout = () => {
             }}
           />
         </Bottom>
-        <ToastContainer />
       </MainBox>
-      <MapModal
+      <ToastContainer />
+      <MapDisplayModal
         isVisible={showMapModal}
         onClickForClose={() => {
           setShowMapModal(false);
