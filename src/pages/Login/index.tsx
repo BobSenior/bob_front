@@ -12,9 +12,11 @@ import {
 } from "../Login/styles";
 //import useSWR from 'swr';
 import { Link } from "react-router-dom";
+import useSWR from "swr";
 
 const Login = () => {
   const navigate = useNavigate();
+  //const {data, error} = useSWR()
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");

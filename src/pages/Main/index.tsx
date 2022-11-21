@@ -3,6 +3,7 @@ import { PromisesColumn, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
 import { promiseInfo } from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
+import axios from "axios";
 
 const p2: promiseInfo[] = [
   {
@@ -160,6 +161,7 @@ const Main = () => {
       window.removeEventListener("resize", recountColumns);
     };
   }, [window.innerWidth]);
+
 
   return (
     <PromisesWrapper>
