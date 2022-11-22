@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { PromisesColumn, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
-import { promiseInfo } from "../../types/db";
+import {AppointmentHeadDTO, BaseResponse, promiseInfo} from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import axios from "axios";
+import useSWR from "swr";
+import fetcher from "../../utils/fetcher";
 
 const p2: promiseInfo[] = [
   {
@@ -131,18 +133,21 @@ const p2: promiseInfo[] = [
 
 const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
+  const {data:PostHeads, error} = useSWR<BaseResponse<AppointmentHeadDTO[]>>(`/post/list?userIdx=1`,fetcher);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
 
-    p2.forEach((value, index) => {
+    PostHeads?.result.forEach((value, index) => {
       tempColDivs[index % numOfColumns].push(
-        <PromiseBox data={value} key={generateUniqueID()} />
+          <PromiseBox data={value} key={generateUniqueID()} />
       );
-    });
+    })
+
+
     return tempColDivs;
-  }, [numOfColumns]);
+  }, [numOfColumns,PostHeads]);
 
   const recountColumns = useCallback(() => {
     let num = Math.floor(window.innerWidth / 350);
@@ -161,7 +166,6 @@ const Main = () => {
       window.removeEventListener("resize", recountColumns);
     };
   }, [window.innerWidth]);
-
 
   return (
     <PromisesWrapper>

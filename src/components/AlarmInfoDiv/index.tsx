@@ -2,8 +2,13 @@ import { AlarmContext, AlarmInfoWrapper } from "./style";
 import UnreadChatSvg from "../../assets/icons/chatbubbles-outline.svg";
 import Skeleton from "react-loading-skeleton";
 import { useState } from "react";
+import {ShownNotice} from "../../types/db";
 
-const AlarmInfoDiv = () => {
+interface Props{
+    data:ShownNotice;
+}
+
+const AlarmInfoDiv = ({data}:Props) => {
   const [isLoading, setLoading] = useState(false);
 
   return (
@@ -19,7 +24,7 @@ const AlarmInfoDiv = () => {
         {isLoading ? (
           <Skeleton width={"150px"} />
         ) : (
-          <span>읽지않은 메시지가 있습니다.</span>
+          <span>{data.text}</span>
         )}
       </AlarmContext>
     </AlarmInfoWrapper>

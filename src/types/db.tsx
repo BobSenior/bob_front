@@ -1,4 +1,5 @@
 import exp from "constants";
+import {Runtime} from "inspector";
 
 export interface promiseInfo {
   name: string;
@@ -31,6 +32,19 @@ export interface IWorkspace {
   OwnerId: number; // 워크스페이스 만든 사람 아이디
 }
 
+
+/**
+ * 0. BaseResponse
+ */
+
+
+export interface BaseResponse<T>{
+  isSuccess:boolean;
+  code:number;
+  message:string;
+  result:T;
+}
+
 /**
  * 1. post / appointment
  */
@@ -39,16 +53,17 @@ export interface IWorkspace {
 export interface AppointmentHeadDTO{
     postIdx: number;
     title: string;
-    writtenAt: Date;
+    writtenAt: string;
     imageURL: string | null;
     writer:SimplifiedUserProfileDTO;
     location:string;
-    meetingAt:Date;
+    meetingAt:string;
     type:string;
     status:string;
     totalNum:number;
     currNum:number;
     waitingNum:number;
+    tagHeads:string[];
 }
 
 export interface PostViewDTO{
@@ -56,19 +71,19 @@ export interface PostViewDTO{
   title:string;
   groupConstraint:string;
   location:string;
-  meetingAt:Date;
-  buyers: SimplifiedUserProfileDTO[];
-  receivers: SimplifiedUserProfileDTO[];
-  content:string;
+  meetingAt:string;
+  buyer: SimplifiedUserProfileDTO[];
+  receiver: SimplifiedUserProfileDTO[];
+  contents:string;
   tagHead:string[];
-  isRequested:boolean;
+  requested:boolean;
 }
 
 export interface SimplifiedUserProfileDTO{
   userIdx:number;
   nickname:string;
   department:string;
-  schoolId:string;
+  schoolId:number;
   school:string;
   isOnline:boolean;
 }
@@ -76,7 +91,7 @@ export interface SimplifiedUserProfileDTO{
 export interface AppointmentViewDTO{
   postIdx:number;
   location:string;
-  meetingAt:Date;
+  meetingAt:String;
   buyers:SimplifiedUserProfileDTO[];
   receivers:SimplifiedUserProfileDTO[];
   voteTitle:string | null;
@@ -109,6 +124,7 @@ export interface ChatPage{
  */
 
 export interface ShownNotice{
+  noticeIdx:number;
   postIdx:number;
   type:string;
   text:string;
@@ -136,7 +152,7 @@ export interface ShownVoteDTO{
   voteIdx:number;
   writerIdx:number;
   nickname:string;
-  createdAt:Date;
+  createdAt:string;
   title:string;
   totalParticipated:number;
   records:ShownVoteRecord[];
