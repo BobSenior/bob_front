@@ -47,7 +47,7 @@ const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
       {render ? (
         <Map
           center={{ lat: coords.latitude, lng: coords.longitude }}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "60vh" }}
         >
           <MapMarker
             position={{ lat: coords.latitude, lng: coords.longitude }}

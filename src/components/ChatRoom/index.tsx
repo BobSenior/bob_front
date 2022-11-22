@@ -18,11 +18,7 @@ import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { toast } from "react-toastify";
 
-interface props {
-  closeChatRoom?: () => void;
-}
-
-const ChatRoom = ({ closeChatRoom }: props) => {
+const ChatRoom = () => {
   const [showPromiseVote, setShowPromiseVote] = useState<boolean>(true);
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);

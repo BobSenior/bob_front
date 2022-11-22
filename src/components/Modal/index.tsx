@@ -7,9 +7,15 @@ interface props {
   isVisible: boolean;
   children: ReactNode;
   onClickForClose?: (e: MouseEvent<HTMLElement>) => void;
+  marginTopPos?: string;
 }
 
-const Modal = ({ isVisible, children, onClickForClose }: props) => {
+const Modal = ({
+  isVisible,
+  children,
+  onClickForClose,
+  marginTopPos,
+}: props) => {
   return (
     <>
       {isVisible && (
@@ -25,6 +31,7 @@ const Modal = ({ isVisible, children, onClickForClose }: props) => {
             background-color: rgba(255, 255, 255, 0.5);
           `}
           onClick={(e) => e.stopPropagation()}
+          onScroll={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.2 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.2 }}
@@ -34,7 +41,7 @@ const Modal = ({ isVisible, children, onClickForClose }: props) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: 500 }}
             css={css`
-              margin-top: 20vh;
+              margin-top: ${marginTopPos ?? "20vh"};
               display: inline-block;
               background: white;
               --saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
@@ -46,9 +53,9 @@ const Modal = ({ isVisible, children, onClickForClose }: props) => {
               );
               border-radius: 6px;
               user-select: none;
-              width: 60vw;
-              max-width: 650px;
-              height: 50vh;
+              width: 70vw;
+              max-width: 700px;
+              max-height: 80vh;
               padding: 35px 15px 20px 15px;
               position: relative;
             `}
