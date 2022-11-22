@@ -2,10 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { PlansHeader, PlansWrapper } from "./style";
-import { promiseInfo } from "../../types/db";
+import {AppointmentHeadDTO, BaseResponse, promiseInfo} from "../../types/db";
 import { PromisesColumn, PromisesWrapper } from "../Main/style";
 import PlanBox from "../../components/PlanBox";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
+import useSWR from "swr";
+import fetcher from "../../utils/fetcher";
+import PromiseBox from "../../components/PromiseBox";
 import countColumns from "../../utils/countColumns";
 
 const p2: promiseInfo[] = [
@@ -47,18 +50,30 @@ const Plans = () => {
   const { plan } = useParams();
   const navigate = useNavigate();
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
+  const [option,setOption] = useState<number>(0);
+  const {data:ParticipatingAppointment,error:PAError} = useSWR<BaseResponse<AppointmentHeadDTO[]>>('/appointment/ongoing?userIdx=11',fetcher);
+  const {data:WaitingAppointment, error:WAError} = useSWR<BaseResponse<AppointmentHeadDTO[]>>('/post/waiting?userIdx=11',fetcher);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
 
-    p2.forEach((value, index) => {
-      tempColDivs[index % numOfColumns].push(
-        <PlanBox data={value} key={generateUniqueID()} />
-      );
-    });
+    if(option == 0) {
+      ParticipatingAppointment?.result.forEach((value, index) => {
+        tempColDivs[index % numOfColumns].push(
+            <PlanBox data={value} key={generateUniqueID()}/>
+        );
+      });
+    }
+    else if(option == 1){
+      WaitingAppointment?.result.forEach((value, index) => {
+        tempColDivs[index % numOfColumns].push(
+            <PromiseBox data={value} key={generateUniqueID()}/>
+        );
+      });
+    }
     return tempColDivs;
-  }, [numOfColumns]);
+  }, [numOfColumns,ParticipatingAppointment,option]);
 
   const recountColumns = () => {
     const num = countColumns({ totalWidth: window.innerWidth, maxDivs: 2 });
@@ -73,6 +88,7 @@ const Plans = () => {
     };
   }, [window.innerWidth]);
 
+
   return (
     <PlansWrapper>
       <PlansHeader>
@@ -80,6 +96,7 @@ const Plans = () => {
           text={"참가 중"}
           height={"38px"}
           onClick={() => {
+            setOption(0);
             navigate(`../plans/participating`);
           }}
           animate={plan === "participating" ? "pushed" : ""}
@@ -88,6 +105,7 @@ const Plans = () => {
           text={"대기 중"}
           height={"38px"}
           onClick={() => {
+            setOption(1);
             navigate(`../plans/waiting`);
           }}
           animate={plan === "waiting" ? "pushed" : ""}

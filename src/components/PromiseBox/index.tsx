@@ -22,17 +22,19 @@ import {
 import { ProgressBar } from "react-loader-spinner";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
-import { promiseInfo } from "../../types/db";
+import {AppointmentHeadDTO, promiseInfo} from "../../types/db";
 import HashTag from "../HashTag";
 import MemberBtn from "../MemberBtn";
 import dayjsAll from "../../utils/dayjsAll";
 
 interface props {
-  data: promiseInfo;
+  data: AppointmentHeadDTO;
 }
 
 const PromiseBox = ({ data }: props) => {
   const [showDetailsBox, setShowDetailsBox] = useState(false);
+  console.log(data);
+  const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
 
   const onClickShowDetails = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
@@ -47,6 +49,19 @@ const PromiseBox = ({ data }: props) => {
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
+            <TopContext>
+              <span>{data.title}</span>
+              <span style={{ fontSize: "0.7em" }}>{`${data.currNum}/${data.totalNum}`}</span>
+            </TopContext>
+            <MiddleContext>
+              <MemberBtn name={data.writer.nickname} major={data.writer.department} ID={data.writer.schoolId} />
+            </MiddleContext>
+            <BottomContext>
+              <BottomRightDiv>
+                <span>대기자수: {data.waitingNum}</span>
+                <span>{dayjsAll(data.writtenAt).fromNow}</span>
+              </BottomRightDiv>
+            </BottomContext>
           <TopContext>
             <span>{data.title}</span>
             <span style={{ fontSize: "0.7em" }}>{`2/4`}</span>
@@ -64,19 +79,7 @@ const PromiseBox = ({ data }: props) => {
       </PromiseHead>
       <PromiseTail>
         <HashTagContainer>
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
-          <HashTag text={"흑석역"} />
+            {data.tagHeads.map((content)=>(<HashTag key={content} text = {content}/>))}
         </HashTagContainer>
         <ArrowImg
           src={ArrowSvg}
