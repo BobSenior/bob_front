@@ -7,16 +7,16 @@ import {
   PromiseHead,
   PromiseImg,
   TopContext,
-} from "../PromiseBox/style";
-import {AppointmentHeadDTO, promiseInfo} from "../../types/db";
-import React, { memo } from "react";
+} from "../PostBox/style";
+import { AppointmentHeadDTO } from "../../types/db";
+import React from "react";
 import MemberBtn from "../MemberBtn";
 
 interface props {
   data: AppointmentHeadDTO;
 }
 
-const PlanBox = ({ data }: props) => {
+const AppointmentBox = ({ data }: props) => {
   return (
     <PBox>
       <PromiseHead>
@@ -26,7 +26,12 @@ const PlanBox = ({ data }: props) => {
             <span>{data.title}</span>
           </TopContext>
           <MiddleContext>
-            <MemberBtn name={data.writer.nickname} major={data.writer.department} ID={data.writer.schoolId} />
+            <MemberBtn
+              userIdx={data.writer.userIdx}
+              nickName={data.writer.nickname}
+              department={data.writer.department}
+              schoolId={data.writer.schoolId}
+            />
           </MiddleContext>
           <BottomContext></BottomContext>
         </PromiseContexts>
@@ -42,7 +47,6 @@ const PlanBox = ({ data }: props) => {
               strokeWidth="2"
               fill="var(--basic-color)"
             />
-            Sorry, your browser does not support inline SVG.
           </svg>
           <span>모집 중</span>
         </div>
@@ -56,7 +60,6 @@ const PlanBox = ({ data }: props) => {
               strokeWidth="2"
               fill="var(--basic-color)"
             />
-            Sorry, your browser does not support inline SVG.
           </svg>
           <span>약속 잡는 중</span>
         </div>
@@ -70,7 +73,6 @@ const PlanBox = ({ data }: props) => {
               strokeWidth="2"
               fill="var(--basic-color)"
             />
-            Sorry, your browser does not support inline SVG.
           </svg>
           <span>약속 완료</span>
         </div>
@@ -79,4 +81,4 @@ const PlanBox = ({ data }: props) => {
   );
 };
 
-export default memo(PlanBox);
+export default AppointmentBox;

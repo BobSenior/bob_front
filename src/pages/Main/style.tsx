@@ -9,6 +9,6 @@ export const PromisesColumn = styled.div`
 `;
 
 export const PromisesWrapper = styled.div`
-  display: flex;
+  display: grid;
   width: 100%;
 `;

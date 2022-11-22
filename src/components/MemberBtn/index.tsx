@@ -16,14 +16,14 @@ import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import EnterSvg from "../../assets/icons/enter-outline.svg";
 import CopySvg from "../../assets/icons/copy-outline.svg";
 import { toast } from "react-toastify";
+import { NavLink } from "react-router-dom";
 
-interface props {
-  name: string;
-  major: string;
-  ID: number;
-}
-
-const MemberBtn = ({ name, major, ID }: props) => {
+const MemberBtn = (userData: {
+  userIdx: number;
+  nickName: string;
+  department: string;
+  schoolId: number;
+}) => {
   const [showMemberInfoPopUp, setShowMemberInfoPopUp] =
     useState<boolean>(false);
   const nameSpanRef = useRef<HTMLSpanElement>(null);
@@ -35,17 +35,17 @@ const MemberBtn = ({ name, major, ID }: props) => {
   return (
     <div>
       <HashColoredSpanBtn
-        coloringText={major}
+        coloringText={userData.department}
         onClick={(e) => {
           e.stopPropagation();
           setShowMemberInfoPopUp(true);
         }}
       >
-        <span ref={nameSpanRef}>{name}</span>
+        <span ref={nameSpanRef}>{userData.nickName}</span>
         <MajorSpan>
           {" "}
-          in {major}
-          {ID}
+          in {userData.department}
+          {userData.schoolId}
         </MajorSpan>
       </HashColoredSpanBtn>
       <AnimatePresence
@@ -98,11 +98,14 @@ const MemberBtn = ({ name, major, ID }: props) => {
                 transition={{ duration: 1 }}
               >
                 <ProfileImg
-                  src={gravatar.url(name, { s: "50px", d: "identicon" })}
+                  src={gravatar.url(userData.nickName, {
+                    s: "50px",
+                    d: "identicon",
+                  })}
                 />
                 <ProfileScriptBox>
                   <CopyToClipboard
-                    text={name + "@" + ID}
+                    text={userData.nickName + "@" + userData.schoolId}
                     onCopy={() => {
                       toast.success("복사완료!", {
                         position: "bottom-left",
@@ -118,9 +121,9 @@ const MemberBtn = ({ name, major, ID }: props) => {
                     }}
                   >
                     <span style={{ cursor: "pointer", width: "fit-content" }}>
-                      <strong>{name}</strong>
+                      <strong>{userData.nickName}</strong>
                       <i style={{ color: "dimgray", fontSize: "0.8em" }}>
-                        @{ID}
+                        @{userData.schoolId}
                       </i>
                       <img
                         src={CopySvg}
@@ -132,21 +135,31 @@ const MemberBtn = ({ name, major, ID }: props) => {
                     </span>
                   </CopyToClipboard>
                   <span style={{ fontSize: "0.7em" }}>
-                    {major}
-                    <i>{ID}</i>
+                    {userData.department}
+                    <i>{userData.schoolId}</i>
                   </span>
-                </ProfileScriptBox>
-                <ColoredBtn width={"45px"} height={"50px"} onClick={() => {}}>
-                  <img
-                    src={EnterSvg}
-                    width={"25px"}
-                    height={"25px"}
-                    alt={"enter-icon"}
-                  />
-                  <span style={{ fontSize: "0.15em", color: "black" }}>
-                    더보기
-                  </span>
-                </ColoredBtn>
+                </ProfileScriptBox>{" "}
+                <NavLink
+                  to={`/main/profile/${userData.userIdx}`}
+                  style={{
+                    textDecoration: "initial",
+                    width: "45px",
+                    height: "50px",
+                  }}
+                  end={true}
+                >
+                  <ColoredBtn width={"100%"} height={"100%"}>
+                    <img
+                      src={EnterSvg}
+                      width={"25px"}
+                      height={"25px"}
+                      alt={"enter-icon"}
+                    />
+                    <span style={{ fontSize: "0.15em", color: "black" }}>
+                      더보기
+                    </span>
+                  </ColoredBtn>
+                </NavLink>
               </MemberInfoDiv>
             </MemberInfoPopUp>
           </>

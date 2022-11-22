@@ -1,4 +1,4 @@
-import REACT, { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Container, InputBox, InputLabel } from "../SignUp/styles";
 import { Column, Finding_button, Header } from "./styles";
 import HorizonLine from "../../components/Horizon";

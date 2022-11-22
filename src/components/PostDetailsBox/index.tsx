@@ -14,7 +14,13 @@ import {
   TitleHeader,
   TNPSection,
 } from "./style";
-import {AppointmentHeadDTO, BaseResponse, PostViewDTO, promiseInfo, SimplifiedUserProfileDTO} from "../../types/db";
+import {
+  AppointmentHeadDTO,
+  BaseResponse,
+  PostViewDTO,
+  promiseInfo,
+  SimplifiedUserProfileDTO,
+} from "../../types/db";
 import ColorHash from "color-hash";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
@@ -22,7 +28,7 @@ import GlobalContext from "../../hooks/GlobalContext";
 import MemberBtn from "../MemberBtn";
 import axios from "axios";
 import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
+import { getFetcher } from "../../utils/fetchers";
 import HashTag from "../HashTag";
 import usePostView from "../../hooks/usePostView";
 
@@ -31,14 +37,18 @@ interface props {
 }
 const major = "소프트웨어학부";
 
-const PromiseDetailsBox = ({ data }: props) => {
-    const {data:PostView,error} = useSWR<BaseResponse<PostViewDTO>>(`/post/${data.postIdx}?userIdx=11`,fetcher);
-    const [participateIn, setParticipateIn] = useState(PostView?.result.requested);
-    const { setShowMapModal, setAddress } = useContext(GlobalContext);
-    console.log(PostView);
+const PostDetailsBox = ({ data }: props) => {
+  const { data: PostView, error } = useSWR<BaseResponse<PostViewDTO>>(
+    `/post/${data.postIdx}?userIdx=11`,
+    getFetcher
+  );
+  const [participateIn, setParticipateIn] = useState(
+    PostView?.result.requested
+  );
+  const { setShowMapModal, setAddress } = useContext(GlobalContext);
+  console.log(PostView);
 
-
-    //TODO: 1. 이미 참가 완료된 상태 분리 2. buyer하고 receiver하고 따로 불가능한가요?
+  //TODO: 1. 이미 참가 완료된 상태 분리 2. buyer하고 receiver하고 따로 불가능한가요?
 
   const onClickParticipationButton = useCallback(
     (e: MouseEvent<HTMLElement>) => {
@@ -46,24 +56,17 @@ const PromiseDetailsBox = ({ data }: props) => {
       setParticipateIn((prevState) => {
         if (prevState) {
           //TODO:참가 신청 취소 API 연결 필요
-            axios.post(
-                `/post/request/reverse`,
-                {
-                    userIdx:11,
-                    postIdx:data.postIdx
-                }
-            )
-
+          axios.post(`/post/request/reverse`, {
+            userIdx: 11,
+            postIdx: data.postIdx,
+          });
         } else {
           //TODO:참가 신청 API 연결 필요
-            axios.post(
-                '/post/request',
-                {
-                    userIdx:11,
-                    postIdx:data.postIdx,
-                    position:"buyer"
-                }
-            )
+          axios.post("/post/request", {
+            userIdx: 11,
+            postIdx: data.postIdx,
+            position: "buyer",
+          });
         }
         return !prevState;
       });
@@ -77,9 +80,9 @@ const PromiseDetailsBox = ({ data }: props) => {
     setShowMapModal(true);
   }, []);
 
-    if (PostView===undefined) {
-        return <p>Loading...</p>;
-    }
+  if (PostView === undefined) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <DetailWrapper onClick={(e) => e.stopPropagation()}>
@@ -109,8 +112,22 @@ const PromiseDetailsBox = ({ data }: props) => {
       <Section>
         <h1>Members</h1>
         <MembersDiv>
-            {PostView.result.buyer.map((user)=>(<MemberBtn key={user.userIdx} name={user.nickname} major={user.department} ID={user.schoolId}/>))}
-            {PostView.result.receiver.map((user)=>(<MemberBtn key={user.userIdx} name={user.nickname} major={user.department} ID={user.schoolId}/>))}
+          {PostView.result.buyer.map((user) => (
+            <MemberBtn
+              userIdx={user.userIdx}
+              nickName={user.nickname}
+              department={user.department}
+              schoolId={user.schoolId}
+            />
+          ))}
+          {PostView.result.receiver.map((user) => (
+            <MemberBtn
+              userIdx={user.userIdx}
+              nickName={user.nickname}
+              department={user.department}
+              schoolId={user.schoolId}
+            />
+          ))}
         </MembersDiv>
       </Section>
       <Section css={ContentSection}>
@@ -134,4 +151,4 @@ const PromiseDetailsBox = ({ data }: props) => {
   );
 };
 
-export default PromiseDetailsBox;
+export default PostDetailsBox;

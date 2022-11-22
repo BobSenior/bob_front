@@ -11,7 +11,7 @@ import {
   ChatRoomHeader,
   PromiseVoteContainer,
 } from "./style";
-import { PlansWrapper } from "../../pages/Plans/style";
+import { PlansWrapper } from "../../pages/Appointments/style";
 import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
 import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";

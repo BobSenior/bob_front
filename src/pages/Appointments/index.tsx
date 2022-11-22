@@ -1,93 +1,96 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { PlansHeader, PlansWrapper } from "./style";
-import {AppointmentHeadDTO, BaseResponse, promiseInfo} from "../../types/db";
+import {
+  AppointmentHeadDTO,
+  BaseResponse,
+  promiseInfo,
+  SimplifiedUserProfileDTO,
+} from "../../types/db";
 import { PromisesColumn, PromisesWrapper } from "../Main/style";
-import PlanBox from "../../components/PlanBox";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
-import PromiseBox from "../../components/PromiseBox";
+import { getFetcher } from "../../utils/fetchers";
 import countColumns from "../../utils/countColumns";
+import PostHeadBox from "../../components/PostBox";
+import AppointmentBox from "../../components/AppointmentBox";
+import dayjs from "dayjs";
 
-const p2: promiseInfo[] = [
+const sm: SimplifiedUserProfileDTO = {
+  userIdx: 1,
+  nickname: "밥선배1",
+  department: "소프트웨어학부",
+  schoolId: 22,
+  school: "중앙대학교",
+  isOnline: true,
+};
+
+const p2: AppointmentHeadDTO[] = [
   {
-    name: "라이언",
-    ID: 22,
-    title: "밥먹을 사람!",
-    major: "미디어커뮤니테이션학부",
-    place: "흑석동",
-    time: "10월 30일",
-  },
-  {
-    name: "라이언",
-    ID: 22,
-    title: "밥먹을 사람!",
-    major: "에너지시스템공학부",
-    place: "흑석동",
-    time: "10월 30일",
-  },
-  {
-    name: "어피치",
-    ID: 21,
-    title: "밥먹을 사람12!",
-    major: "생명자원공학부",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
+    postIdx: 1,
+    title: "밥먹을사람",
+    writtenAt: dayjs().toString(),
+    imageURL: null,
+    writer: sm,
+    location: "흑석",
+    meetingAt: dayjs().toString(),
+    type: "같이먹자",
+    status: "?",
+    totalNum: 4,
+    currNum: 2,
+    waitingNum: 1,
+    tagHeads: ["123", "456"],
   },
 ];
 
-const Plans = () => {
+const Appointments = () => {
   const { plan } = useParams();
   const navigate = useNavigate();
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
-  const [option,setOption] = useState<number>(0);
-  const {data:ParticipatingAppointment,error:PAError} = useSWR<BaseResponse<AppointmentHeadDTO[]>>('/appointment/ongoing?userIdx=11',fetcher);
-  const {data:WaitingAppointment, error:WAError} = useSWR<BaseResponse<AppointmentHeadDTO[]>>('/post/waiting?userIdx=11',fetcher);
+  // const { data: ParticipatingAppointment, error: PAError } = useSWR<
+  //   BaseResponse<AppointmentHeadDTO[]>
+  // >("/appointment/ongoing?userIdx=11", getFetcher);
+  // const { data: WaitingAppointment, error: WAError } = useSWR<
+  //   BaseResponse<AppointmentHeadDTO[]>
+  // >("/post/waiting?userIdx=11", getFetcher);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
 
-    if(option == 0) {
-      ParticipatingAppointment?.result.forEach((value, index) => {
+    if (plan === "participating") {
+      p2.forEach((value, index) => {
         tempColDivs[index % numOfColumns].push(
-            <PlanBox data={value} key={generateUniqueID()}/>
+          <AppointmentBox data={value} key={generateUniqueID()} />
         );
       });
-    }
-    else if(option == 1){
-      WaitingAppointment?.result.forEach((value, index) => {
+    } else if (plan === "waiting") {
+      p2.forEach((value, index) => {
         tempColDivs[index % numOfColumns].push(
-            <PromiseBox data={value} key={generateUniqueID()}/>
+          <PostHeadBox data={value} key={generateUniqueID()} />
         );
       });
     }
     return tempColDivs;
-  }, [numOfColumns,ParticipatingAppointment,option]);
+  }, [
+    numOfColumns,
+    // ParticipatingAppointment,
+    plan,
+  ]);
 
-  const recountColumns = () => {
+  const recountColumns = useCallback(() => {
     const num = countColumns({ totalWidth: window.innerWidth, maxDivs: 2 });
     setNumOfColumns(num);
-  };
+  }, []);
 
   useEffect(() => {
-    recountColumns();
     window.addEventListener("resize", recountColumns);
+    recountColumns();
     return () => {
       window.removeEventListener("resize", recountColumns);
     };
   }, [window.innerWidth]);
-
 
   return (
     <PlansWrapper>
@@ -96,7 +99,6 @@ const Plans = () => {
           text={"참가 중"}
           height={"38px"}
           onClick={() => {
-            setOption(0);
             navigate(`../plans/participating`);
           }}
           animate={plan === "participating" ? "pushed" : ""}
@@ -105,13 +107,14 @@ const Plans = () => {
           text={"대기 중"}
           height={"38px"}
           onClick={() => {
-            setOption(1);
             navigate(`../plans/waiting`);
           }}
           animate={plan === "waiting" ? "pushed" : ""}
         />
       </PlansHeader>
-      <PromisesWrapper>
+      <PromisesWrapper
+        style={{ gridTemplateColumns: `repeat(${numOfColumns}, 1fr)` }}
+      >
         {columnDivs.map((value) => {
           return (
             <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
@@ -122,4 +125,4 @@ const Plans = () => {
   );
 };
 
-export default Plans;
+export default Appointments;

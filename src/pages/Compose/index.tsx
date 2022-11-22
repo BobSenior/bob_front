@@ -16,10 +16,11 @@ import {
   TextArea,
 } from "./style";
 import { Input } from "../../components/SearchBar/style";
-import { HashTagContainer } from "../../components/PromiseBox/style";
+import { HashTagContainer } from "../../components/PostBox/style";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import RangeInput from "../../components/RangeInput";
 import validator from "validator";
+import { postFetcher } from "../../utils/fetchers";
 
 interface basicData {
   title: string;
@@ -50,15 +51,22 @@ const Compose = () => {
     );
   }, [formData]);
 
-  const isValidTitle = useMemo(() => {
-    return !!formData.title.match("[0-9|a-z|A-Z|가-힣|ㄱ-ㅎ|ㅏ-ㅣ]+");
-  }, [formData]);
-
   const onSubmitComposeForm = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      console.log("제출");
       //TODO: form제출
+      postFetcher
+        .post("", {
+          title: formData.title,
+          contexts: formData.contexts,
+          tags: formData.tags,
+        })
+        .then((res) => {
+          console.log("제출" + res);
+        })
+        .catch((reason) => {
+          console.log(reason);
+        });
       console.log({ formData, maxMember, onlyForSameMajor, onlyForAnonymous });
     },
     [formData, maxMember, onlyForSameMajor, onlyForAnonymous]
@@ -73,7 +81,7 @@ const Compose = () => {
     [formData]
   );
 
-  const onInputContext = useCallback(
+  const onInputContexts = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       setFormData((prevState) => {
         return { ...prevState, contexts: e.target.value };
@@ -115,9 +123,7 @@ const Compose = () => {
           같이 밥 먹을래요?
         </MainSpan>
         <ComposeForm onSubmit={onSubmitComposeForm}>
-          <Label>
-            제목 <span hidden={isValidTitle}>유효하지 않은 입력입니다.</span>
-          </Label>
+          <Label>제목</Label>
           <Input
             type={"text"}
             id={"title"}
@@ -131,7 +137,7 @@ const Compose = () => {
           <TextArea
             id={"context"}
             value={formData.contexts ?? undefined}
-            onChange={onInputContext}
+            onChange={onInputContexts}
             onPointerOut={onPointerOutContext}
             onKeyPress={(e) => {
               console.log(e.key);
@@ -231,8 +237,8 @@ const Compose = () => {
           </SwitchWrapper>
           <SubmitButton
             type={"submit"}
-            disabled={!(isSubmittable && isValidTitle)}
-            animate={isSubmittable && isValidTitle ? "on" : "off"}
+            disabled={!isSubmittable}
+            animate={isSubmittable ? "on" : "off"}
             variants={HandleVariant}
           >
             약속 만들기

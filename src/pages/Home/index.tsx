@@ -32,7 +32,6 @@ const Home = () => {
               initial={{ opacity: 0, y: 100 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1 }}
-              style={{ marginBottom: "10px" }}
             >
               밥선배
             </motion.h1>

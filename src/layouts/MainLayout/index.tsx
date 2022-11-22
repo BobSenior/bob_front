@@ -15,7 +15,7 @@ import {
   AlarmMark,
 } from "./style";
 const Profile = lazy(() => import("../../pages/Profile"));
-const Plans = lazy(() => import("../../pages/Plans"));
+const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
 const Main = lazy(() => import("../../pages/Main"));
 import ChatRoom from "../../components/ChatRoom";
@@ -31,7 +31,6 @@ import AlarmList from "../../components/AlarmList";
 import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { m } from "framer-motion";
 
 const emailExample = "123";
 
@@ -48,7 +47,7 @@ const MainLayout = () => {
       case 1:
         return <AlarmList />;
       case 2:
-        return <MenuList />;
+        return <MenuList setShow={setShowListModal} />;
       default:
         return null;
     }
@@ -109,7 +108,9 @@ const MainLayout = () => {
               <Route index element={<Main />} />
               <Route path={"plans/:plan"} element={<Plans />} />
               <Route path={"search/:searchInput"} element={<Main />} />
-              <Route path={"profile"} element={<Profile />} />
+              <Route path={"profile"} element={<Profile />}>
+                <Route path={":userIdx"} />
+              </Route>
               <Route path={"chat_test"} element={<ChatRoom />} />
               <Route path={"compose"} element={<Compose />} />
               <Route path={"*"} element={<div>404 error</div>} />

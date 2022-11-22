@@ -1,4 +1,4 @@
-# 밥선배 프론트 현황(11/19)
+# 밥선배 프론트 현황(11/23)
 
 ### 1. 패키지 현황
 
@@ -19,7 +19,7 @@
   - "@types/validator": "^13.7.10
   - "axios": "^1.1.3"
   - "[color-hash](https://github.com/zenozeng/color-hash#readme)": "^2.0.1" - 문자열 해쉬로 색 추출
-  - "[dayjs](https://day.js.org/)": "^1.11.6" - 날짜 라이브러리
+  - "[dayjs](https://day.js.org/)": "^1.11.6" - 날짜/시간 형식 라이브러리
   - "[framer-motion](https://www.framer.com/docs/)": "^7.6.1" - 애니메이션 추가
   - "[gravatar](https://ko.gravatar.com/)": "^1.8.2" - 문자열 해시 기반 아바타 생성 
   - "react": "^18.2.0"

@@ -7,7 +7,7 @@ interface props {
   children: ReactNode;
   width: string;
   height: string;
-  onClick: (e: MouseEvent<HTMLElement>) => void;
+  onClick?: (e: MouseEvent<HTMLElement>) => void;
   animate?: string;
   variants?: any;
   isHover?: boolean;

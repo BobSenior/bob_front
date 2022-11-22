@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import PromiseBox from "../../components/PromiseBox";
+import PromiseBox from "../../components/PostBox";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import { PromisesColumn, PromisesWrapper } from "../Main/style";
-import {AppointmentHeadDTO, promiseInfo} from "../../types/db";
+import { AppointmentHeadDTO, promiseInfo } from "../../types/db";
 
 const p2: promiseInfo[] = [
   {
@@ -44,7 +44,7 @@ const p2: promiseInfo[] = [
 const Search = () => {
   const { input } = useParams();
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
-  const [post,SetPost] = useState<AppointmentHeadDTO[]>([]);
+  const [post, SetPost] = useState<AppointmentHeadDTO[]>([]);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
@@ -56,7 +56,7 @@ const Search = () => {
       );
     });
     return tempColDivs;
-  }, [numOfColumns,post]);
+  }, [numOfColumns, post]);
 
   const recountColumns = useCallback(() => {
     let num = Math.floor(window.innerWidth / 350);

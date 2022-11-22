@@ -1,156 +1,39 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { PromisesColumn, PromisesWrapper } from "./style";
-import PromiseBox from "../../components/PromiseBox";
-import {AppointmentHeadDTO, BaseResponse, promiseInfo} from "../../types/db";
+import PromiseBox from "../../components/PostBox";
+import { AppointmentHeadDTO, BaseResponse } from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import countColumns from "../../utils/countColumns";
 import { Oval } from "react-loader-spinner";
-import axios from "axios";
-import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
-
-const p2: promiseInfo[] = [
-  {
-    name: "라이언",
-    ID: 22,
-    title: "밥먹을 사람!",
-    major: "미디어커뮤니테이션학부",
-    place: "흑석동",
-    time: "10월 30일",
-    createdAt: "2022-10-30",
-  },
-  {
-    name: "라이언",
-    ID: 22,
-    title: "밥먹을 사람!",
-    major: "에너지시스템공학부",
-    place: "흑석동",
-    time: "10월 30일",
-  },
-  {
-    name: "어피치",
-    ID: 21,
-    title: "밥먹을 사람12!",
-    major: "생명자원공학부",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-];
+import useSWRInfinite from "swr/infinite";
+import { getFetcher } from "../../utils/fetchers";
 
 const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
   const [isReachingEnd, setReachingEnd] = useState(true);
-  const {data:PostHeads, error} = useSWR<BaseResponse<AppointmentHeadDTO[]>>(`/post/list?userIdx=1`,fetcher);
+  const {
+    data: PostHeads,
+    error,
+    size,
+    setSize,
+    isValidating,
+    mutate,
+  } = useSWRInfinite<BaseResponse<AppointmentHeadDTO[]>>(() => {
+    return "123";
+  }, getFetcher);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
-
-    PostHeads?.result.forEach((value, index) => {
-      tempColDivs[index % numOfColumns].push(
-          <PromiseBox data={value} key={generateUniqueID()} />
-      );
-    })
-
+    // PostHeads?.result.forEach((value, index) => {
+    //   tempColDivs[index % numOfColumns].push(
+    //     <PromiseBox data={value} key={generateUniqueID()} />
+    //   );
+    // }
+    // );
 
     return tempColDivs;
-  }, [numOfColumns,PostHeads]);
+  }, [numOfColumns, PostHeads]);
 
   const recountColumns = useCallback(() => {
     const num = countColumns({ totalWidth: window.innerWidth });
@@ -167,7 +50,9 @@ const Main = () => {
 
   return (
     <>
-      <PromisesWrapper>
+      <PromisesWrapper
+        style={{ gridTemplateColumns: `repeat(${numOfColumns}, 1fr)` }}
+      >
         {columnDivs.map((value) => {
           return (
             <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>

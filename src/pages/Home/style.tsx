@@ -53,6 +53,7 @@ export const Column = styled.div`
   flex-direction: column;
   & > h1 {
     font-size: 86px;
+    margin-bottom: 10px;
   }
 `;
 
