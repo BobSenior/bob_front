@@ -6,7 +6,6 @@ import React, {
   KeyboardEvent,
   useCallback,
 } from "react";
-import { AnimatePresence } from "framer-motion";
 import SendSvg from "../../assets/icons/send-sharp.svg";
 import { HandleVariant } from "../../pages/Compose/style";
 
@@ -33,29 +32,27 @@ const ChatBox = forwardRef<HTMLTextAreaElement, Props>(
     );
 
     return (
-      <AnimatePresence>
-        <ChatBoxContainer>
-          <Form onSubmit={onSubmitForm}>
-            <ChatInputArea
-              value={chat}
-              ref={textareaRef}
-              placeholder={placeholder}
-              onKeyPress={onKeydownChat}
-              onChange={onChangeChat}
-            />
-            <SendButton
-              aria-label="Send message"
-              type="submit"
-              disabled={!chat?.trim()}
-              animate={!chat?.trim() ? "off" : "on"}
-              variants={HandleVariant}
-              transition={{ duration: 0.1 }}
-            >
-              <img src={SendSvg} width={"22px"} height={"22px"} alt={"send"} />
-            </SendButton>
-          </Form>
-        </ChatBoxContainer>
-      </AnimatePresence>
+      <ChatBoxContainer>
+        <Form onSubmit={onSubmitForm}>
+          <ChatInputArea
+            value={chat}
+            ref={textareaRef}
+            placeholder={placeholder}
+            onKeyPress={onKeydownChat}
+            onChange={onChangeChat}
+          />
+          <SendButton
+            aria-label="Send message"
+            type="submit"
+            disabled={!chat?.trim()}
+            animate={!chat?.trim() ? "off" : "on"}
+            variants={HandleVariant}
+            transition={{ duration: 0.1 }}
+          >
+            <img src={SendSvg} width={"22px"} height={"22px"} alt={"send"} />
+          </SendButton>
+        </Form>
+      </ChatBoxContainer>
     );
   }
 );

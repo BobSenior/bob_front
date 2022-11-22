@@ -18,7 +18,6 @@ const Profile = lazy(() => import("../../pages/Profile"));
 const Plans = lazy(() => import("../../pages/Plans"));
 const Compose = lazy(() => import("../../pages/Compose"));
 const Main = lazy(() => import("../../pages/Main"));
-const Search = lazy(() => import("../../pages/Search"));
 import ChatRoom from "../../components/ChatRoom";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
@@ -29,10 +28,10 @@ import GlobalContext from "../../hooks/GlobalContext";
 import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
-import { AnimatePresence } from "framer-motion";
 import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { m } from "framer-motion";
 
 const emailExample = "123";
 
@@ -43,10 +42,6 @@ const MainLayout = () => {
   const [showListModal, setShowListModal] = useState(0);
   const [address, setAddress] = useState<string>("");
   const [alarmCount, setAlarmCount] = useState(1);
-
-  const closeAllModals = useCallback(() => {
-    setShowListModal(0);
-  }, []);
 
   const ListModal = useMemo(() => {
     switch (showListModal) {
@@ -77,7 +72,7 @@ const MainLayout = () => {
         setAddress,
       }}
     >
-      <MainBox onClick={closeAllModals}>
+      <MainBox>
         <Header>
           {showSearchBar ? (
             <SearchBar />
@@ -107,14 +102,13 @@ const MainLayout = () => {
               />
             </button>
           </IconsContainer>
-          <AnimatePresence>{ListModal}</AnimatePresence>
         </Header>
         <Body>
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route index element={<Main />} />
               <Route path={"plans/:plan"} element={<Plans />} />
-              <Route path={"search/:input"} element={<Search />} />
+              <Route path={"search/:searchInput"} element={<Main />} />
               <Route path={"profile"} element={<Profile />} />
               <Route path={"chat_test"} element={<ChatRoom />} />
               <Route path={"compose"} element={<Compose />} />
@@ -162,6 +156,21 @@ const MainLayout = () => {
           setShowMapModal(false);
         }}
       />
+      {ListModal && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: "38px",
+              left: 0,
+              width: "100vw",
+              height: "calc(100vh - 38px)",
+            }}
+            onClick={() => setShowListModal(0)}
+          ></div>
+          {ListModal}
+        </>
+      )}
     </GlobalContext.Provider>
   );
 };

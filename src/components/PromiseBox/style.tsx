@@ -79,9 +79,30 @@ export const PromiseHead = styled.div`
 
 export const PromiseTail = styled.div`
   display: flex;
+  justify-content: space-between;
+  padding-top: 5px;
+  align-items: flex-end;
+`;
+
+export const PlanTail = styled.div`
+  display: flex;
   justify-content: space-around;
   padding-top: 5px;
   align-items: flex-end;
+  & span {
+    font-size: 0.75em;
+  }
+  & div {
+    display: flex;
+    align-items: center;
+  }
+  &div {
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    border: 1px solid #9b9b9b;
+    padding: 3px;
+  }
 `;
 
 export const PBox = styled.div`

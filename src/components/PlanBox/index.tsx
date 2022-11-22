@@ -1,35 +1,16 @@
-/** @jsxImportSource @emotion/react */
 import {
   BottomContext,
   MiddleContext,
   PBox,
+  PlanTail,
   PromiseContexts,
   PromiseHead,
   PromiseImg,
-  PromiseTail,
   TopContext,
 } from "../PromiseBox/style";
 import { promiseInfo } from "../../types/db";
 import React, { memo } from "react";
 import MemberBtn from "../MemberBtn";
-import { css } from "@emotion/react";
-
-const TailCSS = css`
-  & span {
-    font-size: 0.75em;
-  }
-  & div {
-    display: flex;
-    align-items: center;
-  }
-  &div {
-    width: 15px;
-    height: 15px;
-    border-radius: 15px;
-    border: 1px solid #9b9b9b;
-    padding: 3px;
-  }
-`;
 
 interface props {
   data: promiseInfo;
@@ -50,7 +31,7 @@ const PlanBox = ({ data }: props) => {
           <BottomContext></BottomContext>
         </PromiseContexts>
       </PromiseHead>
-      <PromiseTail css={TailCSS}>
+      <PlanTail>
         <div>
           <svg width="20" height="20">
             <circle
@@ -93,7 +74,7 @@ const PlanBox = ({ data }: props) => {
           </svg>
           <span>약속 완료</span>
         </div>
-      </PromiseTail>
+      </PlanTail>
     </PBox>
   );
 };

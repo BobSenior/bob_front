@@ -1,6 +1,6 @@
 import Modal from "../Modal";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GlobalContext from "../../hooks/GlobalContext";
 
 interface props {
@@ -47,7 +47,7 @@ const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
       {render ? (
         <Map
           center={{ lat: coords.latitude, lng: coords.longitude }}
-          style={{ width: "280px", height: "320px" }}
+          style={{ width: "100%", height: "100%" }}
         >
           <MapMarker
             position={{ lat: coords.latitude, lng: coords.longitude }}

@@ -1,5 +1,10 @@
-/** @jsxImportSource @emotion/react */
-import React, { lazy, useState, useCallback, Suspense } from "react";
+import React, {
+  lazy,
+  useState,
+  useCallback,
+  Suspense,
+  MouseEvent,
+} from "react";
 import {
   PBox,
   PromiseContexts,
@@ -14,8 +19,6 @@ import {
   ArrowImg,
   variants,
 } from "./style";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import { ProgressBar } from "react-loader-spinner";
 const PromiseDetailsBox = lazy(() => import("../PromiseDetailsBox"));
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
@@ -29,67 +32,59 @@ interface props {
 }
 
 const PromiseBox = ({ data }: props) => {
-  const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
+  const [showDetailsBox, setShowDetailsBox] = useState(false);
 
-  const onClickPBox = useCallback(() => {
-    if (data) setToggleDetailsBox((prevState) => !prevState);
-  }, []);
+  const onClickShowDetails = useCallback(
+    (e: MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      setShowDetailsBox((prevState) => !prevState);
+    },
+    [showDetailsBox]
+  );
 
   return (
-    <PBox onClick={onClickPBox}>
+    <PBox onClick={onClickShowDetails}>
       <PromiseHead>
         <PromiseImg />
         <PromiseContexts>
-          {!data ? (
-            <Skeleton count={3} width={"100%"} height={"1.4em"} />
-          ) : (
-            <>
-              <TopContext>
-                <span>{data.title}</span>
-                <span style={{ fontSize: "0.7em" }}>{`2/4`}</span>
-              </TopContext>
-              <MiddleContext>
-                <MemberBtn name={data.name} major={data.major} ID={data.ID} />
-              </MiddleContext>
-              <BottomContext>
-                <BottomRightDiv>
-                  <span>대기자수: 1</span>
-                  <span>{dayjsAll("2022-11-19 15:50:00").fromNow}</span>
-                </BottomRightDiv>
-              </BottomContext>
-            </>
-          )}
+          <TopContext>
+            <span>{data.title}</span>
+            <span style={{ fontSize: "0.7em" }}>{`2/4`}</span>
+          </TopContext>
+          <MiddleContext>
+            <MemberBtn name={data.name} major={data.major} ID={data.ID} />
+          </MiddleContext>
+          <BottomContext>
+            <BottomRightDiv>
+              <span>대기자수: 1</span>
+              <span>{dayjsAll("2022-11-19 15:50:00").fromNow}</span>
+            </BottomRightDiv>
+          </BottomContext>
         </PromiseContexts>
       </PromiseHead>
       <PromiseTail>
         <HashTagContainer>
-          {!data ? (
-            <Skeleton width={"5em"} height={"1.2em"} count={3} inline={true} />
-          ) : (
-            <>
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-              <HashTag text={"흑석역"} />
-            </>
-          )}
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
+          <HashTag text={"흑석역"} />
         </HashTagContainer>
         <ArrowImg
           src={ArrowSvg}
           variants={variants}
-          animate={toggleDetailsBox ? "rollDown" : "rollUp"}
+          animate={showDetailsBox ? "rollDown" : "rollUp"}
         />
       </PromiseTail>
-      {toggleDetailsBox && (
+      {showDetailsBox && (
         <Suspense
           fallback={
             <ProgressBar

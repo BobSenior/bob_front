@@ -33,13 +33,20 @@ export const ChatWrapper = styled.div`
     border-radius: 3px;
     padding: 1px 3px;
   }
+  & span {
+    display: inline-block;
+  }
+  & .chat-container {
+    max-width: 65%;
+  }
 `;
 
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: rgba(245, 222, 179, 0.3);
-  border-radius: 15px;
+  border-radius: 12px;
+  width: max-content;
   & pre {
     font-family: inherit;
     white-space: pre-wrap;
@@ -49,6 +56,5 @@ export const ChatContainer = styled.div`
     margin: 10px;
     background-color: white;
     height: fit-content;
-    max-width: 60vw;
   }
 `;

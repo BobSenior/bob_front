@@ -3,11 +3,11 @@ import "dayjs/locale/ko";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-const useDayjs = (timeStamp: string | number | dayjs.Dayjs | Date) => {
+const dayjsAll = (timeStamp: string | number | dayjs.Dayjs | Date) => {
   const hourmin = dayjs(timeStamp).locale("ko").format("HH:MM");
   const fromNow = dayjs(timeStamp).locale("ko").fromNow();
-
-  return { fromNow, hourmin };
+  const detail = dayjs(timeStamp).locale("ko").format();
+  return { fromNow, hourmin, detail };
 };
 
-export default useDayjs;
+export default dayjsAll;

@@ -2,44 +2,48 @@
 
 ### 1. 패키지 현황
 
- "dependencies":\
-    "@emotion/babel-preset-css-prop": "^11.10.0"\
-    "@emotion/styled": "^11.10.4"\
-    "@testing-library/jest-dom": "^5.16.5"\
-    "@testing-library/react": "^13.4.0"\
-    "@testing-library/user-event": "^13.5.0"\
-    "@types/color-hash": "^1.0.2"\
-    "@types/gravatar": "^1.8.3"\
-    "@types/jest": "^27.5.2"\
-    "@types/node": "^16.11.68"\
-    "@types/react": "^18.0.21"\
-    "@types/react-copy-to-clipboard": "^5.0.4"\
-    "@types/react-dom": "^18.0.6"\
-    "axios": "^1.1.3"\
-    "[color-hash](https://github.com/zenozeng/color-hash#readme)": "^2.0.1" - 문자열 해쉬로 색 추출\
-    "dayjs": "^1.11.6"\
-    "[framer-motion](https://www.framer.com/docs/)": "^7.6.1" - 애니메이션 추가\
-    "gravatar": "^1.8.2"\
-    "react": "^18.2.0"\
-    "[react-copy-to-clipboard](https://www.npmjs.com/package/react-copy-to-clipboard)": "^5.1.0" - 클립보드로 복사\
-    "react-custom-scrollbars-2": "^4.5.0" - 스크롤바 추가\
-    "react-dom": "^18.2.0"\
-    "[react-kakao-maps-sdk](https://react-kakao-maps-sdk.jaeseokim.dev/)": "^1.1.5" - 카카오맵 관련 api\
-    "[react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)": "^3.1.0" - 컴포넌트 내부에 문자열 로딩화면.\
-    "react-router-dom": "^6.4.2"\
-    "react-scripts": "5.0.1"\
-    "[react-textarea-autosize](https://www.npmjs.com/package/react-textarea-autosize)": "^8.3.4" - 입력값에 따라 자동으로 사이즈 조절되는 textarea\
-    "[react-toastify](https://www.npmjs.com/package/react-toastify)": "^9.1.1" - 토스트 모달\
-    "[socket.io-client](https://socket.io/)": "^2.4.0" - 웹소켓(소켓io) 클라이언트 용(추구 버전 업그레이드 예정)\
-    "swr": "^1.3.0"\
-    "typescript": "^4.8.4"\
-    "web-vitals": "^2.1.4
+- dependencies
+  - "@emotion/babel-preset-css-prop": "^11.10.0"
+  - "@emotion/styled": "^11.10.4"
+  - "@testing-library/jest-dom": "^5.16.5"
+  - "@testing-library/react": "^13.4.0"
+  - "@testing-library/user-event": "^13.5.0"
+  - "@types/color-hash": "^1.0.2"
+  - "@types/gravatar": "^1.8.3"
+  - "@types/jest": "^27.5.2"
+  - "@types/node": "^16.11.68"
+  - "@types/react": "^18.0.21"
+  - "@types/react-copy-to-clipboard": "^5.0.4"
+  - "@types/react-dom": "^18.0.6"
+  - "@types/sanitize-html": "^2.6.2"
+  - "@types/validator": "^13.7.10
+  - "axios": "^1.1.3"
+  - "[color-hash](https://github.com/zenozeng/color-hash#readme)": "^2.0.1" - 문자열 해쉬로 색 추출
+  - "[dayjs](https://day.js.org/)": "^1.11.6" - 날짜 라이브러리
+  - "[framer-motion](https://www.framer.com/docs/)": "^7.6.1" - 애니메이션 추가
+  - "[gravatar](https://ko.gravatar.com/)": "^1.8.2" - 문자열 해시 기반 아바타 생성 
+  - "react": "^18.2.0"
+  - "[react-copy-to-clipboard](https://www.npmjs.com/package/react-copy-to-clipboard)": "^5.1.0" - 클립보드로 복사
+  - "react-custom-scrollbars-2": "^4.5.0" - 스크롤바 추가
+  - "react-dom": "^18.2.0"
+  - "[react-kakao-maps-sdk](https://react-kakao-maps-sdk.jaeseokim.dev/)": "^1.1.5" - 카카오맵 관련 api
+  - "[react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)": "^3.1.0" - 문자열 로딩화면
+  - "react-router-dom": "^6.4.2"
+  - "react-scripts": "5.0.1"
+  - "[react-textarea-autosize](https://www.npmjs.com/package/react-textarea-autosize)": "^8.3.4" - 자동으로 사이즈 조절되는 textarea
+  - "[react-toastify](https://www.npmjs.com/package/react-toastify)": "^9.1.1" - 토스트 모달
+  - "[socket.io-client](https://socket.io/)": "^2.4.0" - 웹소켓(소켓io) 클라이언트용 (추후 버전 업그레이드 예정)
+  - "swr": "^1.3.0"
+  - "typescript": "^4.8.4"
+  - "[validator](https://www.npmjs.com/package/validator)": "^13.7.0" - 유효한 입력값인지 체크
+  - "web-vitals": "^2.1.4
+  
 
- "devDependencies":\
-    "@emotion/react": "^11.10.4"\
-    "@types/socket.io-client": "^1.4.35"\
-    "prettier": "2.7.1"\
-    "[react-loader-spinner](https://mhnpd.github.io/react-loader-spinner/)": "^5.3.4" - 로딩중에 뜨는 spinner들 모음
+- devDependencies
+  - "@emotion/react": "^11.10.4"
+  - "@types/socket.io-client": "^1.4.35"
+  - "prettier": "2.7.1"
+  - "[react-loader-spinner](https://mhnpd.github.io/react-loader-spinner/)": "^5.3.4" - 로딩중 Spinner모음 라이브러리
 
 ### 2. 유의 사항
 
@@ -55,6 +59,7 @@ css props 사용 시 소스파일 맨 위에 아래 줄 추가해야함.\
 | *        | onClick       | MouseEvent\<HTMLElement\>       |
 | input    | onChange      | ChangeEvent\<HTMLInputElement\> |
 | *        | children      | ReactNode                       |
+| *        | onKeyPress    | KeyboardEvent                   |
 
 ## Available Scripts
 

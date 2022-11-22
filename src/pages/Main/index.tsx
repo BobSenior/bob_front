@@ -3,7 +3,8 @@ import { PromisesColumn, PromisesWrapper } from "./style";
 import PromiseBox from "../../components/PromiseBox";
 import { promiseInfo } from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
-import axios from "axios";
+import countColumns from "../../utils/countColumns";
+import { Oval } from "react-loader-spinner";
 
 const p2: promiseInfo[] = [
   {
@@ -131,6 +132,7 @@ const p2: promiseInfo[] = [
 
 const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
+  const [isReachingEnd, setReachingEnd] = useState(true);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
@@ -145,12 +147,7 @@ const Main = () => {
   }, [numOfColumns]);
 
   const recountColumns = useCallback(() => {
-    let num = Math.floor(window.innerWidth / 350);
-    if (num > 3) {
-      num = 3;
-    } else if (num < 1) {
-      num = 1;
-    }
+    const num = countColumns({ totalWidth: window.innerWidth });
     setNumOfColumns(num);
   }, []);
 
@@ -162,15 +159,41 @@ const Main = () => {
     };
   }, [window.innerWidth]);
 
-
   return (
-    <PromisesWrapper>
-      {columnDivs.map((value) => {
-        return (
-          <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
-        );
-      })}
-    </PromisesWrapper>
+    <>
+      <PromisesWrapper>
+        {columnDivs.map((value) => {
+          return (
+            <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
+          );
+        })}
+      </PromisesWrapper>
+      <div
+        style={{
+          minHeight: "7vh",
+          justifyContent: "center",
+          alignItems: "center",
+          display: "flex",
+        }}
+      >
+        {isReachingEnd ? (
+          <span style={{ fontSize: "0.85em", color: "gray" }}>
+            더 이상 약속이 없어요.
+          </span>
+        ) : (
+          <Oval
+            height={"5vh"}
+            width={"5vh"}
+            color={"var(--basic-color)"}
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor={"#828282"}
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

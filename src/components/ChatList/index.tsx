@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import Chat from "../Chat";
 import { ChatZone, Section, StickyHeader } from "./styles";
 import React, { useCallback, forwardRef } from "react";

@@ -6,6 +6,7 @@ import { promiseInfo } from "../../types/db";
 import { PromisesColumn, PromisesWrapper } from "../Main/style";
 import PlanBox from "../../components/PlanBox";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
+import countColumns from "../../utils/countColumns";
 
 const p2: promiseInfo[] = [
   {
@@ -60,22 +61,17 @@ const Plans = () => {
   }, [numOfColumns]);
 
   const recountColumns = () => {
-    let num = Math.floor(window.innerWidth / 400);
-    if (num > 2) {
-      num = 2;
-    } else if (num < 1) {
-      num = 1;
-    }
+    const num = countColumns({ totalWidth: window.innerWidth, maxDivs: 2 });
     setNumOfColumns(num);
   };
 
   useEffect(() => {
-    window.addEventListener("resize", recountColumns);
     recountColumns();
+    window.addEventListener("resize", recountColumns);
     return () => {
       window.removeEventListener("resize", recountColumns);
     };
-  }, [window]);
+  }, [window.innerWidth]);
 
   return (
     <PlansWrapper>

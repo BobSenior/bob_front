@@ -1,5 +1,5 @@
-import { ChatContainer, ChatUserDiv, ChatWrapper } from "../Chat/styles";
-import React, { memo, useRef, useState } from "react";
+import { ChatContainer, ChatUserDiv, ChatWrapper } from "./styles";
+import React, { memo, useRef } from "react";
 import gravatar from "gravatar";
 import dayjs from "dayjs";
 import dayjsAll from "../../utils/dayjsAll";
@@ -37,7 +37,7 @@ const Chat = ({ chat }: Props) => {
           chatOwner.current === "Sender" ? "row-reverse" : undefined,
       }}
     >
-      <ChatContainer>
+      <ChatContainer className={"chat-container"}>
         {chatOwner.current != "Sender" && (
           <ChatUserDiv>
             <img

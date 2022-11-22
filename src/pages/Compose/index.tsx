@@ -1,11 +1,10 @@
-import { FormEvent, ChangeEvent, useCallback, useState } from "react";
+import { FormEvent, ChangeEvent, useCallback, useState, useMemo } from "react";
 import {
   ComposeForm,
   ComposeMain,
   ComposeWrapper,
   Handle,
   SwitchDiv,
-  spring,
   HandleVariant,
   SwitchWrapper,
   SubmitButton,
@@ -20,30 +19,40 @@ import { Input } from "../../components/SearchBar/style";
 import { HashTagContainer } from "../../components/PromiseBox/style";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import RangeInput from "../../components/RangeInput";
+import validator from "validator";
 
-interface composeData {
+interface basicData {
   title: string;
-  contexts: string | null;
+  contexts: string;
   tags: string[] | null;
 }
 
 const getHashTag = (str: string | null): string[] | null => {
   if (!str) return null;
-
   const re = /#[가-힣|a-z|A-Z|0-9|\_]+/g;
   return str.match(re)?.flatMap((x) => x.slice(1)) ?? null;
 };
 
 const Compose = () => {
-  const [formData, setFormData] = useState<composeData>({
+  const [formData, setFormData] = useState<basicData>({
     title: "",
-    contexts: null,
+    contexts: "",
     tags: null,
   });
   const [maxMember, setMaxMember] = useState<number>(2);
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
   const [onlyForAnonymous, setOnlyForAnonymous] = useState<boolean>(false);
-  const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
+
+  const isSubmittable = useMemo(() => {
+    return (
+      !validator.isEmpty(formData.title) &&
+      !validator.isEmpty(formData.contexts)
+    );
+  }, [formData]);
+
+  const isValidTitle = useMemo(() => {
+    return !!formData.title.match("[0-9|a-z|A-Z|가-힣|ㄱ-ㅎ|ㅏ-ㅣ]+");
+  }, [formData]);
 
   const onSubmitComposeForm = useCallback(
     (e: FormEvent) => {
@@ -55,17 +64,11 @@ const Compose = () => {
     [formData, maxMember, onlyForSameMajor, onlyForAnonymous]
   );
 
-  const checkSubmitCondition = useCallback(() => {
-    if (formData.title === "" || !formData.contexts) setDisableSubmit(true);
-    else setDisableSubmit(false);
-  }, [formData]);
-
   const onInputTitle = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setFormData((prevState) => {
         return { ...prevState, title: e.target.value };
       });
-      checkSubmitCondition();
     },
     [formData]
   );
@@ -75,7 +78,6 @@ const Compose = () => {
       setFormData((prevState) => {
         return { ...prevState, contexts: e.target.value };
       });
-      checkSubmitCondition();
     },
     [formData]
   );
@@ -85,7 +87,6 @@ const Compose = () => {
     setFormData((prevState) => {
       return { ...prevState, tags: tags ? tags : null };
     });
-    checkSubmitCondition();
   }, [formData]);
 
   return (
@@ -114,7 +115,9 @@ const Compose = () => {
           같이 밥 먹을래요?
         </MainSpan>
         <ComposeForm onSubmit={onSubmitComposeForm}>
-          <Label>제목</Label>
+          <Label>
+            제목 <span hidden={isValidTitle}>유효하지 않은 입력입니다.</span>
+          </Label>
           <Input
             type={"text"}
             id={"title"}
@@ -130,6 +133,10 @@ const Compose = () => {
             value={formData.contexts ?? undefined}
             onChange={onInputContext}
             onPointerOut={onPointerOutContext}
+            onKeyPress={(e) => {
+              console.log(e.key);
+              if (e.key === "Enter" || e.key === " ") onPointerOutContext();
+            }}
             placeholder={"내용을 입력해주세요."}
           />
           {formData.tags ? (
@@ -197,7 +204,6 @@ const Compose = () => {
             >
               <Handle
                 layout
-                transition={spring}
                 animate={onlyForSameMajor ? "on" : "off"}
                 variants={HandleVariant}
               />
@@ -218,7 +224,6 @@ const Compose = () => {
             >
               <Handle
                 layout
-                transition={spring}
                 animate={onlyForAnonymous ? "on" : "off"}
                 variants={HandleVariant}
               />
@@ -226,8 +231,8 @@ const Compose = () => {
           </SwitchWrapper>
           <SubmitButton
             type={"submit"}
-            disabled={disableSubmit}
-            animate={disableSubmit ? "off" : "on"}
+            disabled={!(isSubmittable && isValidTitle)}
+            animate={isSubmittable && isValidTitle ? "on" : "off"}
             variants={HandleVariant}
           >
             약속 만들기

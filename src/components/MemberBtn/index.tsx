@@ -38,7 +38,7 @@ const MemberBtn = ({ name, major, ID }: props) => {
         coloringText={major}
         onClick={(e) => {
           e.stopPropagation();
-          setShowMemberInfoPopUp((prevState) => !prevState);
+          setShowMemberInfoPopUp(true);
         }}
       >
         <span ref={nameSpanRef}>{name}</span>
@@ -50,85 +50,106 @@ const MemberBtn = ({ name, major, ID }: props) => {
       </HashColoredSpanBtn>
       <AnimatePresence
         onExitComplete={() => {
-          window.removeEventListener("click", closeEvent);
           window.removeEventListener("scroll", closeEvent);
         }}
       >
         {showMemberInfoPopUp && (
-          <MemberInfoPopUp
-            css={css`
-              left: ${nameSpanRef.current?.offsetLeft}px;
-              top: ${nameSpanRef.current?.offsetTop}px;
-            `}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: 20 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.3 }}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            onAnimationComplete={() => {
-              window.addEventListener("click", closeEvent);
-              window.addEventListener("scroll", closeEvent);
-            }}
-          >
-            <svg width={"50"} height={"20"}>
-              <polygon
-                points="35,0 35,20 70,40"
-                fill="var(--basic-back-color)"
-              />
-              Sorry, your browser does not support inline SVG.
-            </svg>
-            <MemberInfoDiv
-              initial={{ boxShadow: "0px 0px 0 rgba(50,50,50,0.2)" }}
-              animate={{ boxShadow: "5px 3px 0 rgba(50,50,50,0.2)" }}
-              exit={{ boxShadow: "0px 0px 0 rgba(50,50,50,0.2)" }}
-              transition={{ duration: 1 }}
+          <>
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMemberInfoPopUp(false);
+              }}
+            ></div>
+            <MemberInfoPopUp
+              css={css`
+                left: ${nameSpanRef.current?.offsetLeft}px;
+                top: ${nameSpanRef.current?.offsetTop}px;
+              `}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: 20 }}
+              exit={{ opacity: 0, y: 50 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              onAnimationComplete={() => {
+                window.addEventListener("scroll", closeEvent);
+              }}
             >
-              <ProfileImg
-                src={gravatar.url(name, { s: "50px", d: "identicon" })}
-              />
-              <ProfileScriptBox>
-                <CopyToClipboard
-                  text={name + "@" + ID}
-                  onCopy={() => {
-                    toast.success("복사완료!", {
-                      position: "bottom-left",
-                      autoClose: 1000,
-                      hideProgressBar: true,
-                      closeOnClick: true,
-                      pauseOnHover: false,
-                      draggable: false,
-                      progress: undefined,
-                      theme: "light",
-                      style: { width: "150px" },
-                    });
-                  }}
-                >
-                  <span style={{ cursor: "pointer", width: "fit-content" }}>
-                    {name}
-                    <i style={{ color: "dimgray", fontSize: "0.8em" }}>@{ID}</i>
-                    <img
-                      src={CopySvg}
-                      width={"12px"}
-                      height={"12px"}
-                      style={{ margin: "0 5px" }}
-                    />
+              <svg width={"50"} height={"20"}>
+                <polygon
+                  points="35,0 35,20 70,50"
+                  fill="var(--basic-back-color)"
+                />
+                Sorry, your browser does not support inline SVG.
+              </svg>
+              <MemberInfoDiv
+                initial={{ boxShadow: "0px 0px 0 rgba(50,50,50,0.2)" }}
+                animate={{ boxShadow: "5px 3px 0 rgba(50,50,50,0.2)" }}
+                exit={{ boxShadow: "0px 0px 0 rgba(50,50,50,0.2)" }}
+                transition={{ duration: 1 }}
+              >
+                <ProfileImg
+                  src={gravatar.url(name, { s: "50px", d: "identicon" })}
+                />
+                <ProfileScriptBox>
+                  <CopyToClipboard
+                    text={name + "@" + ID}
+                    onCopy={() => {
+                      toast.success("복사완료!", {
+                        position: "bottom-left",
+                        autoClose: 1000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: false,
+                        progress: undefined,
+                        theme: "light",
+                        style: { width: "150px" },
+                      });
+                    }}
+                  >
+                    <span style={{ cursor: "pointer", width: "fit-content" }}>
+                      <strong>{name}</strong>
+                      <i style={{ color: "dimgray", fontSize: "0.8em" }}>
+                        @{ID}
+                      </i>
+                      <img
+                        src={CopySvg}
+                        width={"12px"}
+                        height={"12px"}
+                        style={{ margin: "0 5px" }}
+                        alt={"copy-icon"}
+                      />
+                    </span>
+                  </CopyToClipboard>
+                  <span style={{ fontSize: "0.7em" }}>
+                    {major}
+                    <i>{ID}</i>
                   </span>
-                </CopyToClipboard>
-                <span style={{ fontSize: "0.7em" }}>
-                  {major}
-                  <i>{ID}</i>
-                </span>
-              </ProfileScriptBox>
-              <ColoredBtn width={"45px"} height={"50px"} onClick={() => {}}>
-                <img src={EnterSvg} width={"25px"} height={"25px"} />
-                <span style={{ fontSize: "0.15em", color: "black" }}>
-                  더보기
-                </span>
-              </ColoredBtn>
-            </MemberInfoDiv>
-          </MemberInfoPopUp>
+                </ProfileScriptBox>
+                <ColoredBtn width={"45px"} height={"50px"} onClick={() => {}}>
+                  <img
+                    src={EnterSvg}
+                    width={"25px"}
+                    height={"25px"}
+                    alt={"enter-icon"}
+                  />
+                  <span style={{ fontSize: "0.15em", color: "black" }}>
+                    더보기
+                  </span>
+                </ColoredBtn>
+              </MemberInfoDiv>
+            </MemberInfoPopUp>
+          </>
         )}
       </AnimatePresence>
     </div>

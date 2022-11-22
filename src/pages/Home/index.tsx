@@ -8,20 +8,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      {/*<Header>*/}
-      {/*  /!*<nav>*!/*/}
-      {/*  /!*  <a href="/story">*!/*/}
-      {/*  /!*    <span>Out Story</span>*!/*/}
-      {/*  /!*  </a>*!/*/}
-      {/*  /!*  <a href="/collection">*!/*/}
-      {/*  /!*    <span>Collection</span>*!/*/}
-      {/*  /!*  </a>*!/*/}
-      {/*  /!*  <a href="/contact">*!/*/}
-      {/*  /!*    <span>Contact</span>*!/*/}
-      {/*  /!*  </a>*!/*/}
-      {/*  /!*</nav>*!/*/}
-      {/*</Header>*/}
+    <div style={{ width: "100%" }}>
       <Section>
         <Container>
           <Column>

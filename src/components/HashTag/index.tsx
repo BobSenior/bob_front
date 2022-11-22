@@ -20,6 +20,7 @@ const HashTag = ({ text, unClickable }: props) => {
         color: black;
       `}
       end={true}
+      onClick={(e) => e.stopPropagation()}
     >
       #{text}
     </NavLink>

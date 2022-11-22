@@ -2,11 +2,6 @@ import styled from "@emotion/styled/macro";
 import { motion } from "framer-motion";
 import TextAreaAutosize from "react-textarea-autosize";
 
-export const spring = {
-  type: "spring",
-  stiffness: 700,
-  damping: 30,
-};
 export const HandleVariant = {
   on: {
     backgroundColor: "var(--basic-color)",
@@ -90,6 +85,11 @@ export const SubmitButton = styled(motion.button)`
 
 export const Label = styled.label`
   padding-top: 50px;
+
+  & span {
+    font-size: 0.9em;
+    color: rgba(255, 0, 0, 0.7);
+  }
 `;
 
 export const SwitchSpan = styled(motion.span)`
