@@ -1,26 +1,32 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { PromisesColumn, PromisesWrapper } from "./style";
-import PromiseBox from "../../components/PostBox";
-import { AppointmentHeadDTO, BaseResponse } from "../../types/db";
+import PostBox from "../../components/PostBox";
+import {
+  AppointmentHeadDTO,
+  BaseResponse,
+  SimplifiedUserProfileDTO,
+} from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import countColumns from "../../utils/countColumns";
 import { Oval } from "react-loader-spinner";
 import useSWRInfinite from "swr/infinite";
 import { getFetcher } from "../../utils/fetchers";
+import dayjs from "dayjs";
+import { p2 } from "../Appointments";
 
 const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(1);
   const [isReachingEnd, setReachingEnd] = useState(true);
-  const {
-    data: PostHeads,
-    error,
-    size,
-    setSize,
-    isValidating,
-    mutate,
-  } = useSWRInfinite<BaseResponse<AppointmentHeadDTO[]>>(() => {
-    return "123";
-  }, getFetcher);
+  // const {
+  //   data: PostHeads,
+  //   error,
+  //   size,
+  //   setSize,
+  //   isValidating,
+  //   mutate,
+  // } = useSWRInfinite<BaseResponse<AppointmentHeadDTO[]>>(() => {
+  //   return "123";
+  // }, getFetcher);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
@@ -31,9 +37,13 @@ const Main = () => {
     //   );
     // }
     // );
-
+    p2.forEach((value, index) => {
+      tempColDivs[index % numOfColumns].push(
+        <PostBox data={value} key={generateUniqueID()} />
+      );
+    });
     return tempColDivs;
-  }, [numOfColumns, PostHeads]);
+  }, [numOfColumns]);
 
   const recountColumns = useCallback(() => {
     const num = countColumns({ totalWidth: window.innerWidth });

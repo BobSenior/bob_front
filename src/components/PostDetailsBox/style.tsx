@@ -9,6 +9,17 @@ export const InNOut = {
   Out: {},
 };
 
+export const MembersColumn = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 15px;
+  & h4 {
+    margin: 3px 0;
+  }
+`;
+
 export const MembersDiv = styled.div`
   width: 100%;
   display: grid;
@@ -67,6 +78,9 @@ export const HeaderSection = css`
 export const ContentSection = css`
   padding: 0 10px;
   & p {
+    width: 100%;
+    border: 1px solid lightslategrey;
+    border-radius: 5px;
     align-self: flex-start;
     font-size: 0.9em;
     word-break: break-word;
@@ -84,6 +98,7 @@ export const Section = styled.section`
   align-items: center;
   padding-top: 7px;
 `;
+
 export const Footer = styled.div`
   display: flex;
 `;

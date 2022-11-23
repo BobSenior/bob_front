@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { BaseResponse, ShownNotice } from "../../types/db";
 import React from "react";
 import { getFetcher } from "../../utils/fetchers";
+import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 
 const ListAlarm = () => {
   const { data: alarms, error } = useSWR<BaseResponse<ShownNotice[]>>(
@@ -21,7 +22,7 @@ const ListAlarm = () => {
       <AlarmListWrapper>
         <Scrollbars>
           {alarms?.result.map((content) => (
-            <AlarmInfoDiv key={content.noticeIdx} data={content} />
+            <AlarmInfoDiv key={generateUniqueID()} data={content} />
           ))}
         </Scrollbars>
       </AlarmListWrapper>

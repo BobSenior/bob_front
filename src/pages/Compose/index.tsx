@@ -131,6 +131,7 @@ const Compose = () => {
             onChange={onInputTitle}
             style={{ width: "100%", fontSize: "16px" }}
             placeholder={"제목을 입력해주세요."}
+            maxLength={16}
           />
 
           <Label>내용</Label>

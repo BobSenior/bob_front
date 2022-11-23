@@ -31,6 +31,8 @@ import AlarmList from "../../components/AlarmList";
 import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useSWR from "swr";
+import { getFetcher } from "../../utils/fetchers";
 
 const emailExample = "123";
 
@@ -41,6 +43,12 @@ const MainLayout = () => {
   const [showListModal, setShowListModal] = useState(0);
   const [address, setAddress] = useState<string>("");
   const [alarmCount, setAlarmCount] = useState(1);
+  const {
+    data: alarmData,
+    error,
+    isValidating,
+    mutate,
+  } = useSWR(``, getFetcher);
 
   const ListModal = useMemo(() => {
     switch (showListModal) {
@@ -110,6 +118,7 @@ const MainLayout = () => {
               <Route path={"search/:searchInput"} element={<Main />} />
               <Route path={"profile"} element={<Profile />}>
                 <Route path={":userIdx"} />
+                <Route path={"me"} />
               </Route>
               <Route path={"chat_test"} element={<ChatRoom />} />
               <Route path={"compose"} element={<Compose />} />

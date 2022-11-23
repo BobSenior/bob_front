@@ -44,6 +44,7 @@ export const TopContext = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: flex-end;
+  font-size: 0.95em;
 `;
 export const MiddleContext = styled.div`
   display: flex;

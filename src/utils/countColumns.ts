@@ -4,8 +4,8 @@ const countColumns = (data: {
   maxDivs?: number;
 }) => {
   let num = Math.floor(data.totalWidth / (data.divWidth ?? 380));
-  if (num > (data.maxDivs ?? 3)) {
-    num = data.maxDivs ?? 3;
+  if (num > (data.maxDivs ?? 2)) {
+    num = data.maxDivs ?? 2;
   } else if (num < 1) {
     num = 1;
   }

@@ -1,17 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { motion } from "framer-motion";
-import { MouseEvent, ReactNode } from "react";
+import { forwardRef, MouseEvent, ReactNode } from "react";
 import { css } from "@emotion/react";
 
-interface props {
+interface Props {
   children: ReactNode;
   width: string;
   height: string;
   onClick?: (e: MouseEvent<HTMLElement>) => void;
   animate?: string;
   variants?: any;
-  isHover?: boolean;
-  isTap?: boolean;
+  useHover?: boolean;
+  useTap?: boolean;
+  disable?: boolean;
 }
 
 const ColoredBtn = ({
@@ -21,11 +22,12 @@ const ColoredBtn = ({
   onClick,
   animate,
   variants,
-  isHover,
-  isTap,
-}: props) => {
+  useHover,
+  useTap,
+  disable,
+}: Props) => {
   return (
-    <motion.div
+    <motion.button
       css={css`
         display: flex;
         flex-direction: column;
@@ -36,19 +38,25 @@ const ColoredBtn = ({
         border-radius: 10px;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
+        border: none;
+        font-size: 1em;
+        :hover {
+          cursor: pointer;
+        }
       `}
-      onClick={onClick}
-      whileHover={isHover ? { scale: 1.05 } : undefined}
+      whileHover={useHover ? { scale: 1.05 } : undefined}
       whileTap={
-        isTap ? { scale: 0.9, backgroundColor: "var(--bold-color)" } : undefined
+        useTap
+          ? { scale: 0.9, backgroundColor: "var(--bold-color)" }
+          : undefined
       }
       animate={animate}
       variants={variants}
+      onClick={onClick}
+      disabled={disable}
     >
       {children}
-    </motion.div>
+    </motion.button>
   );
 };
-
 export default ColoredBtn;

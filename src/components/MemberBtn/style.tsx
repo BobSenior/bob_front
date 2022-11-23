@@ -20,6 +20,7 @@ export const ProfileImg = styled.img`
 `;
 
 export const MemberInfoPopUp = styled(motion.div)`
+  width: 250px;
   position: absolute;
   z-index: 500;
   gap: 0;
@@ -29,10 +30,10 @@ export const MemberInfoDiv = styled(motion.div)`
   position: relative;
   top: -5px;
   background-color: var(--basic-back-color);
-  min-width: 200px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 50px 1fr 30px;
   align-items: center;
   border-radius: 10px;
-  padding: 10px 10px;
+  padding: 8px 5px;
   column-gap: 5px;
 `;

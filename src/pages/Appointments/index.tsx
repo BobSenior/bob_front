@@ -19,17 +19,17 @@ import dayjs from "dayjs";
 
 const sm: SimplifiedUserProfileDTO = {
   userIdx: 1,
-  nickname: "밥선배1",
+  nickname: "123456789012345",
   department: "소프트웨어학부",
   schoolId: 22,
   school: "중앙대학교",
   isOnline: true,
 };
 
-const p2: AppointmentHeadDTO[] = [
+export const p2: AppointmentHeadDTO[] = [
   {
     postIdx: 1,
-    title: "밥먹을사람",
+    title: "가나다라마바사아자차카타파하가나다라",
     writtenAt: dayjs().toString(),
     imageURL: null,
     writer: sm,
@@ -80,7 +80,7 @@ const Appointments = () => {
   ]);
 
   const recountColumns = useCallback(() => {
-    const num = countColumns({ totalWidth: window.innerWidth, maxDivs: 2 });
+    const num = countColumns({ totalWidth: window.innerWidth });
     setNumOfColumns(num);
   }, []);
 

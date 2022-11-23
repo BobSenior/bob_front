@@ -1,10 +1,4 @@
-import React, {
-  lazy,
-  useState,
-  useCallback,
-  Suspense,
-  MouseEvent,
-} from "react";
+import React, { lazy, useState, useCallback, MouseEvent } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -19,29 +13,28 @@ import {
   ArrowImg,
   variants,
 } from "./style";
-import { ProgressBar } from "react-loader-spinner";
 const PromiseDetailsBox = lazy(() => import("../PostDetailsBox"));
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
 import { AppointmentHeadDTO } from "../../types/db";
 import HashTag from "../HashTag";
 import MemberBtn from "../MemberBtn";
 import dayjsAll from "../../utils/dayjsAll";
+import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 
 interface props {
   data: AppointmentHeadDTO;
 }
 
 const PostBox = ({ data }: props) => {
-  const [showDetailsBox, setShowDetailsBox] = useState(false);
-  console.log(data);
+  // console.log(data);
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
 
   const onClickShowDetails = useCallback(
     (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation();
-      setShowDetailsBox((prevState) => !prevState);
+      setToggleDetailsBox((prevState) => !prevState);
     },
-    [showDetailsBox]
+    [toggleDetailsBox]
   );
 
   return (
@@ -74,34 +67,16 @@ const PostBox = ({ data }: props) => {
       <PromiseTail>
         <HashTagContainer>
           {data.tagHeads.map((content) => (
-            <HashTag key={content} text={content} />
+            <HashTag key={generateUniqueID()} text={content} />
           ))}
         </HashTagContainer>
         <ArrowImg
           src={ArrowSvg}
           variants={variants}
-          animate={showDetailsBox ? "rollDown" : "rollUp"}
+          animate={toggleDetailsBox ? "rollDown" : "rollUp"}
         />
       </PromiseTail>
-      {showDetailsBox && (
-        <Suspense
-          fallback={
-            <ProgressBar
-              height="80"
-              width="80"
-              ariaLabel="progress-bar-loading"
-              wrapperStyle={{
-                width: "100%",
-              }}
-              wrapperClass="progress-bar-wrapper"
-              borderColor=""
-              barColor="var(--basic-color)"
-            />
-          }
-        >
-          <PromiseDetailsBox data={data} />
-        </Suspense>
-      )}
+      {toggleDetailsBox && <PromiseDetailsBox postIdx={data.postIdx} />}
     </PBox>
   );
 };

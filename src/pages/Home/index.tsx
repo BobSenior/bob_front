@@ -13,24 +13,24 @@ const Home = () => {
         <Container>
           <Column>
             <motion.h4
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               style={{ marginBottom: 0 }}
             >
               선배랑 밥먹고 싶을 때,
             </motion.h4>
             <motion.h4
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               style={{ marginBottom: 0 }}
             >
               후배 밥 사주고 싶을 때,
             </motion.h4>
             <motion.h1
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 1 }}
             >
               밥선배
@@ -43,8 +43,8 @@ const Home = () => {
               onClick={() => {
                 navigate("/login");
               }}
-              isHover={true}
-              isTap={true}
+              useHover={true}
+              useTap={true}
             >
               <span>로그인</span>
             </ColoredBtn>
@@ -54,8 +54,8 @@ const Home = () => {
               onClick={() => {
                 navigate("/signup");
               }}
-              isHover={true}
-              isTap={true}
+              useHover={true}
+              useTap={true}
             >
               <span>회원가입</span>
             </ColoredBtn>
@@ -65,8 +65,8 @@ const Home = () => {
               onClick={() => {
                 navigate("/main");
               }}
-              isHover={true}
-              isTap={true}
+              useHover={true}
+              useTap={true}
             >
               <span>(개발용)메인으로 가기</span>
             </ColoredBtn>

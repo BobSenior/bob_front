@@ -2,7 +2,7 @@
 import HashColoredSpanBtn from "../../assets/buttons/HashColoredSpanBtn";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { css } from "@emotion/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MajorSpan,
   MemberInfoDiv,
@@ -27,10 +27,22 @@ const MemberBtn = (userData: {
   const [showMemberInfoPopUp, setShowMemberInfoPopUp] =
     useState<boolean>(false);
   const nameSpanRef = useRef<HTMLSpanElement>(null);
+  const [leftMovePopUp, setLeftMovePopUp] = useState<number>(0);
 
   const closeEvent = () => {
     setShowMemberInfoPopUp(false);
   };
+
+  useEffect(() => {
+    if (nameSpanRef.current) {
+      if (nameSpanRef.current.offsetLeft + 250 > window.innerWidth) {
+        const num = nameSpanRef.current.offsetLeft + 250 - window.innerWidth;
+        console.log(num);
+        setLeftMovePopUp(num);
+      }
+    }
+    return () => {};
+  }, [showMemberInfoPopUp]);
 
   return (
     <div>
@@ -70,11 +82,11 @@ const MemberBtn = (userData: {
             ></div>
             <MemberInfoPopUp
               css={css`
-                left: ${nameSpanRef.current?.offsetLeft}px;
+                left: ${nameSpanRef.current?.offsetLeft ?? 0 - leftMovePopUp}px;
                 top: ${nameSpanRef.current?.offsetTop}px;
               `}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1, y: 20 }}
+              initial={{ opacity: 0, x: 0 }}
+              animate={{ opacity: 1, y: 20, x: -leftMovePopUp }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => {
@@ -84,9 +96,11 @@ const MemberBtn = (userData: {
                 window.addEventListener("scroll", closeEvent);
               }}
             >
-              <svg width={"50"} height={"20"}>
+              <svg width={"190"} height={"20"}>
                 <polygon
-                  points="35,0 35,20 70,50"
+                  points={`${50 + leftMovePopUp},0 ${30 + leftMovePopUp},30 ${
+                    70 + leftMovePopUp
+                  },30`}
                   fill="var(--basic-back-color)"
                 />
                 Sorry, your browser does not support inline SVG.
@@ -104,8 +118,11 @@ const MemberBtn = (userData: {
                   })}
                 />
                 <ProfileScriptBox>
+                  <span style={{ whiteSpace: "pre-wrap" }}>
+                    {userData.nickName}
+                  </span>
                   <CopyToClipboard
-                    text={userData.nickName + "@" + userData.schoolId}
+                    text={userData.nickName + "@" + userData.userIdx}
                     onCopy={() => {
                       toast.success("복사완료!", {
                         position: "bottom-left",
@@ -120,11 +137,14 @@ const MemberBtn = (userData: {
                       });
                     }}
                   >
-                    <span style={{ cursor: "pointer", width: "fit-content" }}>
-                      <strong>{userData.nickName}</strong>
-                      <i style={{ color: "dimgray", fontSize: "0.8em" }}>
-                        @{userData.schoolId}
-                      </i>
+                    <span
+                      style={{
+                        color: "dimgray",
+                        fontSize: "0.8em",
+                        cursor: "pointer",
+                      }}
+                    >
+                      @{userData.schoolId}
                       <img
                         src={CopySvg}
                         width={"12px"}
@@ -142,8 +162,7 @@ const MemberBtn = (userData: {
                 <NavLink
                   to={`/main/profile/${userData.userIdx}`}
                   style={{
-                    textDecoration: "initial",
-                    width: "45px",
+                    width: "30px",
                     height: "50px",
                   }}
                   end={true}
@@ -155,9 +174,6 @@ const MemberBtn = (userData: {
                       height={"25px"}
                       alt={"enter-icon"}
                     />
-                    <span style={{ fontSize: "0.15em", color: "black" }}>
-                      더보기
-                    </span>
                   </ColoredBtn>
                 </NavLink>
               </MemberInfoDiv>
