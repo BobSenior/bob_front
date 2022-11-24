@@ -1,10 +1,21 @@
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
-export const getFetcher = axios.create({
-  baseURL: "http://localhost:8080",
-  method: "get",
-  withCredentials: true,
-  httpsAgent: {},
-});
+export const fetcher = (url: string) => {
+  return axios(url)
+    .then((res) => res.data)
+    .catch((error) => console.log(error));
+};
 
 export const postFetcher = axios.create({});
+export const getFetcher = axios.create({});
+
+export const infiniteFetcher = (url: string) => {
+  return axios(url)
+    .then((res) => {
+      //TODO 배포 시 콘솔 삭제
+      console.log(res.config.url);
+      return res.data.result;
+    })
+    .catch((error) => console.log(error));
+};

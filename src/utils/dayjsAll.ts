@@ -11,11 +11,15 @@ dayjs.extend(localizedFormat);
 const dayjsAll = (timeStamp: string | number | dayjs.Dayjs | Date) => {
   const hourmin: string = dayjs(timeStamp).format("HH:MM");
   const fromNow: string = dayjs(timeStamp).fromNow();
-  const appointmentDate: string = dayjs(timeStamp).calendar(null, {
-    sameDay: "[오늘] A h:mm",
-    nextDay: "[내일] A h:mm",
-    sameElse: "MMMM D[일](dd)",
-  });
+  const appointmentDate: () => string = (): string => {
+    if (dayjs().isAfter(timeStamp)) return "이미 지난 약속이예요.";
+    return dayjs(timeStamp).calendar(null, {
+      sameDay: "[오늘] A h:mm",
+      nextDay: "[내일] A h:mm",
+      nextWeek: "MMMM DD[일](dd)",
+      sameElse: "MMMM DD[일](dd)",
+    });
+  };
   return { fromNow, hourmin, appointmentDate };
 };
 

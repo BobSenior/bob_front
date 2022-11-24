@@ -35,9 +35,8 @@ const MemberBtn = (userData: {
 
   useEffect(() => {
     if (nameSpanRef.current) {
-      if (nameSpanRef.current.offsetLeft + 250 > window.innerWidth) {
-        const num = nameSpanRef.current.offsetLeft + 250 - window.innerWidth;
-        console.log(num);
+      if (nameSpanRef.current.offsetLeft + 255 > window.innerWidth) {
+        const num = nameSpanRef.current.offsetLeft + 255 - window.innerWidth;
         setLeftMovePopUp(num);
       }
     }
@@ -82,11 +81,13 @@ const MemberBtn = (userData: {
             ></div>
             <MemberInfoPopUp
               css={css`
-                left: ${nameSpanRef.current?.offsetLeft ?? 0 - leftMovePopUp}px;
+                left: ${(nameSpanRef.current?.offsetLeft
+                  ? nameSpanRef.current?.offsetLeft
+                  : 0) - leftMovePopUp}px;
                 top: ${nameSpanRef.current?.offsetTop}px;
               `}
-              initial={{ opacity: 0, x: 0 }}
-              animate={{ opacity: 1, y: 20, x: -leftMovePopUp }}
+              initial={{ opacity: 0, y: 0 }}
+              animate={{ opacity: 1, y: 20 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => {
@@ -144,7 +145,7 @@ const MemberBtn = (userData: {
                         cursor: "pointer",
                       }}
                     >
-                      @{userData.schoolId}
+                      @{userData.userIdx}
                       <img
                         src={CopySvg}
                         width={"12px"}
@@ -158,7 +159,7 @@ const MemberBtn = (userData: {
                     {userData.department}
                     <i>{userData.schoolId}</i>
                   </span>
-                </ProfileScriptBox>{" "}
+                </ProfileScriptBox>
                 <NavLink
                   to={`/main/profile/${userData.userIdx}`}
                   style={{

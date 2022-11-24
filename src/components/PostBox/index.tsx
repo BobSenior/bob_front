@@ -26,7 +26,6 @@ interface props {
 }
 
 const PostBox = ({ data }: props) => {
-  // console.log(data);
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
 
   const onClickShowDetails = useCallback(
@@ -45,12 +44,12 @@ const PostBox = ({ data }: props) => {
           <TopContext>
             <span>{data.title}</span>
             <span
-              style={{ fontSize: "0.7em" }}
+              style={{ fontSize: "xx-small" }}
             >{`${data.currNum}/${data.totalNum}`}</span>
           </TopContext>
           <MiddleContext>
             <MemberBtn
-              userIdx={1}
+              userIdx={data.writer.userIdx}
               nickName={data.writer.nickname}
               department={data.writer.department}
               schoolId={data.writer.schoolId}

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { motion } from "framer-motion";
-import { forwardRef, MouseEvent, ReactNode } from "react";
+import { motion, TapInfo } from "framer-motion";
+import { CSSProperties, forwardRef, MouseEvent, ReactNode } from "react";
 import { css } from "@emotion/react";
 
 interface Props {
@@ -11,8 +11,13 @@ interface Props {
   animate?: string;
   variants?: any;
   useHover?: boolean;
-  useTap?: boolean;
+  useTap?: boolean | null;
   disable?: boolean;
+  type?: string;
+  onTapStart?: (
+    event: globalThis.MouseEvent | TouchEvent | PointerEvent,
+    info: TapInfo
+  ) => void;
 }
 
 const ColoredBtn = ({
@@ -25,6 +30,8 @@ const ColoredBtn = ({
   useHover,
   useTap,
   disable,
+  type,
+  onTapStart,
 }: Props) => {
   return (
     <motion.button
@@ -44,12 +51,13 @@ const ColoredBtn = ({
           cursor: pointer;
         }
       `}
-      whileHover={useHover ? { scale: 1.05 } : undefined}
+      whileHover={useHover ? { scale: 1.02 } : undefined}
       whileTap={
         useTap
           ? { scale: 0.9, backgroundColor: "var(--bold-color)" }
           : undefined
       }
+      onTapStart={onTapStart}
       animate={animate}
       variants={variants}
       onClick={onClick}

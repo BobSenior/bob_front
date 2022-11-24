@@ -1,13 +1,13 @@
 import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./pages/Loading";
-import FindingIdPw from "./pages/FindingIdPw";
 import { AnimatePresence } from "framer-motion";
 
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/SignUp"));
+const FindingIdPw = lazy(() => import("./pages/FindingIdPw"));
 
 const App = () => {
   return (

@@ -13,9 +13,16 @@ interface coordination {
   longitude: number;
 }
 
+const messageList = {
+  ERROR: "알 수 없는 오류가 발생했습니다.",
+  ZERO_RESULT: "결과를 찾을 수 없습니다.",
+};
+
 const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
   const { address } = useContext(GlobalContext);
-  const [render, setRender] = useState<boolean>(false);
+  const [resultStatus, setResultStatus] = useState<kakao.maps.services.Status>(
+    kakao.maps.services.Status.ZERO_RESULT
+  );
   const [coords, setCoords] = useState<coordination>({
     latitude: 36,
     longitude: 127,
@@ -27,15 +34,14 @@ const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
       const geocoder = new kakao.maps.services.Geocoder();
 
       if (address)
-        geocoder.addressSearch(address, function (result, status) {
+        geocoder.addressSearch(address, function (result, status, {}) {
           if (status === kakao.maps.services.Status.OK) {
-            setRender(true);
             setCoords({
               latitude: parseFloat(result[0].y),
               longitude: parseFloat(result[0].x),
             });
-            console.log(`${address}: MAP_OK`);
           }
+          setResultStatus(status);
         });
     } catch (error) {
       console.log(error);
@@ -44,7 +50,7 @@ const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
 
   return (
     <Modal isVisible={isVisible} onClickForClose={onClickForClose}>
-      {render ? (
+      {resultStatus === kakao.maps.services.Status.OK ? (
         <Map
           center={{ lat: coords.latitude, lng: coords.longitude }}
           style={{ width: "100%", height: "60vh" }}
@@ -55,7 +61,9 @@ const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
           ></MapMarker>
         </Map>
       ) : (
-        <div style={{ width: "280px", height: "320px" }}></div>
+        <div style={{ width: "280px", height: "320px" }}>
+          {messageList[resultStatus]}
+        </div>
       )}
     </Modal>
   );

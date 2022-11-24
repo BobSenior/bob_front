@@ -2,95 +2,188 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { PlansHeader, PlansWrapper } from "./style";
+import { AppointmentHeadDTO } from "../../types/db";
 import {
-  AppointmentHeadDTO,
-  BaseResponse,
-  promiseInfo,
-  SimplifiedUserProfileDTO,
-} from "../../types/db";
-import { PromisesColumn, PromisesWrapper } from "../Main/style";
+  PageSpinnerWrapper,
+  PromisesColumn,
+  PromisesWrapper,
+} from "../Main/style";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
-import useSWR from "swr";
-import { getFetcher } from "../../utils/fetchers";
+import { infiniteFetcher } from "../../utils/fetchers";
 import countColumns from "../../utils/countColumns";
 import PostHeadBox from "../../components/PostBox";
 import AppointmentBox from "../../components/AppointmentBox";
-import dayjs from "dayjs";
+import { testUserIdx } from "../Main";
+import useSWRInfinite from "swr/infinite";
+import { Oval } from "react-loader-spinner";
 
-const sm: SimplifiedUserProfileDTO = {
-  userIdx: 1,
-  nickname: "123456789012345",
-  department: "소프트웨어학부",
-  schoolId: 22,
-  school: "중앙대학교",
-  isOnline: true,
+const pageParams = {
+  참가중: "participating",
+  대기중: "waiting",
 };
 
-export const p2: AppointmentHeadDTO[] = [
-  {
-    postIdx: 1,
-    title: "가나다라마바사아자차카타파하가나다라",
-    writtenAt: dayjs().toString(),
-    imageURL: null,
-    writer: sm,
-    location: "흑석",
-    meetingAt: dayjs().toString(),
-    type: "같이먹자",
-    status: "?",
-    totalNum: 4,
-    currNum: 2,
-    waitingNum: 1,
-    tagHeads: ["123", "456"],
-  },
-];
-
 const Appointments = () => {
+  const [numOfColumns, setNumOfColumns] = useState<number>(
+    countColumns({ totalWidth: window.innerWidth })
+  );
+  const [isPAReachingEnd, setPAReachingEnd] = useState<boolean>(false);
+  const [isWAReachingEnd, setWAReachingEnd] = useState<boolean>(false);
   const { plan } = useParams();
   const navigate = useNavigate();
-  const [numOfColumns, setNumOfColumns] = useState<number>(1);
-  // const { data: ParticipatingAppointment, error: PAError } = useSWR<
-  //   BaseResponse<AppointmentHeadDTO[]>
-  // >("/appointment/ongoing?userIdx=11", getFetcher);
-  // const { data: WaitingAppointment, error: WAError } = useSWR<
-  //   BaseResponse<AppointmentHeadDTO[]>
-  // >("/post/waiting?userIdx=11", getFetcher);
+
+  const {
+    data: ParticipatingAppointment,
+    error: PAError,
+    isValidating: PAIsValidating,
+    size: PASize,
+    setSize: PASetSize,
+    mutate: PAMutate,
+  } = useSWRInfinite<AppointmentHeadDTO[]>(
+    (pageIndex: number, previousPageData: AppointmentHeadDTO[][]) => {
+      if (
+        (previousPageData && previousPageData.length < 10) ||
+        !isPAReachingEnd
+      ) {
+        setPAReachingEnd(true);
+        return null;
+      }
+      return `/appointment/ongoing?size=10&page=${pageIndex}&userIdx=${testUserIdx}`;
+    },
+    infiniteFetcher
+  );
+  const {
+    data: WaitingAppointment,
+    error: WAError,
+    isValidating: WAIsValidating,
+    size: WASize,
+    setSize: WASetSize,
+    mutate: WAMutate,
+  } = useSWRInfinite<AppointmentHeadDTO[]>(
+    (pageIndex: number, previousPageData: AppointmentHeadDTO[][]) => {
+      if (
+        (previousPageData && previousPageData.length < 10) ||
+        !isWAReachingEnd
+      ) {
+        setWAReachingEnd(true);
+        return null;
+      }
+      return `/post/waiting?size=10&page=${pageIndex}&userIdx=${testUserIdx}`;
+    },
+    infiniteFetcher
+  );
+
+  const getNextPage = useCallback(() => {
+    let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+    let windowHeight = window.innerHeight; // 스크린 창
+    let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+    if (scrollLocation + windowHeight >= fullHeight - 5) {
+      if (plan === pageParams.참가중 && !isPAReachingEnd) {
+        PASetSize(PASize + 1)
+          .then(() => console.log(pageParams.참가중 + " 다음 페이지"))
+          .catch((err) => console.log(err));
+      } else if (plan === pageParams.대기중 && !isWAReachingEnd) {
+        WASetSize(WASize + 1)
+          .then(() => console.log(pageParams.대기중 + " 다음 페이지"))
+          .catch((err) => console.log(err));
+      }
+    }
+  }, [
+    isPAReachingEnd,
+    isWAReachingEnd,
+    PASize,
+    PASetSize,
+    WASize,
+    WASetSize,
+    plan,
+  ]);
+
+  const endSpan = useMemo(() => {
+    let str = "알 수 없는 페이지입니다.";
+    if (plan === pageParams.참가중) {
+      if (
+        !ParticipatingAppointment ||
+        ParticipatingAppointment[0]?.length === 0
+      ) {
+        str = "참가 중인 약속이 없어요.";
+      } else {
+        if (PAIsValidating || !isPAReachingEnd)
+          return (
+            <Oval
+              height={"5vh"}
+              width={"5vh"}
+              color={"var(--basic-color)"}
+              visible={true}
+              ariaLabel="oval-loading"
+              secondaryColor={"#828282"}
+              strokeWidth={2}
+              strokeWidthSecondary={2}
+            />
+          );
+        else if (isPAReachingEnd) str = "마지막 약속이예요.";
+      }
+    } else if (plan === pageParams.대기중) {
+      if (!WaitingAppointment || WaitingAppointment[0]?.length === 0) {
+        str = "참가 대기 중인 약속이 없어요.";
+      } else {
+        if (WAIsValidating || !isWAReachingEnd)
+          return (
+            <Oval
+              height={"5vh"}
+              width={"5vh"}
+              color={"var(--basic-color)"}
+              visible={true}
+              ariaLabel="oval-loading"
+              secondaryColor={"#828282"}
+              strokeWidth={2}
+              strokeWidthSecondary={2}
+            />
+          );
+        else if (isWAReachingEnd) str = "마지막 약속이예요.";
+      }
+    }
+    return <span className={"end-point"}>{str}</span>;
+  }, [
+    plan,
+    isPAReachingEnd,
+    isWAReachingEnd,
+    PAIsValidating,
+    WAIsValidating,
+    ParticipatingAppointment,
+    WaitingAppointment,
+  ]);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
 
-    if (plan === "participating") {
-      p2.forEach((value, index) => {
+    if (plan === pageParams.참가중 && ParticipatingAppointment) {
+      ParticipatingAppointment.flat().forEach((value, index) => {
         tempColDivs[index % numOfColumns].push(
           <AppointmentBox data={value} key={generateUniqueID()} />
         );
       });
-    } else if (plan === "waiting") {
-      p2.forEach((value, index) => {
+    } else if (plan === pageParams.대기중 && WaitingAppointment) {
+      WaitingAppointment.flat().forEach((value, index) => {
         tempColDivs[index % numOfColumns].push(
           <PostHeadBox data={value} key={generateUniqueID()} />
         );
       });
     }
     return tempColDivs;
-  }, [
-    numOfColumns,
-    // ParticipatingAppointment,
-    plan,
-  ]);
+  }, [numOfColumns, ParticipatingAppointment, WaitingAppointment, plan]);
 
   const recountColumns = useCallback(() => {
-    const num = countColumns({ totalWidth: window.innerWidth });
-    setNumOfColumns(num);
+    setNumOfColumns(countColumns({ totalWidth: window.innerWidth }));
   }, []);
 
   useEffect(() => {
     window.addEventListener("resize", recountColumns);
-    recountColumns();
+    window.addEventListener("scroll", getNextPage);
     return () => {
       window.removeEventListener("resize", recountColumns);
+      window.removeEventListener("scroll", getNextPage);
     };
-  }, [window.innerWidth]);
+  }, []);
 
   return (
     <PlansWrapper>
@@ -98,18 +191,23 @@ const Appointments = () => {
         <LayoutBtn
           text={"참가 중"}
           height={"38px"}
-          onClick={() => {
-            navigate(`../plans/participating`);
+          onClick={(e) => {
+            e.stopPropagation();
+            setPAReachingEnd(false);
+            PAMutate([], { revalidate: true }).then().catch();
+            navigate(`../plans/${pageParams.참가중}`);
           }}
-          animate={plan === "participating" ? "pushed" : ""}
+          animate={plan === pageParams.참가중 ? "pushed" : ""}
         />
         <LayoutBtn
           text={"대기 중"}
           height={"38px"}
-          onClick={() => {
-            navigate(`../plans/waiting`);
+          onClick={(e) => {
+            e.stopPropagation();
+            setWAReachingEnd(false);
+            navigate(`../plans/${pageParams.대기중}`);
           }}
-          animate={plan === "waiting" ? "pushed" : ""}
+          animate={plan === pageParams.대기중 ? "pushed" : ""}
         />
       </PlansHeader>
       <PromisesWrapper
@@ -121,6 +219,7 @@ const Appointments = () => {
           );
         })}
       </PromisesWrapper>
+      <PageSpinnerWrapper>{endSpan}</PageSpinnerWrapper>
     </PlansWrapper>
   );
 };

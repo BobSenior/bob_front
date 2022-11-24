@@ -31,8 +31,9 @@ import AlarmList from "../../components/AlarmList";
 import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { getFetcher } from "../../utils/fetchers";
+import { testUserIdx } from "../../pages/Main";
 
 const emailExample = "123";
 
@@ -47,7 +48,7 @@ const MainLayout = () => {
     data: alarmData,
     error,
     isValidating,
-    mutate,
+    mutate: alarmMuate,
   } = useSWR(``, getFetcher);
 
   const ListModal = useMemo(() => {
@@ -111,20 +112,22 @@ const MainLayout = () => {
           </IconsContainer>
         </Header>
         <Body>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route index element={<Main />} />
-              <Route path={"plans/:plan"} element={<Plans />} />
-              <Route path={"search/:searchInput"} element={<Main />} />
-              <Route path={"profile"} element={<Profile />}>
-                <Route path={":userIdx"} />
-                <Route path={"me"} />
-              </Route>
-              <Route path={"chat_test"} element={<ChatRoom />} />
-              <Route path={"compose"} element={<Compose />} />
-              <Route path={"*"} element={<div>404 error</div>} />
-            </Routes>
-          </Suspense>
+          <SWRConfig>
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                <Route index element={<Main />} />
+                <Route path={"plans/:plan"} element={<Plans />} />
+                <Route path={"search/:searchInput"} element={<Main />} />
+                <Route path={"profile"} element={<Profile />}>
+                  <Route path={":userIdx"} />
+                  <Route path={"me"} />
+                </Route>
+                <Route path={"chat_test"} element={<ChatRoom />} />
+                <Route path={"compose"} element={<Compose />} />
+                <Route path={"*"} element={<div>404 error</div>} />
+              </Routes>
+            </Suspense>
+          </SWRConfig>
         </Body>
         <Bottom>
           <LayoutBtn

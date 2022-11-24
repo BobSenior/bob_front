@@ -21,7 +21,7 @@ const ListAlarm = () => {
     >
       <AlarmListWrapper>
         <Scrollbars>
-          {alarms?.result.map((content) => (
+          {alarms?.result?.map((content) => (
             <AlarmInfoDiv key={generateUniqueID()} data={content} />
           ))}
         </Scrollbars>

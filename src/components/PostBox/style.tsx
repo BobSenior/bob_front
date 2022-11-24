@@ -97,13 +97,6 @@ export const PlanTail = styled.div`
     display: flex;
     align-items: center;
   }
-  &div {
-    width: 15px;
-    height: 15px;
-    border-radius: 15px;
-    border: 1px solid #9b9b9b;
-    padding: 3px;
-  }
 `;
 
 export const PBox = styled.div`
