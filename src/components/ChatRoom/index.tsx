@@ -1,20 +1,14 @@
 import React, {
   useCallback,
-  MouseEvent,
   useState,
   useRef,
   useEffect,
   FormEvent,
 } from "react";
-import {
-  ChatRoomContainer,
-  ChatRoomHeader,
-  PromiseVoteContainer,
-} from "./style";
+import { ChatRoomContainer, PromiseVoteContainer } from "./style";
 import { PlansWrapper } from "../../pages/Appointments/style";
 import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
-import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { toast } from "react-toastify";
 
@@ -23,10 +17,6 @@ const ChatRoom = () => {
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
-  const onClickBackArrow = useCallback((e: MouseEvent<HTMLElement>) => {
-    console.log(e);
-  }, []);
 
   const onSubmitChat = useCallback(
     (e: FormEvent) => {
@@ -53,24 +43,16 @@ const ChatRoom = () => {
   return (
     <PlansWrapper className={"chat-page-wrapper"}>
       <ChatRoomContainer className={"chat-room-container"}>
-        <ChatRoomHeader>
-          <img
-            className={"back-arrow-image"}
-            src={BackArrowSvg}
-            onClick={onClickBackArrow}
-            alt={"back-arrow"}
-          />
-          {showPromiseVote && (
-            <PromiseVoteContainer>
-              <div>
-                <span>장소: ~</span>
-                <span>시간: ~</span>
-              </div>
-              <button />
-              <button />
-            </PromiseVoteContainer>
-          )}
-        </ChatRoomHeader>
+        {showPromiseVote && (
+          <PromiseVoteContainer>
+            <div>
+              <span>장소: ~</span>
+              <span>시간: ~</span>
+            </div>
+            <button />
+            <button />
+          </PromiseVoteContainer>
+        )}
         <ChatList ref={scrollbarRef} />
         <ChatBox
           chat={chat}

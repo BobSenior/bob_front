@@ -75,14 +75,6 @@ export const SwitchWrapper = styled.div`
   padding: 10px 0;
 `;
 
-export const SubmitButton = styled(motion.button)`
-  height: 50px;
-  margin-top: 50px;
-  cursor: pointer;
-  font: large bold;
-  border-radius: 15px;
-`;
-
 export const Label = styled.label`
   padding-top: 50px;
 

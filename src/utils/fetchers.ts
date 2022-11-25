@@ -10,6 +10,12 @@ export const fetcher = (url: string) => {
 export const postFetcher = axios.create({});
 export const getFetcher = axios.create({});
 
+export const postDetailsFetcher = (url: string) => {
+  return axios(url)
+    .then((res) => res.data.result)
+    .catch((err) => console.log(err));
+};
+
 export const infiniteFetcher = (url: string) => {
   return axios(url)
     .then((res) => {

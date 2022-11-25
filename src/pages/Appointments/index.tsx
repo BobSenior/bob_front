@@ -22,12 +22,12 @@ const pageParams = {
   대기중: "waiting",
 };
 
+const pageSize = 10;
+
 const Appointments = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
-  const [isPAReachingEnd, setPAReachingEnd] = useState<boolean>(false);
-  const [isWAReachingEnd, setWAReachingEnd] = useState<boolean>(false);
   const { plan } = useParams();
   const navigate = useNavigate();
 
@@ -39,17 +39,11 @@ const Appointments = () => {
     setSize: PASetSize,
     mutate: PAMutate,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
-    (pageIndex: number, previousPageData: AppointmentHeadDTO[][]) => {
-      if (
-        (previousPageData && previousPageData.length < 10) ||
-        !isPAReachingEnd
-      ) {
-        setPAReachingEnd(true);
-        return null;
-      }
-      return `/appointment/ongoing?size=10&page=${pageIndex}&userIdx=${testUserIdx}`;
+    (pageIndex: number) => {
+      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
     },
-    infiniteFetcher
+    infiniteFetcher,
+    { dedupingInterval: 2000 }
   );
   const {
     data: WaitingAppointment,
@@ -59,30 +53,37 @@ const Appointments = () => {
     setSize: WASetSize,
     mutate: WAMutate,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
-    (pageIndex: number, previousPageData: AppointmentHeadDTO[][]) => {
-      if (
-        (previousPageData && previousPageData.length < 10) ||
-        !isWAReachingEnd
-      ) {
-        setWAReachingEnd(true);
-        return null;
-      }
-      return `/post/waiting?size=10&page=${pageIndex}&userIdx=${testUserIdx}`;
+    (pageIndex: number) => {
+      return `/post/waiting?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
     },
-    infiniteFetcher
+    infiniteFetcher,
+    { dedupingInterval: 2000 }
   );
+
+  const isPAEmpty = ParticipatingAppointment?.[0].length === 0;
+  const isPAReachingEnd =
+    isPAEmpty ||
+    (ParticipatingAppointment &&
+      ParticipatingAppointment[ParticipatingAppointment.length - 1]?.length <
+        pageSize);
+
+  const isWAEmpty = WaitingAppointment?.[0].length === 0;
+  const isWAReachingEnd =
+    isWAEmpty ||
+    (WaitingAppointment &&
+      WaitingAppointment[WaitingAppointment.length - 1]?.length < pageSize);
 
   const getNextPage = useCallback(() => {
     let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
     let windowHeight = window.innerHeight; // 스크린 창
     let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
-    if (scrollLocation + windowHeight >= fullHeight - 5) {
+    if (scrollLocation + windowHeight >= fullHeight) {
       if (plan === pageParams.참가중 && !isPAReachingEnd) {
-        PASetSize(PASize + 1)
+        PASetSize((size) => size + 1)
           .then(() => console.log(pageParams.참가중 + " 다음 페이지"))
           .catch((err) => console.log(err));
       } else if (plan === pageParams.대기중 && !isWAReachingEnd) {
-        WASetSize(WASize + 1)
+        WASetSize((size) => size + 1)
           .then(() => console.log(pageParams.대기중 + " 다음 페이지"))
           .catch((err) => console.log(err));
       }
@@ -100,10 +101,7 @@ const Appointments = () => {
   const endSpan = useMemo(() => {
     let str = "알 수 없는 페이지입니다.";
     if (plan === pageParams.참가중) {
-      if (
-        !ParticipatingAppointment ||
-        ParticipatingAppointment[0]?.length === 0
-      ) {
+      if (isPAEmpty) {
         str = "참가 중인 약속이 없어요.";
       } else {
         if (PAIsValidating || !isPAReachingEnd)
@@ -122,7 +120,7 @@ const Appointments = () => {
         else if (isPAReachingEnd) str = "마지막 약속이예요.";
       }
     } else if (plan === pageParams.대기중) {
-      if (!WaitingAppointment || WaitingAppointment[0]?.length === 0) {
+      if (isWAEmpty) {
         str = "참가 대기 중인 약속이 없어요.";
       } else {
         if (WAIsValidating || !isWAReachingEnd)
@@ -144,12 +142,15 @@ const Appointments = () => {
     return <span className={"end-point"}>{str}</span>;
   }, [
     plan,
+    isPAEmpty,
+    isWAEmpty,
     isPAReachingEnd,
     isWAReachingEnd,
     PAIsValidating,
     WAIsValidating,
     ParticipatingAppointment,
     WaitingAppointment,
+    pageParams,
   ]);
 
   const columnDivs = useMemo(() => {
@@ -193,8 +194,6 @@ const Appointments = () => {
           height={"38px"}
           onClick={(e) => {
             e.stopPropagation();
-            setPAReachingEnd(false);
-            PAMutate([], { revalidate: true }).then().catch();
             navigate(`../plans/${pageParams.참가중}`);
           }}
           animate={plan === pageParams.참가중 ? "pushed" : ""}
@@ -204,7 +203,6 @@ const Appointments = () => {
           height={"38px"}
           onClick={(e) => {
             e.stopPropagation();
-            setWAReachingEnd(false);
             navigate(`../plans/${pageParams.대기중}`);
           }}
           animate={plan === pageParams.대기중 ? "pushed" : ""}

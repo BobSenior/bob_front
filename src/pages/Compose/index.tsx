@@ -7,7 +7,6 @@ import {
   SwitchDiv,
   HandleVariant,
   SwitchWrapper,
-  SubmitButton,
   Label,
   SwitchVariant,
   SwitchSpan,
@@ -21,6 +20,7 @@ import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import RangeInput from "../../components/RangeInput";
 import validator from "validator";
 import { postFetcher } from "../../utils/fetchers";
+import { BottomButton } from "../Login/styles";
 
 interface basicData {
   title: string;
@@ -236,14 +236,13 @@ const Compose = () => {
               />
             </SwitchDiv>
           </SwitchWrapper>
-          <SubmitButton
-            type={"submit"}
+          <BottomButton
             disabled={!isSubmittable}
-            animate={isSubmittable ? "on" : "off"}
             variants={HandleVariant}
+            animate={isSubmittable ? "on" : "off"}
           >
             약속 만들기
-          </SubmitButton>
+          </BottomButton>
         </ComposeForm>
       </ComposeMain>
     </ComposeWrapper>

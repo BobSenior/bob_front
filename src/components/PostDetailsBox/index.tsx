@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, {
   useCallback,
-  useContext,
   useState,
   MouseEvent,
   useEffect,
@@ -23,13 +22,11 @@ import {
   TitleHeader,
   TagSection,
   NoOneSpan,
-  RequestBtnWrapper,
 } from "./style";
 import { PostViewDTO } from "../../types/db";
 import ColorHash from "color-hash";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
-import GlobalContext from "../../hooks/GlobalContext";
 import MemberBtn from "../MemberBtn";
 import axios from "axios";
 import { getFetcher, postFetcher } from "../../utils/fetchers";
@@ -41,6 +38,7 @@ import HashTag from "../HashTag";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import { testUserIdx } from "../../pages/Main";
 import { toast } from "react-toastify";
+import MapDisplayModal from "../MapDisplayModal";
 
 interface props {
   postIdx: number;
@@ -64,8 +62,8 @@ const PostDetailsBox = ({ postIdx }: props) => {
     null
   );
   const [isError, setError] = useState<boolean>(false);
+  const [showMapDisplayModal, setShowMapDisplayModal] = useState(false);
   const [requestType, setRequestType] = useState<string>("");
-  const { setShowMapModal, setAddress } = useContext(GlobalContext);
 
   //TODO: 1. 이미 참가 완료된 상태 분리 2. buyer하고 receiver하고 따로 불가능한가요?
 
@@ -152,8 +150,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
     (e: MouseEvent<HTMLElement>) => {
       e.stopPropagation();
       if (postDetailData) {
-        setAddress(postDetailData.location);
-        setShowMapModal(true);
+        setShowMapDisplayModal(true);
       }
     },
     [postDetailData]
@@ -173,6 +170,12 @@ const PostDetailsBox = ({ postIdx }: props) => {
 
   return (
     <DetailWrapper onClick={(e) => e.stopPropagation()}>
+      {showMapDisplayModal && (
+        <MapDisplayModal
+          address={postDetailData?.location ?? ""}
+          setShow={setShowMapDisplayModal}
+        />
+      )}
       {isError ? (
         <div
           style={{

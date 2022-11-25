@@ -124,11 +124,11 @@ const SignUp = () => {
               placeholder={"학교를 입력해주세요"}
               onChange={(e) => setSchool(e.target.value)}
             ></InputBox>
-            <Modal isVisible={ShowModal}>
-              <select>
-                <option value="1">test</option>
-              </select>
-            </Modal>
+            {/*<Modal isVisible={ShowModal}>*/}
+            {/*  <select>*/}
+            {/*    <option value="1">test</option>*/}
+            {/*  </select>*/}
+            {/*</Modal>*/}
             <GlassButton onClick={find_school} />
           </InputLabel>
           <BottomButton onClick={onSubmit1}>다음</BottomButton>

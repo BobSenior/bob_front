@@ -1,4 +1,4 @@
-import React, { lazy, useState, useCallback, MouseEvent } from "react";
+import React, { lazy, useState, useCallback, MouseEvent, memo } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -28,13 +28,10 @@ interface props {
 const PostBox = ({ data }: props) => {
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
 
-  const onClickShowDetails = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      setToggleDetailsBox((prevState) => !prevState);
-    },
-    [toggleDetailsBox]
-  );
+  const onClickShowDetails = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setToggleDetailsBox((prevState) => !prevState);
+  }, []);
 
   return (
     <PBox onClick={onClickShowDetails}>
@@ -80,4 +77,4 @@ const PostBox = ({ data }: props) => {
   );
 };
 
-export default PostBox;
+export default memo(PostBox);
