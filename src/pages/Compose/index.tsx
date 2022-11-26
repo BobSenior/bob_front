@@ -41,6 +41,8 @@ const Compose = () => {
     tags: null,
   });
   const [maxMember, setMaxMember] = useState<number>(2);
+  const [position,setPosition] = useState<string>("buyer");
+  const [dutch, setDutch] = useState<boolean>(false);
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
   const [onlyForAnonymous, setOnlyForAnonymous] = useState<boolean>(false);
 
@@ -56,10 +58,20 @@ const Compose = () => {
       e.preventDefault();
       //TODO: form제출
       postFetcher
-        .post("", {
+        .post("/post/write", {
+          //TODO : user정보 세팅하기
+          writerIdx:1,
+          writerPosition:dutch?"buyer":position,
+          location:"칰폴레옹",
+          meetingAt:null,
+          type:dutch?"dutch":"buy",
+          receiverNum:maxMember,
+          buyerNum:maxMember,
+          buyer:[1],
           title: formData.title,
-          contexts: formData.contexts,
+          content: formData.contexts,
           tags: formData.tags,
+          constraint:onlyForSameMajor?"ANY":"컴퓨터공학",
         })
         .then((res) => {
           console.log("제출" + res);
@@ -69,7 +81,7 @@ const Compose = () => {
         });
       console.log({ formData, maxMember, onlyForSameMajor, onlyForAnonymous });
     },
-    [formData, maxMember, onlyForSameMajor, onlyForAnonymous]
+    [formData, maxMember, onlyForSameMajor, onlyForAnonymous,dutch,position]
   );
 
   const onInputTitle = useCallback(
@@ -96,6 +108,23 @@ const Compose = () => {
       return { ...prevState, tags: tags ? tags : null };
     });
   }, [formData]);
+
+  const onSelectDutch = useCallback((e: ChangeEvent)=>{
+    setDutch((dutch:boolean)=>true);
+    setPosition("buyer");
+  },[dutch,position]);
+
+  const onSelectBuy = useCallback((e: ChangeEvent)=>{
+    setDutch((dutch:boolean)=>false);
+    setPosition("buyer");
+  },[dutch,position]);
+
+  const onSelectReceive = useCallback((e: ChangeEvent)=>{
+    setDutch((dutch)=>false);
+    setPosition("receiver");
+  },[dutch,position]);
+
+  console.log(dutch);
 
   return (
     <ComposeWrapper>
@@ -141,7 +170,6 @@ const Compose = () => {
             onChange={onInputContexts}
             onPointerOut={onPointerOutContext}
             onKeyPress={(e) => {
-              console.log(e.key);
               if (e.key === "Enter" || e.key === " ") onPointerOutContext();
             }}
             placeholder={"내용을 입력해주세요."}
@@ -179,15 +207,15 @@ const Compose = () => {
           <Label>종류</Label>
           <fieldset>
             <div>
-              <input type={"radio"} name={"category"} />
+              <input type={"radio"} name={"category"} onChange={onSelectDutch}/>
               <label htmlFor={"category1"}>같이먹자</label>
             </div>
-            <div>
-              <input type={"radio"} name={"category"} />
+            <div>s
+              <input type={"radio"} name={"category"} onChange={onSelectBuy}/>
               <label htmlFor={"category2"}>내가산다</label>
             </div>
             <div>
-              <input type={"radio"} name={"category"} />
+              <input type={"radio"} name={"category"} onChange={onSelectReceive}/>
               <label htmlFor={"category3"}>사주세요</label>
             </div>
           </fieldset>

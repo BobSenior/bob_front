@@ -83,14 +83,17 @@ export interface SimplifiedUserProfileDTO {
 }
 
 export interface AppointmentViewDTO {
+  constraint:string;
+  title:string;
   postIdx: number;
   location: string;
-  meetingAt: String;
+  meetingAt: string;
+  voteIdx:number;
   buyers: SimplifiedUserProfileDTO[];
   receivers: SimplifiedUserProfileDTO[];
   voteTitle: string | null;
   records: ShownVoteRecord[] | null;
-  maxNum: number | null;
+  maxNum: number;
   alreadyVoted: boolean | null;
   chatRoomIdx: number;
 }
@@ -130,6 +133,7 @@ export interface ShownNotice {
  * Vote
  */
 export interface ShownVoteRecord {
+  id:number;
   content: string;
   count: number;
 }

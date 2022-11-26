@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loading from "./pages/Loading";
 import { AnimatePresence } from "framer-motion";
+import AppointmentLayout from "./layouts/AppointmentLayout";
 
 const MainLayout = lazy(() => import("./layouts/MainLayout"));
 const Home = lazy(() => import("./pages/Home"));
@@ -18,6 +19,7 @@ const App = () => {
           <Route path={"login"} element={<Login />} />
           <Route path={"signup"} element={<Signup />} />
           <Route path={"main/*"} element={<MainLayout />} />
+          <Route path={"appointment/*"} element={<AppointmentLayout />}/>
           <Route path={"test"} element={<Loading />} />
           <Route path={"*"} element={<div>404 error</div>} />
           <Route path={"finding"} element={<FindingIdPw />} />
