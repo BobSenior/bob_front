@@ -30,7 +30,6 @@ const ModalContainer = styled(motion.div)`
   max-height: 80vh;
   padding: 35px 15px 20px 15px;
   position: relative;
-  width: 80vw;
 `;
 
 const ModalCloseBtn = styled(motion.button)`

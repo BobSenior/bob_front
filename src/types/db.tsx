@@ -29,6 +29,11 @@ export interface IWorkspace {
   OwnerId: number; // 워크스페이스 만든 사람 아이디
 }
 
+export interface Coordination {
+  latitude: number;
+  longitude: number;
+}
+
 /**
  * 0. BaseResponse
  */

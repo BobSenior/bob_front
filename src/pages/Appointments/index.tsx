@@ -43,7 +43,12 @@ const Appointments = () => {
       return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
     },
     infiniteFetcher,
-    { dedupingInterval: 2000 }
+    {
+      revalidateOnMount: true,
+      revalidateOnFocus: false,
+      dedupingInterval: 2000,
+      revalidateFirstPage: false,
+    }
   );
   const {
     data: WaitingAppointment,
@@ -57,7 +62,12 @@ const Appointments = () => {
       return `/post/waiting?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
     },
     infiniteFetcher,
-    { dedupingInterval: 2000 }
+    {
+      revalidateOnMount: true,
+      revalidateOnFocus: false,
+      dedupingInterval: 2000,
+      revalidateFirstPage: false,
+    }
   );
 
   const isPAEmpty = ParticipatingAppointment?.[0].length === 0;
@@ -80,11 +90,11 @@ const Appointments = () => {
     if (scrollLocation + windowHeight >= fullHeight) {
       if (plan === pageParams.참가중 && !isPAReachingEnd) {
         PASetSize((size) => size + 1)
-          .then(() => console.log(pageParams.참가중 + " 다음 페이지"))
+          .then(() => {})
           .catch((err) => console.log(err));
       } else if (plan === pageParams.대기중 && !isWAReachingEnd) {
         WASetSize((size) => size + 1)
-          .then(() => console.log(pageParams.대기중 + " 다음 페이지"))
+          .then(() => {})
           .catch((err) => console.log(err));
       }
     }
@@ -99,12 +109,12 @@ const Appointments = () => {
   ]);
 
   const endSpan = useMemo(() => {
-    let str = "알 수 없는 페이지입니다.";
+    let str = "";
     if (plan === pageParams.참가중) {
       if (isPAEmpty) {
         str = "참가 중인 약속이 없어요.";
       } else {
-        if (PAIsValidating || !isPAReachingEnd)
+        if (PAIsValidating && !isPAReachingEnd)
           return (
             <Oval
               height={"5vh"}
@@ -123,7 +133,7 @@ const Appointments = () => {
       if (isWAEmpty) {
         str = "참가 대기 중인 약속이 없어요.";
       } else {
-        if (WAIsValidating || !isWAReachingEnd)
+        if (WAIsValidating && !isWAReachingEnd)
           return (
             <Oval
               height={"5vh"}

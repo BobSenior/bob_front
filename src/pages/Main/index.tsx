@@ -58,18 +58,18 @@ const Main = () => {
         .then(() => {})
         .catch((error) => console.log(error));
     }
-  }, [isReachingEnd, setSize]);
+  }, [isReachingEnd]);
 
   const recountColumns = useCallback(() => {
     setNumOfColumns(countColumns({ totalWidth: window.innerWidth }));
   }, []);
 
   const endSpan = useMemo(() => {
-    let str = "알 수 없는 페이지입니다.";
+    let str = "";
     if (isEmpty) {
       str = "약속이 없어요.";
     } else {
-      if (isValidating || !isReachingEnd)
+      if (isValidating && !isReachingEnd)
         return (
           <Oval
             height={"5vh"}

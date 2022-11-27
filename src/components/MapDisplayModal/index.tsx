@@ -79,6 +79,7 @@ const MapDisplayModal = ({ setShow, address }: Props) => {
               style={{
                 width: "100%",
                 display: "flex",
+                flexWrap: "wrap",
               }}
             >
               {searchResults?.slice(0, 5).map((value, index) => {

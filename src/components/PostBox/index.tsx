@@ -1,4 +1,4 @@
-import React, { lazy, useState, useCallback, MouseEvent, memo } from "react";
+import React, { useState, useCallback, MouseEvent, memo } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -13,7 +13,7 @@ import {
   ArrowImg,
   variants,
 } from "./style";
-const PromiseDetailsBox = lazy(() => import("../PostDetailsBox"));
+import PromiseDetailsBox from "../PostDetailsBox";
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
 import { AppointmentHeadDTO } from "../../types/db";
 import HashTag from "../HashTag";

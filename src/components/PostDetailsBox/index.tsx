@@ -5,6 +5,7 @@ import React, {
   MouseEvent,
   useEffect,
   useMemo,
+  memo,
 } from "react";
 import {
   ContentSection,
@@ -348,4 +349,4 @@ const PostDetailsBox = ({ postIdx }: props) => {
   );
 };
 
-export default PostDetailsBox;
+export default memo(PostDetailsBox);
