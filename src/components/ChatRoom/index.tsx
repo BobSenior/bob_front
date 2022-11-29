@@ -21,10 +21,6 @@ const ChatRoom = () => {
 
 
 
-  const onClickBackArrow = useCallback((e: MouseEvent<HTMLElement>) => {
-    console.log(e);
-  }, []);
-
   const onSubmitChat = useCallback(
     (e: FormEvent) => {
       e.preventDefault();

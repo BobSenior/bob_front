@@ -4,7 +4,7 @@ import {
     ComposeMain, ComposeWrapper, Handle, HandleVariant,
     Label,
     MainSpan,
-    SpanVariant, SubmitButton, SwitchDiv,
+    SpanVariant, SwitchDiv,
     SwitchSpan, SwitchVariant,
     SwitchWrapper,
     TextArea
@@ -211,6 +211,9 @@ const AppointmentSpace = ()=>{
                     if(!reason.data.isSuccess){
                         toast.error(reason.data.message);
                     }
+                    else{
+                        navigate('/main');
+                    }
         })
     },[appointment]);
 
@@ -256,7 +259,7 @@ return(
                         </MyPlaceInfoDiv>
                         <MyTimeInfoDiv>
                   <span>
-                    {dayjsAll(appointment.result.meetingAt).appointmentDate()}
+
                   </span>
                         </MyTimeInfoDiv>
                     </LocationWrapper>
