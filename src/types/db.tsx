@@ -83,6 +83,7 @@ export interface SimplifiedUserProfileDTO {
 }
 
 export interface AppointmentViewDTO {
+  writerIdx:number;
   constraint:string;
   title:string;
   postIdx: number;
@@ -94,6 +95,8 @@ export interface AppointmentViewDTO {
   voteTitle: string | null;
   records: ShownVoteRecord[] | null;
   maxNum: number;
+  maxBuyerNum:number;
+  maxReceiverNum:number;
   alreadyVoted: boolean | null;
   chatRoomIdx: number;
 }

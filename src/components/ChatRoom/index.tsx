@@ -17,12 +17,23 @@ import ChatBox from "../ChatBox";
 import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { toast } from "react-toastify";
+import SockJS from 'sockjs-client';
+import {Stomp} from "@stomp/stompjs";
+import {client} from "webstomp-client";
+
+
+
+
 
 const ChatRoom = () => {
+  const client = useRef({});
   const [showPromiseVote, setShowPromiseVote] = useState<boolean>(true);
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+
+
 
   const onClickBackArrow = useCallback((e: MouseEvent<HTMLElement>) => {
     console.log(e);

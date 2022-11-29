@@ -127,7 +127,7 @@ const MainLayout = () => {
                 <Route path={"chat_test"} element={<ChatRoom />} />
                 <Route path={"compose"} element={<Compose />} />
                 <Route path={"*"} element={<div>404 error</div>} />
-                <Route path={"appointment"} element={<AppointmentSpace />} />
+                <Route path={"appointment/:id"} element={<AppointmentSpace />} />
               </Routes>
             </Suspense>
           </SWRConfig>

@@ -52,3 +52,12 @@ export const MemberInfoDiv = styled(motion.div)`
   padding: 8px 5px;
   column-gap: 5px;
 `;
+
+export const SelectedWrapper = styled.label`
+  background-color: white;
+  width: 60%;
+  height: 50px;
+  border-radius: 10px;
+  border-width: 5px;
+  border-color: red;
+`;

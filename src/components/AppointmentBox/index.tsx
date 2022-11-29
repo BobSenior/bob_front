@@ -45,7 +45,7 @@ const AppointmentBox = ({ data }: props) => {
           <BottomContext></BottomContext>
         </PromiseContexts>
         <NavLink
-          to={`/main/promise/${data.postIdx}`}
+          to={`/main/appointment/${data.postIdx}`}
           style={{
             width: "30px",
             height: "100%",
