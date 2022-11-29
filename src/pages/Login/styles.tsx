@@ -1,31 +1,15 @@
-import styled from "@emotion/styled";
+import styled from "@emotion/styled/macro";
+import { motion } from "framer-motion";
 
 export const Header = styled.header`
-  font-family: "Roboto";
-  text-align: center;
-  position: absolute;
-  width: 80%;
-  height: 11px;
-  left: 10%;
-  top: 10px;
-  color: #23a1bd;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 46px;
-  letter-spacing: -0.75px;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 15vh;
+  font-size: 3em;
+  margin-bottom: 20px;
 `;
 
 export const Form = styled.form`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 320px;
-  max-width: 800px;
-  top: 180px;
-  margin: 0 auto;
-  width: 80%;
+  width: 80vw;
+  max-width: 500px;
 `;
 
 export const Input = styled.input`
@@ -35,15 +19,9 @@ export const Input = styled.input`
   transition: border 80ms ease-out, box-shadow 80ms ease-out;
   box-sizing: border-box;
   margin: 0 0 20px;
-  position: relative;
-  left: 10%;
-  width: 80%;
-  height: 55px;
-  color: #b4b4b4;
+  width: 100%;
   background-color: rgba(var(--sk_primary_background, 255, 255, 255), 1);
-  padding: 12px;
-  padding-top: 11px;
-  padding-bottom: 13px;
+  padding: 11px 12px 13px 11px;
   font-size: 18px;
   line-height: 1.33333333;
   &:focus {
@@ -53,28 +31,26 @@ export const Input = styled.input`
 `;
 
 export const Finding_string = styled.div`
-  position: relative;
+  text-align: end;
   font-size: 18px;
-  left: 70%;
+  padding-bottom: 8px;
   &:hover {
-    color: #34a9ab;
+    color: var(--basic-color);
     cursor: pointer;
   }
 `;
 
-export const BottomButton = styled.button`
-  position: relative;
-  top: 30px;
-  width: 750%;
-  max-width: 80%;
+export const BottomButton = styled(motion.button)`
+  width: 100%;
   color: #fff;
-  background-color: #34a9ab;
-  height: 80px;
+  background-color: var(--basic-color);
+  height: 5vh;
+  max-height: 80px;
+  min-height: 50px;
   border: 0;
   outline: 0;
   border-radius: 10px;
   font-size: 20px;
-  margin: auto;
   cursor: pointer;
 `;
 
@@ -90,23 +66,56 @@ export const ArrowBotton = styled.button`
   transform: rotate(225deg);
 `;
 
+export const SocialLoginContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & span {
+    color: #afafaf;
+    font-size: 0.8em;
+    padding: 3px 5px;
+  }
+  & img {
+    cursor: pointer;
+  }
+`;
+
 export const LinkContainer = styled.p`
-  position: relative;
-  top: 245px;
+  text-align: end;
+  max-width: 500px;
+  width: 100vw;
   font-size: 18px;
-  color: #616061;
-  margin: 0 auto 8px;
-  left: 15px;
-  width: 300px;
-  max-width: 4500px;
+  color: #9b9b9b;
+  margin-right: 20px;
+  margin-top: 5px;
+
   & a {
     position: relative;
     top: 0;
     color: #34a9ab;
     text-decoration: none;
     font-weight: 700;
+
     &:hover {
       text-decoration: underline;
     }
   }
+`;
+
+export const FormSection = styled.section`
+  position: relative;
+  background-color: var(--basic-back-color);
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+`;
+
+export const LoginPageWrapper = styled.div`
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;

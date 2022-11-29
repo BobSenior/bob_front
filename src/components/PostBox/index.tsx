@@ -1,4 +1,4 @@
-import React, { lazy, useState, useCallback, MouseEvent } from "react";
+import React, { useState, useCallback, MouseEvent, memo } from "react";
 import {
   PBox,
   PromiseContexts,
@@ -12,8 +12,9 @@ import {
   HashTagContainer,
   ArrowImg,
   variants,
+  BottomLeftDiv,
 } from "./style";
-const PromiseDetailsBox = lazy(() => import("../PostDetailsBox"));
+import PromiseDetailsBox from "../PostDetailsBox";
 import ArrowSvg from "../../assets/icons/caret-up-outline.svg";
 import { AppointmentHeadDTO } from "../../types/db";
 import HashTag from "../HashTag";
@@ -28,13 +29,10 @@ interface props {
 const PostBox = ({ data }: props) => {
   const [toggleDetailsBox, setToggleDetailsBox] = useState(false);
 
-  const onClickShowDetails = useCallback(
-    (e: MouseEvent<HTMLDivElement>) => {
-      e.stopPropagation();
-      setToggleDetailsBox((prevState) => !prevState);
-    },
-    [toggleDetailsBox]
-  );
+  const onClickShowDetails = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setToggleDetailsBox((prevState) => !prevState);
+  }, []);
 
   return (
     <PBox onClick={onClickShowDetails}>
@@ -56,6 +54,15 @@ const PostBox = ({ data }: props) => {
             />
           </MiddleContext>
           <BottomContext>
+            <BottomLeftDiv>
+              <span>
+                {data.meetingAt &&
+                  "시간: " +
+                    dayjsAll(data.meetingAt).appointmentDate() +
+                    dayjsAll(data.meetingAt).appointmentTime()}
+              </span>
+              <span>{data.location && "장소: " + data.location}</span>
+            </BottomLeftDiv>
             <BottomRightDiv>
               <span>대기자수: {data.waitingNum}</span>
               <span>{dayjsAll(data.writtenAt).fromNow}</span>
@@ -80,4 +87,4 @@ const PostBox = ({ data }: props) => {
   );
 };
 
-export default PostBox;
+export default memo(PostBox);

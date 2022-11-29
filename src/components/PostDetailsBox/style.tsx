@@ -60,11 +60,6 @@ export const PickerImg = styled.img`
   width: 1.5em;
 `;
 
-export const TitleHeader = css`
-  border-radius: 6px;
-  font-size: 0.65em;
-`;
-
 export const TNPSection = css`
   display: grid;
   grid-template-columns: 1fr 1fr;

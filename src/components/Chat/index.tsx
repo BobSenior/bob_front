@@ -37,7 +37,7 @@ const Chat = ({ chat }: Props) => {
           chatOwner.current === "Sender" ? "row-reverse" : undefined,
       }}
     >
-      <ChatContainer className={"chat-container"}>
+      <ChatContainer>
         {chatOwner.current != "Sender" && (
           <ChatUserDiv>
             <img

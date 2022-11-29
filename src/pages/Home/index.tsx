@@ -70,6 +70,17 @@ const Home = () => {
             >
               <span>(개발용)메인으로 가기</span>
             </ColoredBtn>
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
+              onClick={() => {
+                navigate("/test");
+              }}
+              useHover={true}
+              useTap={true}
+            >
+              <span>(개발용)test</span>
+            </ColoredBtn>
           </JoinDiv>
         </Container>
       </Section>

@@ -10,6 +10,8 @@ const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/SignUp"));
 const FindingIdPw = lazy(() => import("./pages/FindingIdPw"));
 
+import Test from "./pages/Test";
+
 const App = () => {
   return (
     <AnimatePresence>
@@ -20,7 +22,7 @@ const App = () => {
           <Route path={"signup"} element={<Signup />} />
           <Route path={"main/*"} element={<MainLayout />} />
           <Route path={"appointment/*"} element={<AppointmentLayout />}/>
-          <Route path={"test"} element={<Loading />} />
+          <Route path={"test"} element={<Test />} />
           <Route path={"*"} element={<div>404 error</div>} />
           <Route path={"finding"} element={<FindingIdPw />} />
         </Routes>

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Dispatch, SetStateAction, useRef } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useRef } from "react";
 import { css } from "@emotion/react";
 
 const WrapperCSS = css`
@@ -22,12 +22,12 @@ const RangeInputCSS = css`
 
 interface props {
   value: number;
-  setValue: Dispatch<SetStateAction<number>>;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   min?: number;
   max?: number;
 }
 
-const RangeInput = ({ value, setValue, min, max }: props) => {
+const RangeInput = ({ value, onChange, min, max }: props) => {
   const minNum = useRef<number>(min ? min : 2);
   const maxNum = useRef<number>(max ? max : 16);
 
@@ -39,9 +39,7 @@ const RangeInput = ({ value, setValue, min, max }: props) => {
         css={RangeInputCSS}
         min={minNum.current}
         max={maxNum.current}
-        onChange={(e) => {
-          setValue(parseInt(e.target.value));
-        }}
+        onChange={onChange}
       />
       <span css={SpanCSS}>{value}</span>
     </div>

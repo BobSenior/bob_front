@@ -27,17 +27,11 @@ export const ChatWrapper = styled.div`
   gap: 0 5px;
 
   & .chat-time {
-    height: fit-content;
     font-size: 0.5em;
     background-color: #f5f5f5;
     border-radius: 3px;
     padding: 1px 3px;
-  }
-  & span {
-    display: inline-block;
-  }
-  & .chat-container {
-    max-width: 65%;
+    white-space: nowrap;
   }
 `;
 
@@ -46,7 +40,7 @@ export const ChatContainer = styled.div`
   flex-direction: column;
   background-color: rgba(245, 222, 179, 0.3);
   border-radius: 12px;
-  width: max-content;
+  max-width: 80%;
   & pre {
     font-family: inherit;
     white-space: pre-wrap;

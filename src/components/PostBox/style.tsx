@@ -30,7 +30,6 @@ export const BottomRightDiv = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   font-size: xx-small;
-  color: grey;
 `;
 export const BottomLeftDiv = styled.div`
   display: flex;
@@ -54,6 +53,8 @@ export const MiddleContext = styled.div`
 `;
 export const BottomContext = styled.div`
   justify-content: space-between;
+  display: flex;
+  color: #808080;
 `;
 
 export const PromiseImg = styled.img`

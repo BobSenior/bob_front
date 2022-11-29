@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React, {
   useCallback,
-  useContext,
   useState,
   MouseEvent,
   useEffect,
   useMemo,
+  memo,
 } from "react";
 import {
   ContentSection,
@@ -20,27 +20,24 @@ import {
   TimeInfoDiv,
   TNPSection,
   MembersColumn,
-  TitleHeader,
   TagSection,
   NoOneSpan,
-  RequestBtnWrapper,
 } from "./style";
 import { PostViewDTO } from "../../types/db";
-import ColorHash from "color-hash";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
-import GlobalContext from "../../hooks/GlobalContext";
 import MemberBtn from "../MemberBtn";
-import axios from "axios";
 import { getFetcher, postFetcher } from "../../utils/fetchers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import dayjsAll from "../../utils/dayjsAll";
 import { HashTagContainer } from "../PostBox/style";
 import HashTag from "../HashTag";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import { testUserIdx } from "../../pages/Main";
 import { toast } from "react-toastify";
+import MapDisplayModal from "../MapDisplayModal";
+import TitleTagSpan from "../TitleTagSpan";
+import dayjsAll from "../../utils/dayjsAll";
 
 interface props {
   postIdx: number;
@@ -64,10 +61,8 @@ const PostDetailsBox = ({ postIdx }: props) => {
     null
   );
   const [isError, setError] = useState<boolean>(false);
+  const [showMapDisplayModal, setShowMapDisplayModal] = useState(false);
   const [requestType, setRequestType] = useState<string>("");
-  const { setShowMapModal, setAddress } = useContext(GlobalContext);
-
-  //TODO: 1. 이미 참가 완료된 상태 분리 2. buyer하고 receiver하고 따로 불가능한가요?
 
   const receiversSpans = useMemo(() => {
     if (!postDetailData) return null;
@@ -111,7 +106,6 @@ const PostDetailsBox = ({ postIdx }: props) => {
       if (!postDetailData) return;
 
       if (postDetailData.requested) {
-        //TODO:참가 신청 취소 API 연결 필요
         postFetcher
           .post(`/post/request/reverse`, {
             userIdx: testUserIdx,
@@ -127,8 +121,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
           })
           .catch((err) => console.error(err));
       } else {
-        //TODO:참가 신청 API 연결 필요
-        axios
+        postFetcher
           .post("/post/request", {
             userIdx: testUserIdx,
             postIdx: postIdx,
@@ -151,9 +144,13 @@ const PostDetailsBox = ({ postIdx }: props) => {
   const onClickPlaceInfoDiv = useCallback(
     (e: MouseEvent<HTMLElement>) => {
       e.stopPropagation();
-      if (postDetailData) {
-        setAddress(postDetailData.location);
-        setShowMapModal(true);
+      if (
+        postDetailData &&
+        postDetailData.location &&
+        postDetailData.latitude &&
+        postDetailData.longitude
+      ) {
+        setShowMapDisplayModal(true);
       }
     },
     [postDetailData]
@@ -191,17 +188,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
             <div className={"header-section-wrapper"}>
               {postDetailData ? (
                 <>
-                  <span
-                    style={{
-                      backgroundColor: new ColorHash().hex(
-                        postDetailData.groupConstraint
-                      ),
-                    }}
-                    css={TitleHeader}
-                    className={"header-title"}
-                  >
-                    {postDetailData.groupConstraint}
-                  </span>
+                  <TitleTagSpan str={postDetailData.groupConstraint} />
                   <span className={"header-title"}>{postDetailData.title}</span>
                 </>
               ) : (
@@ -220,13 +207,21 @@ const PostDetailsBox = ({ postIdx }: props) => {
                   whileTap={{ scale: 0.85 }}
                   onClick={onClickPlaceInfoDiv}
                 >
-                  <PickerImg src={PickerSvg} />
-                  <span>{postDetailData.location}</span>
+                  {postDetailData.location ?? (
+                    <>
+                      <PickerImg src={PickerSvg} />
+                      <span>{postDetailData.location}</span>
+                    </>
+                  )}
                 </PlaceInfoDiv>
                 <TimeInfoDiv>
-                  <span>
-                    {dayjsAll(postDetailData.meetingAt).appointmentDate()}
-                  </span>
+                  {postDetailData.meetingAt && (
+                    <span>
+                      {dayjsAll(postDetailData.meetingAt).appointmentDate() +
+                        " " +
+                        dayjsAll(postDetailData.meetingAt).appointmentTime()}
+                    </span>
+                  )}
                 </TimeInfoDiv>
               </>
             ) : (
@@ -341,8 +336,22 @@ const PostDetailsBox = ({ postIdx }: props) => {
           </Footer>
         </>
       )}
+      {showMapDisplayModal &&
+        postDetailData &&
+        postDetailData.latitude &&
+        postDetailData.longitude &&
+        postDetailData.location && (
+          <MapDisplayModal
+            setShow={setShowMapDisplayModal}
+            coordinate={{
+              latitude: postDetailData.latitude,
+              longitude: postDetailData.longitude,
+            }}
+            location={postDetailData.location}
+          />
+        )}
     </DetailWrapper>
   );
 };
 
-export default PostDetailsBox;
+export default memo(PostDetailsBox);

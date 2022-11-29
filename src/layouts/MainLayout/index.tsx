@@ -25,16 +25,15 @@ import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import MenuList from "../../components/MenuList";
-import GlobalContext from "../../hooks/GlobalContext";
 import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
-import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useSWR, { SWRConfig } from "swr";
 import { getFetcher } from "../../utils/fetchers";
 import { testUserIdx } from "../../pages/Main";
+import ChatRoomModal from "../../components/ChatRoomModal";
 import Search from "../../pages/Search";
 
 const emailExample = "123";
@@ -42,10 +41,9 @@ const emailExample = "123";
 const MainLayout = () => {
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [showMapModal, setShowMapModal] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
-  const [address, setAddress] = useState<string>("");
   const [alarmCount, setAlarmCount] = useState(1);
+  const [showChatRoomModal, setShowChatRoomModal] = useState(false);
   const {
     data: alarmData,
     error,
@@ -74,14 +72,7 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <GlobalContext.Provider
-      value={{
-        showMapModal,
-        setShowMapModal,
-        address,
-        setAddress,
-      }}
-    >
+    <>
       <MainBox>
         <Header>
           {showSearchBar ? (
@@ -112,6 +103,21 @@ const MainLayout = () => {
               />
             </button>
           </IconsContainer>
+          {ListModal && (
+            <>
+              <div
+                style={{
+                  position: "fixed",
+                  top: "38px",
+                  left: 0,
+                  width: "100vw",
+                  height: "calc(100vh - 38px)",
+                }}
+                onClick={() => setShowListModal(0)}
+              ></div>
+              {ListModal}
+            </>
+          )}
         </Header>
         <Body>
           <SWRConfig>
@@ -151,7 +157,7 @@ const MainLayout = () => {
             text={"채팅 테스트"}
             onClick={() => {
               setShowSearchBar(false);
-              navigate(`chat_test`);
+              setShowChatRoomModal(true);
             }}
           />
           <LayoutBtn
@@ -166,28 +172,8 @@ const MainLayout = () => {
         </Bottom>
       </MainBox>
       <ToastContainer />
-      <MapDisplayModal
-        isVisible={showMapModal}
-        onClickForClose={() => {
-          setShowMapModal(false);
-        }}
-      />
-      {ListModal && (
-        <>
-          <div
-            style={{
-              position: "fixed",
-              top: "38px",
-              left: 0,
-              width: "100vw",
-              height: "calc(100vh - 38px)",
-            }}
-            onClick={() => setShowListModal(0)}
-          ></div>
-          {ListModal}
-        </>
-      )}
-    </GlobalContext.Provider>
+      {showChatRoomModal && <ChatRoomModal setShow={setShowChatRoomModal} />}
+    </>
   );
 };
 

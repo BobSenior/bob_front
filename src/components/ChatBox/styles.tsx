@@ -4,6 +4,7 @@ import TextAreaAutosize from "react-textarea-autosize";
 
 export const ChatBoxContainer = styled.div`
   width: inherit;
+  max-width: inherit;
   display: grid;
   grid-template-columns: 1fr;
   margin: 5px 0;

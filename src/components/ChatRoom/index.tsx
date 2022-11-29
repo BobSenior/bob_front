@@ -1,29 +1,15 @@
 import React, {
   useCallback,
-  MouseEvent,
   useState,
   useRef,
   useEffect,
   FormEvent,
 } from "react";
-import {
-  ChatRoomContainer,
-  ChatRoomHeader,
-  PromiseVoteContainer,
-} from "./style";
-import { PlansWrapper } from "../../pages/Appointments/style";
+import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
-import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { toast } from "react-toastify";
-import SockJS from 'sockjs-client';
-import {Stomp} from "@stomp/stompjs";
-import {client} from "webstomp-client";
-
-
-
-
 
 const ChatRoom = () => {
   const client = useRef({});
@@ -62,38 +48,18 @@ const ChatRoom = () => {
   }, []);
 
   return (
-    <PlansWrapper className={"chat-page-wrapper"}>
-      <ChatRoomContainer className={"chat-room-container"}>
-        <ChatRoomHeader>
-          <img
-            className={"back-arrow-image"}
-            src={BackArrowSvg}
-            onClick={onClickBackArrow}
-            alt={"back-arrow"}
-          />
-          {showPromiseVote && (
-            <PromiseVoteContainer>
-              <div>
-                <span>장소: ~</span>
-                <span>시간: ~</span>
-              </div>
-              <button />
-              <button />
-            </PromiseVoteContainer>
-          )}
-        </ChatRoomHeader>
-        <ChatList ref={scrollbarRef} />
-        <ChatBox
-          chat={chat}
-          onSubmitForm={onSubmitChat}
-          onChangeChat={(e) => {
-            setChat(e.target.value);
-          }}
-          ref={textAreaRef}
-          placeholder={"채팅을 시작하세요."}
-        />
-      </ChatRoomContainer>
-    </PlansWrapper>
+    <ChatRoomContainer className={"chat-room-container"}>
+      <ChatList ref={scrollbarRef} />
+      <ChatBox
+        chat={chat}
+        onSubmitForm={onSubmitChat}
+        onChangeChat={(e) => {
+          setChat(e.target.value);
+        }}
+        ref={textAreaRef}
+        placeholder={"채팅을 시작하세요."}
+      />
+    </ChatRoomContainer>
   );
 };
 export default ChatRoom;
