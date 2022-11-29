@@ -38,7 +38,7 @@ import { BottomButton } from "../Login/styles";
 import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import dayjsAll from "../../utils/dayjsAll";
-import { Coordination } from "../../types/db";
+import { ICoordinate } from "../../types/db";
 
 interface basicData {
   title: string;
@@ -71,7 +71,7 @@ const Compose = () => {
     contexts: "",
   });
   const [hashtags, setHashtags] = useState<string[] | null>(null);
-  const [coords, setCoords] = useState<Coordination | null>(null);
+  const [coords, setCoords] = useState<ICoordinate | null>(null);
   const [location, setLocation] = useState<string | null>(null);
   const [meetingAt, setMeetingAt] = useState<string | null>(null);
   const [postType, setPostType] = useState<string | null>(postTypes[0][0]);
@@ -263,7 +263,6 @@ const Compose = () => {
             onClick={onClickLocation}
           >
             <ResultSpan>{location ? location : "정하지 못했어요."}</ResultSpan>
-
             <LAMDetailsSpan>나중에 변경할 수 있어요.</LAMDetailsSpan>
           </LAMButton>
           <Label>시간</Label>

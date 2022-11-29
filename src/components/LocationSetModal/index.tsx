@@ -13,16 +13,22 @@ import { HandleVariant } from "../../pages/Compose/style";
 import SendSvg from "../../assets/icons/send-sharp.svg";
 import SearchSvg from "../../assets/icons/search-circle.svg";
 import { SendButton } from "../ChatBox/styles";
-import { Coordination } from "../../types/db";
+import { ICoordinate } from "../../types/db";
 import search from "../../pages/Search";
 
 interface Props {
   setShow: Dispatch<React.SetStateAction<boolean>>;
   setLocation: Dispatch<React.SetStateAction<string | null>>;
-  setCoords: Dispatch<React.SetStateAction<Coordination | null>>;
+  setCoords: Dispatch<React.SetStateAction<ICoordinate | null>>;
 }
 
-const messageList = {
+type MsgType = {
+  [anyKeyword: string]: string;
+  ERROR: string;
+  ZERO_RESULT: string;
+};
+
+const messageList: MsgType = {
   ERROR: "알 수 없는 오류가 발생했습니다.",
   ZERO_RESULT: "결과를 찾을 수 없습니다.",
 };
@@ -32,7 +38,7 @@ const LocationSetModal = ({ setShow, setLocation, setCoords }: Props) => {
     kakao.maps.services.Status.ZERO_RESULT
   );
   const [inputPlace, setSearchPlace] = useState<string>("");
-  const [curCoords, setCurCoords] = useState<Coordination | null>();
+  const [curCoords, setCurCoords] = useState<ICoordinate | null>();
   const [searchResults, setSearchResults] = useState<
     kakao.maps.services.PlacesSearchResultItem[] | null
   >(null);
@@ -124,7 +130,7 @@ const LocationSetModal = ({ setShow, setLocation, setCoords }: Props) => {
               );
             })
           ) : (
-            <span>{messageList["ERROR"]}</span>
+            <span>{messageList[resultStatus]}</span>
           )}
         </HorizontalScrollMenu>
         {curCoords && (

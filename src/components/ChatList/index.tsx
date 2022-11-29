@@ -6,7 +6,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 const ChatList = forwardRef<Scrollbars>(({}, scrollBarRef) => {
   return (
     <ChatZone>
-      <Scrollbars ref={scrollBarRef} universal={true}>
+      <Scrollbars ref={scrollBarRef} max={700}>
         <Section className={`section-1`} key={"1"}>
           <Chat chat={"123"} />
           <Chat />

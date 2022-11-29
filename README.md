@@ -13,9 +13,9 @@
   - "@types/jest": "^27.5.2"
   - "@types/node": "^16.11.68"
   - "@types/react": "^18.0.21"
+  - "@types/react-calendar": "^3.9.0"
   - "@types/react-copy-to-clipboard": "^5.0.4"
   - "@types/react-dom": "^18.0.6"
-  - "@types/sanitize-html": "^2.6.2"
   - "@types/validator": "^13.7.10
   - "axios": "^1.1.3"
   - "[color-hash](https://github.com/zenozeng/color-hash#readme)": "^2.0.1" - 문자열 해쉬로 색 추출
@@ -23,6 +23,7 @@
   - "[framer-motion](https://www.framer.com/docs/)": "^7.6.1" - 애니메이션 추가
   - "[gravatar](https://ko.gravatar.com/)": "^1.8.2" - 문자열 해시 기반 아바타 생성 
   - "react": "^18.2.0"
+  - "[react-calendar](https://www.npmjs.com/package/react-calendar)": "^4.0.0"
   - "[react-copy-to-clipboard](https://www.npmjs.com/package/react-copy-to-clipboard)": "^5.1.0" - 클립보드로 복사
   - "react-custom-scrollbars-2": "^4.5.0" - 스크롤바 추가
   - "react-dom": "^18.2.0"

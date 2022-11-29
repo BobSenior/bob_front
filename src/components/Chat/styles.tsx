@@ -40,7 +40,7 @@ export const ChatContainer = styled.div`
   flex-direction: column;
   background-color: rgba(245, 222, 179, 0.3);
   border-radius: 12px;
-  width: max-content;
+  max-width: 80%;
   & pre {
     font-family: inherit;
     white-space: pre-wrap;

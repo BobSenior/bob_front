@@ -58,7 +58,7 @@ const Main = () => {
         .then(() => {})
         .catch((error) => console.log(error));
     }
-  }, [isReachingEnd]);
+  }, [isReachingEnd, setSize]);
 
   const recountColumns = useCallback(() => {
     setNumOfColumns(countColumns({ totalWidth: window.innerWidth }));

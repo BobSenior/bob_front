@@ -4,6 +4,8 @@ export const PromiseVoteContainer = styled.div`
   display: grid;
   position: sticky;
   top: 0;
+  width: inherit;
+  max-width: inherit;
   position: -webkit-sticky;
   grid-template-columns: 1fr 50px 50px;
   align-content: center;
@@ -25,6 +27,7 @@ export const PromiseVoteContainer = styled.div`
 export const ChatRoomContainer = styled.div`
   display: grid;
   height: 80vh;
-  width: 100%;
+  width: 70vw;
+  max-width: 700px;
   grid-template-rows: 38px 1fr;
 `;

@@ -29,7 +29,7 @@ export interface IWorkspace {
   OwnerId: number; // 워크스페이스 만든 사람 아이디
 }
 
-export interface Coordination {
+export interface ICoordinate {
   latitude: number;
   longitude: number;
 }
@@ -55,8 +55,8 @@ export interface AppointmentHeadDTO {
   writtenAt: string;
   imageURL: string | null;
   writer: SimplifiedUserProfileDTO;
-  location: string;
-  meetingAt: string;
+  location: string | null;
+  meetingAt: string | null;
   type: string;
   status: string;
   totalNum: number;
@@ -69,8 +69,10 @@ export interface PostViewDTO {
   postIdx: number;
   title: string;
   groupConstraint: string;
-  location: string;
-  meetingAt: string;
+  latitude: number | null;
+  longitude: number | null;
+  location: string | null;
+  meetingAt: string | null;
   buyer: SimplifiedUserProfileDTO[];
   receiver: SimplifiedUserProfileDTO[];
   contents: string;
@@ -89,8 +91,10 @@ export interface SimplifiedUserProfileDTO {
 
 export interface AppointmentViewDTO {
   postIdx: number;
-  location: string;
-  meetingAt: String;
+  latitude: number | null;
+  longitude: number | null;
+  location: string | null;
+  meetingAt: string | null;
   buyers: SimplifiedUserProfileDTO[];
   receivers: SimplifiedUserProfileDTO[];
   voteTitle: string | null;
@@ -98,6 +102,25 @@ export interface AppointmentViewDTO {
   maxNum: number | null;
   alreadyVoted: boolean | null;
   chatRoomIdx: number;
+}
+
+export interface MakeNewPostReqDTO {
+  // private Long writerIdx;
+  writerPosition: string;
+  title: string;
+  location: string;
+  meetingAt: string;
+  type: string;
+  receiverNum: number | null;
+  buyerNum: number | null;
+
+  /*
+  //초대된 buyer의 목록
+  private List<Long> invitedIdx; // nullable, 지금은 무시할것
+  */
+  constraint: string;
+  content: string;
+  tags: string[] | null;
 }
 
 /**

@@ -88,25 +88,24 @@ const Appointments = () => {
     let windowHeight = window.innerHeight; // 스크린 창
     let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
     if (scrollLocation + windowHeight >= fullHeight) {
-      if (plan === pageParams.참가중 && !isPAReachingEnd) {
-        PASetSize((size) => size + 1)
-          .then(() => {})
-          .catch((err) => console.log(err));
-      } else if (plan === pageParams.대기중 && !isWAReachingEnd) {
-        WASetSize((size) => size + 1)
-          .then(() => {})
-          .catch((err) => console.log(err));
+      switch (plan) {
+        case pageParams.참가중:
+          if (!isPAReachingEnd)
+            PASetSize((size) => size + 1)
+              .then(() => {})
+              .catch((err) => console.log(err));
+          break;
+        case pageParams.대기중:
+          if (!isWAReachingEnd)
+            WASetSize((size) => size + 1)
+              .then(() => {})
+              .catch((err) => console.log(err));
+          break;
+        default:
+          break;
       }
     }
-  }, [
-    isPAReachingEnd,
-    isWAReachingEnd,
-    PASize,
-    PASetSize,
-    WASize,
-    WASetSize,
-    plan,
-  ]);
+  }, [PAIsValidating, WAIsValidating, isPAReachingEnd, isWAReachingEnd, plan]);
 
   const endSpan = useMemo(() => {
     let str = "";
@@ -114,7 +113,7 @@ const Appointments = () => {
       if (isPAEmpty) {
         str = "참가 중인 약속이 없어요.";
       } else {
-        if (PAIsValidating && !isPAReachingEnd)
+        if (PAIsValidating)
           return (
             <Oval
               height={"5vh"}
@@ -133,7 +132,7 @@ const Appointments = () => {
       if (isWAEmpty) {
         str = "참가 대기 중인 약속이 없어요.";
       } else {
-        if (WAIsValidating && !isWAReachingEnd)
+        if (WAIsValidating)
           return (
             <Oval
               height={"5vh"}

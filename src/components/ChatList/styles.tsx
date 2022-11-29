@@ -1,6 +1,7 @@
 import styled from "@emotion/styled/macro";
 
 export const ChatZone = styled.div`
+  max-width: inherit;
   & .scrollBarDiv {
     width: 100%;
     height: 100%;
