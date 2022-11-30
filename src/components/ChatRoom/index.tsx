@@ -9,12 +9,22 @@ import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import useSWRInfinite from "swr/infinite";
+import { infiniteFetcher } from "../../utils/fetchers";
+import { ChatDto } from "../../types/db";
+import makeDateSection from "../../utils/makeDateSection";
 import { toast } from "react-toastify";
 
+const chatSize = 20;
+const roomIdx = 1;
+const postIdx = 20;
 
 const ChatRoom = () => {
-  const client = useRef({});
-  const [showPromiseVote, setShowPromiseVote] = useState<boolean>(true);
+  const { data: chats, mutate } = useSWRInfinite<ChatDto[]>(
+    (index) => `/chat/load/${roomIdx}?page=${index}&size=${chatSize}`,
+    infiniteFetcher,
+    {}
+  );
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -44,9 +54,11 @@ const ChatRoom = () => {
     scrollbarRef.current?.scrollToBottom();
   }, []);
 
+  const chatDateSections = makeDateSection(chats ? chats.flat().reverse() : []);
+
   return (
     <ChatRoomContainer className={"chat-room-container"}>
-      <ChatList ref={scrollbarRef} />
+      <ChatList ref={scrollbarRef} chatDateSections={chatDateSections} />
       <ChatBox
         chat={chat}
         onSubmitForm={onSubmitChat}
