@@ -90,22 +90,22 @@ export interface SimplifiedUserProfileDTO {
 }
 
 export interface AppointmentViewDTO {
-  writerIdx:number;
-  constraint:string;
-  title:string;
+  writerIdx: number;
+  constraint: string;
+  title: string;
   postIdx: number;
   latitude: number | null;
   longitude: number | null;
   location: string | null;
   meetingAt: string | null;
-  voteIdx:number;
+  voteIdx: number;
   buyers: SimplifiedUserProfileDTO[];
   receivers: SimplifiedUserProfileDTO[];
   voteTitle: string | null;
   records: ShownVoteRecord[] | null;
   maxNum: number;
-  maxBuyerNum:number;
-  maxReceiverNum:number;
+  maxBuyerNum: number;
+  maxReceiverNum: number;
   alreadyVoted: boolean | null;
   chatRoomIdx: number;
 }
@@ -136,7 +136,9 @@ export interface MakeNewPostReqDTO {
 export interface ChatDto {
   type: string;
   senderIdx: number;
+  nickname: string;
   data: string;
+  writtenAt: string;
 }
 
 export interface ChatPage {
@@ -164,7 +166,7 @@ export interface ShownNotice {
  * Vote
  */
 export interface ShownVoteRecord {
-  id:number;
+  id: number;
   content: string;
   count: number;
 }
