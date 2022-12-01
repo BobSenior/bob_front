@@ -155,7 +155,7 @@ export const MemberSection = styled.section`
   padding-bottom: 30px;
 `;
 export const LargeMembersDiv = styled.div`
-  width: 200%;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
@@ -272,7 +272,7 @@ display: flex;
 
 export const RecordInputBox = styled.input`
   margin-left: 10px;
-  width: 80%;
+  width: 60%;
   height: 30px;
   border: gray solid 1px;
   border-radius: 3px;

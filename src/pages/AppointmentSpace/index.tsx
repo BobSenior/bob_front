@@ -57,6 +57,7 @@ import Modal from "../../components/Modal";
 import CenterModal from "../../components/CenterModal";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
+import RecordBox from "../../components/RecordBox";
 
 const AppointmentSpace = ()=>{
 
@@ -69,10 +70,14 @@ const AppointmentSpace = ()=>{
     const [inputUUID, setInputUUID]= useState<string>("");
     const [invitedPosition, setInvitedPosition] = useState<string>("");
     const [onMakeVote, setOnMakeVote] = useState<boolean>(false);
-    const [records, setRecords] = useState<string[]>([]);
+    const [records, setRecords] = useState<string[]>(["",""]);
     const [numRecord, setNumRecord] = useState<number>(2);
     const [recordsDate, setRecordsDate] = useState<String[]>([]);
+    const [voteMode, setVoteMode] = useState<string>("normal");
+    const [voteTitle, setVoteTitle] = useState<String>("");
 
+
+    console.log(records)
 
 
 
@@ -172,8 +177,7 @@ const AppointmentSpace = ()=>{
         let buf = numRecord;
         let count = 1;
         for(buf;buf>0;buf--){
-            remainings.push(<RecordLabel><>{count}번</>
-                <RecordInputBox id={`${count}`} placeholder={"항목을 입력하세요"}></RecordInputBox></RecordLabel>);
+            remainings.push(<RecordBox count={count} setRecords={setRecords} />);
             count++;
         }
         return remainings;
@@ -199,7 +203,8 @@ const AppointmentSpace = ()=>{
                     navigate(`/main`);
                 }
 
-            })
+            }).finally(()=>{setSelected(0);}
+        )
     },[selected,isSelected]);
 
     const onClickExit = useCallback(() =>{
@@ -234,9 +239,34 @@ const AppointmentSpace = ()=>{
             }
         }).finally(()=>{
             setOnInvite(false);
+            setInputUUID("");
             mutate();
         })
     },[appointment, inputUUID,invitedPosition]);
+
+    const onClickMakeVote = useCallback(()=>{
+        postFetcher.post(
+            `/vote/init/${id}`,
+            {
+                makerIdx:1,
+                title:voteTitle,
+                contents:records,
+                voteType:voteMode
+            }
+        ).then((response:AxiosResponse<BaseResponse<any>>)=>{
+            if(!response.data.isSuccess){
+                toast.error(response.data.message)
+            }
+            else{
+                toast.info("투표가 개시되었습니다!");
+            }
+        }).finally(()=>{
+            setRecords([]);
+            setNumRecord(0);
+            setVoteMode("normal");
+            setVoteTitle("");
+        })
+    },[appointment, records, numRecord,voteMode,voteTitle])
 
 
 
@@ -306,6 +336,7 @@ return(
                         {voteRecordSpan}
                     </VoteRecordSection>
                     <PlusButton onClick={()=>setNumRecord(numRecord+1)}>+</PlusButton>
+                        <BottomButton style={{marginBottom:"10px",width:"80%",marginLeft:"10%"}} onClick={onClickMakeVote}>submit</BottomButton>
                     </VoteSection>
                 </CenterModal>
 
@@ -315,6 +346,7 @@ return(
                     <AddButton onClick={onClickInviteBuyer}>+</AddButton>
                 </CenterModal>
             </MemberSection>
+            {appointment?.result.writerIdx === 1 && <BottomButton>신청 목록</BottomButton>}
             <HorizonLine text={''}/>
             <Title style={{paddingTop:"1px"}}>VOTE</Title>
             <BoxSection>
@@ -336,7 +368,7 @@ return(
             <BottomButtonSection>
                 <BottomButton onClick={onClickExit}>나가기</BottomButton>
                 <BottomButton onClick={()=>navigate(`/main`)}>메인으로</BottomButton>
-                <BottomButton onClick={()=>navigate(`/main/chat_test`)}>채팅방으로</BottomButton>
+                <BottomButton onClick={()=>navigate(`/main/chat_test`)}>채팅방</BottomButton>
             </BottomButtonSection>
         </ComposeMain>
     </ComposeWrapper>
