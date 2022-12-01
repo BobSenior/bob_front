@@ -17,6 +17,8 @@ import ChatBox from "../ChatBox";
 import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { toast } from "react-toastify";
+import SockJs from "sockjs-client";
+import StompJs from "stompjs";
 
 interface props {
   closeChatRoom?: () => void;
@@ -27,6 +29,45 @@ const ChatRoom = ({ closeChatRoom }: props) => {
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const sock = new SockJs("http://localhost:8080/ws/chat");
+  const stomp = StompJs.over(sock);
+  console.log(sock)
+
+  const stompConnect = () => {
+    console.log(sock)
+    stomp.connect({}, ()=> {
+      stomp?.subscribe('/topic/room/77',(message)=>{
+        console.log(message)
+      })
+    })
+  };
+
+  const stompDisConnect = () => {
+    try {
+      stomp?.disconnect(() => {
+        stomp?.unsubscribe("sub-0");
+      });
+    } catch (err) {
+
+    }
+  };
+
+  const SendMessage = () => {
+    const data = {
+      type:"NORMAL",
+      senderIdx:1,
+      data:"제발 좀 되라"
+    };
+    //예시 - 데이터 보낼때 json형식을 맞추어 보낸다.
+    stomp?.send(`/app/stomp/77`, {},JSON.stringify(data));
+  };
+
+
+  useEffect(()=>{
+    stompConnect();
+  });
+
+
 
   const onClickBackArrow = useCallback((e: MouseEvent<HTMLElement>) => {
     console.log(e);
@@ -58,6 +99,7 @@ const ChatRoom = ({ closeChatRoom }: props) => {
     <PlansWrapper className={"chat-page-wrapper"}>
       <ChatRoomContainer className={"chat-room-container"}>
         <ChatRoomHeader>
+          <button onClick={SendMessage}>test</button>
           <img
             className={"back-arrow-image"}
             src={BackArrowSvg}
