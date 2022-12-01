@@ -11,6 +11,7 @@ import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { toast } from "react-toastify";
 
+
 const ChatRoom = () => {
   const client = useRef({});
   const [showPromiseVote, setShowPromiseVote] = useState<boolean>(true);
