@@ -35,9 +35,7 @@ const Appointments = () => {
     data: ParticipatingAppointment,
     error: PAError,
     isValidating: PAIsValidating,
-    size: PASize,
     setSize: PASetSize,
-    mutate: PAMutate,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
       return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
@@ -54,9 +52,7 @@ const Appointments = () => {
     data: WaitingAppointment,
     error: WAError,
     isValidating: WAIsValidating,
-    size: WASize,
     setSize: WASetSize,
-    mutate: WAMutate,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
       return `/post/waiting?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
@@ -70,14 +66,14 @@ const Appointments = () => {
     }
   );
 
-  const isPAEmpty = ParticipatingAppointment?.[0].length === 0;
+  const isPAEmpty = ParticipatingAppointment?.[0]?.length === 0;
   const isPAReachingEnd =
     isPAEmpty ||
     (ParticipatingAppointment &&
       ParticipatingAppointment[ParticipatingAppointment.length - 1]?.length <
         pageSize);
 
-  const isWAEmpty = WaitingAppointment?.[0].length === 0;
+  const isWAEmpty = WaitingAppointment?.[0]?.length === 0;
   const isWAReachingEnd =
     isWAEmpty ||
     (WaitingAppointment &&

@@ -16,8 +16,7 @@ import makeDateSection from "../../utils/makeDateSection";
 import { toast } from "react-toastify";
 
 const chatSize = 20;
-const roomIdx = 1;
-const postIdx = 20;
+const postIdx = 1;
 
 const ChatRoom = () => {
   const { data: chats, mutate } = useSWRInfinite<ChatDto[]>(
@@ -25,7 +24,7 @@ const ChatRoom = () => {
     infiniteFetcher,
     {}
   );
-  const [chat, setChat] = useState<string>("");
+  const [chatInput, setChatInput] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 

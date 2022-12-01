@@ -1,6 +1,5 @@
 import styled from "@emotion/styled/macro";
 
-
 export const PromiseVoteContainer = styled.div`
   display: grid;
   position: sticky;
@@ -29,6 +28,6 @@ export const ChatRoomContainer = styled.div`
   display: grid;
   height: 80vh;
   width: 70vw;
-  max-width: 700px;
+  max-width: 550px;
   grid-template-rows: 1fr 50px;
 `;
