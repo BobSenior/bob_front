@@ -1,9 +1,9 @@
 import React, {
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
   FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
 } from "react";
 import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
@@ -13,55 +13,57 @@ import useStomp from "../../hooks/useStomp";
 import useSWRInfinite from "swr/infinite";
 import { infiniteFetcher } from "../../utils/fetchers";
 import { ChatDto } from "../../types/db";
-import { IMessage, StompSubscription } from "@stomp/stompjs";
+import { ActivationState, IMessage, StompSubscription } from "@stomp/stompjs";
 import { testUserIdx } from "../../pages/Main";
 import makeDateSection from "../../utils/makeDateSection";
 import dayjs from "dayjs";
 
 const chatSize = 20;
-const roomIdx = 1;
-const postIdx = 20;
+const postIdx = 1;
 
 const subscriptions: { [roomIdx: number]: StompSubscription } = {};
 const ChatRoom = () => {
+  const [client, disconnect] = useStomp("chat");
   const { data: chats, mutate } = useSWRInfinite<ChatDto[]>(
-    (index) => `/chat/load/${roomIdx}?page=${index}&size=${chatSize}`,
+    (index) => `/chat/load/${postIdx}?page=${index}&size=${chatSize}`,
     infiniteFetcher,
-    {}
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      revalidateFirstPage: false,
+    }
   );
-  const [chat, setChat] = useState<string>("");
+  const [chatInput, setChatInput] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const [client, disconnect] = useStomp("chat");
   const onSubmitChat = useCallback(
     (e: FormEvent) => {
-      e.preventDefault();
-      if (chat.trim() === "") return;
-      console.log(chat);
-      const myChat: ChatDto = {
-        type: "",
-        senderIdx: testUserIdx,
-        nickname: `tester_${testUserIdx}`,
-        data: chat,
-        writtenAt: dayjs().toString(),
-      };
-      const quote = { senderIdx: testUserIdx, content: chat };
-      //TODO 채팅 송신 메서드. 주소 확인 필요
-      client?.publish({
-        destination: `/app/stomp/${roomIdx}`,
-        body: JSON.stringify(quote),
-        skipContentLengthHeader: true,
-      });
-      mutate((chats: ChatDto[][] | undefined) => {
-        chats?.[0].unshift(myChat);
-        return chats;
-      }, false)
-        .then()
-        .catch();
-      setChat("");
+      // e.preventDefault();
+      // if (chatInput.trim() === "") return;
+      // const myChat: ChatDto = {
+      //   type: "123",
+      //   senderIdx: testUserIdx,
+      //   nickname: `tester_${testUserIdx}`,
+      //   data: chatInput,
+      //   writtenAt: dayjs().toString(),
+      // };
+      // const quote = { senderIdx: testUserIdx, content: chatInput };
+      // //TODO 채팅 송신 메서드. 주소 확인 필요
+      // client?.publish({
+      //   destination: `/app/stomp/${postIdx}`,
+      //   body: JSON.stringify(quote),
+      //   skipContentLengthHeader: true,
+      // });
+      // mutate((chats: ChatDto[][] | undefined) => {
+      //   chats?.[0].unshift(myChat);
+      //   return chats;
+      // }, false)
+      //   .then()
+      //   .catch();
+      // setChatInput("");
     },
-    [chat, textAreaRef]
+    [chatInput]
   );
 
   const onReceiveChat = useCallback((message: IMessage) => {
@@ -80,16 +82,17 @@ const ChatRoom = () => {
   }, []);
 
   useEffect(() => {
-    if (!subscriptions[roomIdx] && client) {
-      //TODO 채팅 수신 메서드. 주소 확인 필요
-      subscriptions[roomIdx] = client?.subscribe("", onReceiveChat);
-    }
-    client?.activate();
+    // if (client && !subscriptions[postIdx]) {
+    //   subscriptions[postIdx] = client.subscribe(
+    //     `/topic/room/${postIdx}`,
+    //     onReceiveChat
+    //   );
+    // }
     return () => {
       client?.deactivate();
-      if (subscriptions[roomIdx] && client) {
-        subscriptions[roomIdx].unsubscribe();
-        delete subscriptions[roomIdx];
+      if (subscriptions[postIdx] && client) {
+        subscriptions[postIdx].unsubscribe();
+        delete subscriptions[postIdx];
         disconnect();
       }
     };
@@ -101,10 +104,10 @@ const ChatRoom = () => {
     <ChatRoomContainer className={"chat-room-container"}>
       <ChatList ref={scrollbarRef} chatDateSections={chatDateSections} />
       <ChatBox
-        chat={chat}
+        chat={chatInput}
         onSubmitForm={onSubmitChat}
         onChangeChat={(e) => {
-          setChat(e.target.value);
+          setChatInput(e.target.value);
         }}
         ref={textAreaRef}
         placeholder={"채팅을 시작하세요."}

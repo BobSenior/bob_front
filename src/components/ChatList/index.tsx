@@ -19,8 +19,8 @@ const ChatList = forwardRef<Scrollbars, Props>(
                 <StickyHeader>
                   <button>{date}</button>
                 </StickyHeader>
-                {chats.map((chat) => (
-                  <Chat key={generateUniqueID()} chat={chat} />
+                {chats.map((chatData) => (
+                  <Chat key={generateUniqueID()} chatData={chatData} />
                 ))}
               </Section>
             );

@@ -9,4 +9,4 @@ const useMySWR = () => {
   });
 };
 
-export default useMySWR();
+export default useMySWR;

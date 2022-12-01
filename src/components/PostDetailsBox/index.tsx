@@ -27,7 +27,11 @@ import { PostViewDTO } from "../../types/db";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import MemberBtn from "../MemberBtn";
-import { getFetcher, postFetcher } from "../../utils/fetchers";
+import {
+  getFetcher,
+  postDetailsFetcher,
+  postFetcher,
+} from "../../utils/fetchers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { HashTagContainer } from "../PostBox/style";
@@ -107,7 +111,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
 
       if (postDetailData.requested) {
         postFetcher
-          .post(`/post/request/reverse`, {
+          .post(`/api/post/request/reverse`, {
             userIdx: testUserIdx,
             postIdx: postIdx,
           })
@@ -122,7 +126,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
           .catch((err) => console.error(err));
       } else {
         postFetcher
-          .post("/post/request", {
+          .post("/api/post/request", {
             userIdx: testUserIdx,
             postIdx: postIdx,
             position: requestType,
@@ -157,10 +161,9 @@ const PostDetailsBox = ({ postIdx }: props) => {
   );
 
   useEffect(() => {
-    getFetcher
-      .get(`/post/${postIdx}?userIdx=${testUserIdx}`, { timeout: 5000 })
+    postDetailsFetcher(`/post/${postIdx}?userIdx=${testUserIdx}`)
       .then((res) => {
-        setPostDetailData(res.data.result);
+        setPostDetailData(res);
       })
       .catch((err) => {
         console.error(err);

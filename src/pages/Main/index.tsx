@@ -19,6 +19,7 @@ const Main = () => {
     data: PostHeads,
     isValidating,
     setSize,
+    error,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
       return `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${testUserIdx}`;
@@ -95,6 +96,8 @@ const Main = () => {
       window.removeEventListener("resize", recountColumns);
     };
   }, []);
+
+  if (error) return <div>404 error</div>;
 
   return (
     <div>
