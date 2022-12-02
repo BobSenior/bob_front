@@ -14,7 +14,6 @@ import SendSvg from "../../assets/icons/send-sharp.svg";
 import SearchSvg from "../../assets/icons/search-circle.svg";
 import { SendButton } from "../ChatBox/styles";
 import { ICoordinate } from "../../types/db";
-import search from "../../pages/Search";
 
 interface Props {
   setShow: Dispatch<React.SetStateAction<boolean>>;
