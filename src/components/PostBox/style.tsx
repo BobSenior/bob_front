@@ -30,7 +30,6 @@ export const BottomRightDiv = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   font-size: xx-small;
-  color: grey;
 `;
 export const BottomLeftDiv = styled.div`
   display: flex;
@@ -44,6 +43,7 @@ export const TopContext = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: flex-end;
+  font-size: 0.95em;
 `;
 export const MiddleContext = styled.div`
   display: flex;
@@ -53,6 +53,8 @@ export const MiddleContext = styled.div`
 `;
 export const BottomContext = styled.div`
   justify-content: space-between;
+  display: flex;
+  color: #808080;
 `;
 
 export const PromiseImg = styled.img`
@@ -79,9 +81,23 @@ export const PromiseHead = styled.div`
 
 export const PromiseTail = styled.div`
   display: flex;
+  justify-content: space-between;
+  padding-top: 5px;
+  align-items: flex-end;
+`;
+
+export const PlanTail = styled.div`
+  display: flex;
   justify-content: space-around;
   padding-top: 5px;
   align-items: flex-end;
+  & span {
+    font-size: 0.75em;
+  }
+  & div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 export const PBox = styled.div`

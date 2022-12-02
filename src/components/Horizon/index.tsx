@@ -9,7 +9,7 @@ const HorizonLine: FC<Props> = ({ text }) => {
     <div
       style={{
         position: "relative",
-        width: "90%",
+        width: "100%",
         left: "5%",
         marginTop: "30px",
         textAlign: "center",

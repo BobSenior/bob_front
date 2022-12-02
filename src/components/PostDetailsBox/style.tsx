@@ -9,6 +9,29 @@ export const InNOut = {
   Out: {},
 };
 
+export const RequestBtnWrapper = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 3px;
+`;
+
+export const NoOneSpan = styled.span`
+  font-size: 0.7em;
+  color: grey;
+`;
+
+export const MembersColumn = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 15px;
+  & h4 {
+    margin: 3px 0;
+  }
+`;
+
 export const MembersDiv = styled.div`
   width: 100%;
   display: grid;
@@ -37,11 +60,6 @@ export const PickerImg = styled.img`
   width: 1.5em;
 `;
 
-export const TitleHeader = css`
-  border-radius: 6px;
-  font-size: 0.65em;
-`;
-
 export const TNPSection = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -52,24 +70,42 @@ export const TNPSection = css`
 `;
 
 export const HeaderSection = css`
-  & div {
+  & .header-section-wrapper {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    & span {
+    & .header-title {
       padding: 0 5px;
       display: block;
     }
   }
+  margin-bottom: 2px;
+`;
+
+export const TagSection = css`
+  & div {
+    width: 100%;
+  }
+  margin-bottom: 1.1em;
 `;
 
 export const ContentSection = css`
   padding: 0 10px;
-  & p {
-    align-self: flex-start;
-    font-size: 0.9em;
-    word-break: break-word;
+  display: grid;
+  grid-template-rows: 30px 1fr;
+  & .content-wrapper {
+    width: 100%;
+    border: 1px solid lightslategrey;
+    border-radius: 5px;
+    padding: 5px 8px;
+    & p {
+      font-size: 0.9em;
+      word-break: break-word;
+      vertical-align: top;
+      text-indent: 5px;
+      margin: 0;
+    }
   }
 `;
 
@@ -82,8 +118,9 @@ export const Section = styled.section`
   flex-direction: column;
   justify-items: center;
   align-items: center;
-  padding-top: 7px;
+  margin: 7px 0;
 `;
+
 export const Footer = styled.div`
   display: flex;
 `;

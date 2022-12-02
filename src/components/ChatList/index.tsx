@@ -1,38 +1,34 @@
-/** @jsxImportSource @emotion/react */
-import Chat from "../Chat";
 import { ChatZone, Section, StickyHeader } from "./styles";
-import React, { useCallback, forwardRef } from "react";
+import React, { forwardRef } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import { ChatDto } from "../../types/db";
+import Chat from "../Chat";
+import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 
-const ChatList = forwardRef<Scrollbars>(({}, scrollBarRef) => {
-  return (
-    <ChatZone>
-      <Scrollbars ref={scrollBarRef} universal={true}>
-        <Section className={`section-1`} key={"1"}>
-          <Chat chat={"123"} />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-          <Chat />
-        </Section>
-      </Scrollbars>
-    </ChatZone>
-  );
-});
+interface Props {
+  chatDateSections: { [date: string]: ChatDto[] };
+}
+const ChatList = forwardRef<Scrollbars, Props>(
+  ({ chatDateSections }, scrollBarRef) => {
+    return (
+      <ChatZone>
+        <Scrollbars ref={scrollBarRef}>
+          {Object.entries(chatDateSections).map(([date, chats]) => {
+            return (
+              <Section className={`section-${date}`} key={date}>
+                <StickyHeader>
+                  <button>{date}</button>
+                </StickyHeader>
+                {chats.map((chatData) => (
+                  <Chat key={generateUniqueID()} chatData={chatData} />
+                ))}
+              </Section>
+            );
+          })}
+        </Scrollbars>
+      </ChatZone>
+    );
+  }
+);
 
 export default ChatList;

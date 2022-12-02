@@ -1,181 +1,118 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { PromisesColumn, PromisesWrapper } from "./style";
-import PromiseBox from "../../components/PromiseBox";
-import {AppointmentHeadDTO, BaseResponse, promiseInfo} from "../../types/db";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { PageSpinnerWrapper, PromisesColumn, PromisesWrapper } from "./style";
+import PostBox from "../../components/PostBox";
+import { AppointmentHeadDTO } from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
-import axios from "axios";
-import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
+import countColumns from "../../utils/countColumns";
+import { Oval } from "react-loader-spinner";
+import useSWRInfinite from "swr/infinite";
+import { infiniteFetcher } from "../../utils/fetchers";
 
-const p2: promiseInfo[] = [
-  {
-    name: "라이언",
-    ID: 22,
-    title: "밥먹을 사람!",
-    major: "미디어커뮤니테이션학부",
-    place: "흑석동",
-    time: "10월 30일",
-    createdAt: "2022-10-30",
-  },
-  {
-    name: "라이언",
-    ID: 22,
-    title: "밥먹을 사람!",
-    major: "에너지시스템공학부",
-    place: "흑석동",
-    time: "10월 30일",
-  },
-  {
-    name: "어피치",
-    ID: 21,
-    title: "밥먹을 사람12!",
-    major: "생명자원공학부",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-  {
-    name: "야다",
-    ID: 21,
-    title: "아무나1",
-    major: "물리학과",
-    place: "상도동",
-    time: "10월 29일",
-  },
-];
+export const testUserIdx = 1;
+const pageSize = 10;
 
 const Main = () => {
-  const [numOfColumns, setNumOfColumns] = useState<number>(1);
-  const {data:PostHeads, error} = useSWR<BaseResponse<AppointmentHeadDTO[]>>(`/post/list?userIdx=1`,fetcher);
+  const [numOfColumns, setNumOfColumns] = useState<number>(
+    countColumns({ totalWidth: window.innerWidth })
+  );
+  const {
+    data: PostHeads,
+    isValidating,
+    setSize,
+    error,
+  } = useSWRInfinite<AppointmentHeadDTO[]>(
+    (pageIndex: number) => {
+      return `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${testUserIdx}`;
+    },
+    infiniteFetcher,
+    {
+      revalidateOnMount: true,
+      revalidateOnFocus: false,
+      dedupingInterval: 2000,
+      revalidateFirstPage: false,
+    }
+  );
+
+  const isEmpty = PostHeads?.[0].length === 0;
+  const isReachingEnd =
+    isEmpty ||
+    (PostHeads && PostHeads[PostHeads.length - 1]?.length < pageSize);
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
     for (let i = 0; i < numOfColumns; i++) tempColDivs[i] = [];
-
-    PostHeads?.result.forEach((value, index) => {
+    PostHeads?.flat().forEach((value, index) => {
       tempColDivs[index % numOfColumns].push(
-          <PromiseBox data={value} key={generateUniqueID()} />
+        <PostBox data={value} key={generateUniqueID()} />
       );
-    })
-
-
+    });
     return tempColDivs;
-  }, [numOfColumns,PostHeads]);
+  }, [numOfColumns, PostHeads]);
+
+  const getNextPage = useCallback(() => {
+    let scrollLocation = document.documentElement.scrollTop; // 현재 스크롤바 위치
+    let windowHeight = window.innerHeight; // 스크린 창
+    let fullHeight = document.body.scrollHeight; //  margin 값은 포함 x
+
+    if (scrollLocation + windowHeight >= fullHeight && !isReachingEnd) {
+      setSize((size) => size + 1)
+        .then(() => {})
+        .catch((error) => console.log(error));
+    }
+  }, [isReachingEnd, setSize]);
 
   const recountColumns = useCallback(() => {
-    let num = Math.floor(window.innerWidth / 350);
-    if (num > 3) {
-      num = 3;
-    } else if (num < 1) {
-      num = 1;
-    }
-    setNumOfColumns(num);
+    setNumOfColumns(countColumns({ totalWidth: window.innerWidth }));
   }, []);
 
+  const endSpan = useMemo(() => {
+    let str = "";
+    if (isEmpty) {
+      str = "약속이 없어요.";
+    } else {
+      if (isValidating && !isReachingEnd)
+        return (
+          <Oval
+            height={"5vh"}
+            width={"5vh"}
+            color={"var(--basic-color)"}
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor={"#828282"}
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        );
+      else if (isReachingEnd) str = "마지막 약속이예요.";
+    }
+    return <span className={"end-point"}>{str}</span>;
+  }, [isReachingEnd, isEmpty, isValidating, PostHeads]);
+
   useEffect(() => {
+    window.addEventListener("scroll", getNextPage);
     window.addEventListener("resize", recountColumns);
-    recountColumns();
     return () => {
+      window.removeEventListener("scroll", getNextPage);
       window.removeEventListener("resize", recountColumns);
     };
-  }, [window.innerWidth]);
+  }, []);
+
+  if (error) return <div>404 error</div>;
 
   return (
-    <PromisesWrapper>
-      {columnDivs.map((value) => {
-        return (
-          <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
-        );
-      })}
-    </PromisesWrapper>
+    <div>
+      <PromisesWrapper
+        style={{ gridTemplateColumns: `repeat(${numOfColumns}, 1fr)` }}
+      >
+        {columnDivs.map((value) => {
+          return (
+            <PromisesColumn key={generateUniqueID()}>{value}</PromisesColumn>
+          );
+        })}
+      </PromisesWrapper>
+      <PageSpinnerWrapper>{endSpan}</PageSpinnerWrapper>
+    </div>
   );
 };
 
-export default memo(Main);
+export default Main;

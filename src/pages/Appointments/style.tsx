@@ -20,7 +20,4 @@ export const PlansWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  & div {
-    max-width: 800px;
-  }
 `;

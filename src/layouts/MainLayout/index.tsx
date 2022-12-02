@@ -15,45 +15,45 @@ import {
   AlarmMark,
 } from "./style";
 const Profile = lazy(() => import("../../pages/Profile"));
-const Plans = lazy(() => import("../../pages/Plans"));
+const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
+const AppointmentSpace = lazy(() => import("../../pages/AppointmentSpace"));
 const Main = lazy(() => import("../../pages/Main"));
-const Search = lazy(() => import("../../pages/Search"));
-import ChatRoom from "../../components/ChatRoom";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import MenuList from "../../components/MenuList";
-import GlobalContext from "../../hooks/GlobalContext";
 import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
-import { AnimatePresence } from "framer-motion";
-import MapDisplayModal from "../../components/MapDisplayModal";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useSWR from "swr";
+import { getFetcher } from "../../utils/fetchers";
+import ChatRoomModal from "../../components/ChatRoomModal";
 
 const emailExample = "123";
 
 const MainLayout = () => {
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [showMapModal, setShowMapModal] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
-  const [address, setAddress] = useState<string>("");
   const [alarmCount, setAlarmCount] = useState(1);
-
-  const closeAllModals = useCallback(() => {
-    setShowListModal(0);
-  }, []);
+  const [showChatRoomModal, setShowChatRoomModal] = useState(false);
+  const {
+    data: alarmData,
+    error,
+    isValidating,
+    mutate: alarmMuate,
+  } = useSWR(null, getFetcher);
 
   const ListModal = useMemo(() => {
     switch (showListModal) {
       case 1:
         return <AlarmList />;
       case 2:
-        return <MenuList />;
+        return <MenuList setShow={setShowListModal} />;
       default:
         return null;
     }
@@ -69,15 +69,8 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <GlobalContext.Provider
-      value={{
-        showMapModal,
-        setShowMapModal,
-        address,
-        setAddress,
-      }}
-    >
-      <MainBox onClick={closeAllModals}>
+    <>
+      <MainBox>
         <Header>
           {showSearchBar ? (
             <SearchBar />
@@ -107,18 +100,35 @@ const MainLayout = () => {
               />
             </button>
           </IconsContainer>
-          <AnimatePresence>{ListModal}</AnimatePresence>
+          {ListModal && (
+            <>
+              <div
+                style={{
+                  position: "fixed",
+                  top: "38px",
+                  left: 0,
+                  width: "100vw",
+                  height: "calc(100vh - 38px)",
+                }}
+                onClick={() => setShowListModal(0)}
+              ></div>
+              {ListModal}
+            </>
+          )}
         </Header>
         <Body>
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route index element={<Main />} />
+              <Route path={"search/:searchInput"} element={<Main />} />
               <Route path={"plans/:plan"} element={<Plans />} />
-              <Route path={"search/:input"} element={<Search />} />
-              <Route path={"profile"} element={<Profile />} />
-              <Route path={"chat_test"} element={<ChatRoom />} />
+              <Route path={"profile"} element={<Profile />}>
+                <Route path={":userIdx"} />
+                <Route path={"me"} />
+              </Route>
               <Route path={"compose"} element={<Compose />} />
               <Route path={"*"} element={<div>404 error</div>} />
+              <Route path={"appointment/:id"} element={<AppointmentSpace />} />
             </Routes>
           </Suspense>
         </Body>
@@ -141,7 +151,7 @@ const MainLayout = () => {
             text={"채팅 테스트"}
             onClick={() => {
               setShowSearchBar(false);
-              navigate(`chat_test`);
+              setShowChatRoomModal(true);
             }}
           />
           <LayoutBtn
@@ -156,13 +166,8 @@ const MainLayout = () => {
         </Bottom>
       </MainBox>
       <ToastContainer />
-      <MapDisplayModal
-        isVisible={showMapModal}
-        onClickForClose={() => {
-          setShowMapModal(false);
-        }}
-      />
-    </GlobalContext.Provider>
+      {showChatRoomModal && <ChatRoomModal setShow={setShowChatRoomModal} />}
+    </>
   );
 };
 

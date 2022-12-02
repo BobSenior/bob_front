@@ -1,62 +1,46 @@
 import Modal from "../Modal";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import GlobalContext from "../../hooks/GlobalContext";
+import { MapMarker, Map } from "react-kakao-maps-sdk";
+import React, { Dispatch } from "react";
+import { ICoordinate } from "../../types/db";
+import { Wrapper } from "../LocationSetModal/style";
 
-interface props {
-  isVisible: boolean;
-  onClickForClose: () => void;
+interface Props {
+  setShow: Dispatch<React.SetStateAction<boolean>>;
+  coordinate: ICoordinate;
+  location: string;
 }
 
-interface coordination {
-  latitude: number;
-  longitude: number;
-}
-
-const MapDisplayModal = ({ isVisible, onClickForClose }: props) => {
-  const { address } = useContext(GlobalContext);
-  const [render, setRender] = useState<boolean>(false);
-  const [coords, setCoords] = useState<coordination>({
-    latitude: 36,
-    longitude: 127,
-  });
-
-  useEffect(() => {
-    if (!isVisible) return;
-    try {
-      const geocoder = new kakao.maps.services.Geocoder();
-
-      if (address)
-        geocoder.addressSearch(address, function (result, status) {
-          if (status === kakao.maps.services.Status.OK) {
-            setRender(true);
-            setCoords({
-              latitude: parseFloat(result[0].y),
-              longitude: parseFloat(result[0].x),
-            });
-            console.log(`${address}: MAP_OK`);
-          }
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  }, [isVisible]);
-
+const MapDisplayModal = ({ setShow, coordinate: coords, location }: Props) => {
   return (
-    <Modal isVisible={isVisible} onClickForClose={onClickForClose}>
-      {render ? (
+    <Modal setShow={setShow}>
+      <Wrapper>
         <Map
+          style={{ height: "50vh", maxWidth: "700px" }}
           center={{ lat: coords.latitude, lng: coords.longitude }}
-          style={{ width: "280px", height: "320px" }}
+          level={2}
         >
           <MapMarker
             position={{ lat: coords.latitude, lng: coords.longitude }}
-            title={address ?? ""}
-          ></MapMarker>
+            image={{
+              size: { width: 45, height: 50 },
+              options: { offset: { x: 24, y: 42 } },
+              src: "https://cdn-icons-png.flaticon.com/512/4249/4249833.png",
+            }}
+          >
+            <div style={{ padding: "5px", color: "#000", width: "100%" }}>
+              {location} <br />
+              <a
+                href={`https://map.kakao.com/link/map/${location},${coords.latitude},${coords.longitude}`}
+                style={{ color: "blue" }}
+                target="_blank"
+                rel="noreferrer"
+              >
+                큰지도보기
+              </a>
+            </div>
+          </MapMarker>
         </Map>
-      ) : (
-        <div style={{ width: "280px", height: "320px" }}></div>
-      )}
+      </Wrapper>
     </Modal>
   );
 };

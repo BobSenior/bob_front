@@ -6,27 +6,28 @@ import React, {
   useEffect,
   FormEvent,
 } from "react";
-import {
-  ChatRoomContainer,
-  ChatRoomHeader,
-  PromiseVoteContainer,
-} from "./style";
-import { PlansWrapper } from "../../pages/Plans/style";
+import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
-import BackArrowSvg from "../../assets/icons/arrow-back-outline.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
+import useSWRInfinite from "swr/infinite";
+import { infiniteFetcher } from "../../utils/fetchers";
+import { ChatDto } from "../../types/db";
+import makeDateSection from "../../utils/makeDateSection";
 import { toast } from "react-toastify";
 import SockJs from "sockjs-client";
 import StompJs from "stompjs";
 
-interface props {
-  closeChatRoom?: () => void;
-}
+const chatSize = 20;
+const postIdx = 1;
 
-const ChatRoom = ({ closeChatRoom }: props) => {
-  const [showPromiseVote, setShowPromiseVote] = useState<boolean>(true);
-  const [chat, setChat] = useState<string>("");
+const ChatRoom = () => {
+  const { data: chats, mutate } = useSWRInfinite<ChatDto[]>(
+    (index) => `/chat/load/${roomIdx}?page=${index}&size=${chatSize}`,
+    infiniteFetcher,
+    {}
+  );
+  const [chatInput, setChatInput] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const sock = new SockJs("http://localhost:8080/ws/chat");
@@ -95,40 +96,21 @@ const ChatRoom = ({ closeChatRoom }: props) => {
     scrollbarRef.current?.scrollToBottom();
   }, []);
 
+  const chatDateSections = makeDateSection(chats ? chats.flat().reverse() : []);
+
   return (
-    <PlansWrapper className={"chat-page-wrapper"}>
-      <ChatRoomContainer className={"chat-room-container"}>
-        <ChatRoomHeader>
-          <button onClick={SendMessage}>test</button>
-          <img
-            className={"back-arrow-image"}
-            src={BackArrowSvg}
-            onClick={onClickBackArrow}
-            alt={"back-arrow"}
-          />
-          {showPromiseVote && (
-            <PromiseVoteContainer>
-              <div>
-                <span>장소: ~</span>
-                <span>시간: ~</span>
-              </div>
-              <button />
-              <button />
-            </PromiseVoteContainer>
-          )}
-        </ChatRoomHeader>
-        <ChatList ref={scrollbarRef} />
-        <ChatBox
-          chat={chat}
-          onSubmitForm={onSubmitChat}
-          onChangeChat={(e) => {
-            setChat(e.target.value);
-          }}
-          ref={textAreaRef}
-          placeholder={"채팅을 시작하세요."}
-        />
-      </ChatRoomContainer>
-    </PlansWrapper>
+    <ChatRoomContainer className={"chat-room-container"}>
+      <ChatList ref={scrollbarRef} chatDateSections={chatDateSections} />
+      <ChatBox
+        chat={chat}
+        onSubmitForm={onSubmitChat}
+        onChangeChat={(e) => {
+          setChat(e.target.value);
+        }}
+        ref={textAreaRef}
+        placeholder={"채팅을 시작하세요."}
+      />
+    </ChatRoomContainer>
   );
 };
 export default ChatRoom;

@@ -1,92 +1,186 @@
-import { FormEvent, ChangeEvent, useCallback, useState } from "react";
+import {
+  FormEvent,
+  ChangeEvent,
+  useCallback,
+  useState,
+  useMemo,
+  useEffect,
+} from "react";
 import {
   ComposeForm,
   ComposeMain,
   ComposeWrapper,
   Handle,
   SwitchDiv,
-  spring,
   HandleVariant,
   SwitchWrapper,
-  SubmitButton,
   Label,
   SwitchVariant,
   SwitchSpan,
   SpanVariant,
   MainSpan,
   TextArea,
+  TypeRadioWrapper,
+  RadioBox,
+  RadioDetailsBox,
+  LAMButton,
+  LAM_Variant,
+  LAMDetailsSpan,
+  ResultSpan,
 } from "./style";
 import { Input } from "../../components/SearchBar/style";
-import { HashTagContainer } from "../../components/PromiseBox/style";
+import { HashTagContainer } from "../../components/PostBox/style";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import RangeInput from "../../components/RangeInput";
+import validator from "validator";
+import { postFetcher } from "../../utils/fetchers";
+import { BottomButton } from "../Login/styles";
+import LocationSetModal from "../../components/LocationSetModal";
+import MeetingAtSetModal from "../../components/MeetingAtSetModal";
+import dayjsAll from "../../utils/dayjsAll";
+import { ICoordinate } from "../../types/db";
 
-interface composeData {
+interface basicData {
   title: string;
-  contexts: string | null;
-  tags: string[] | null;
+  contexts: string;
 }
+
+interface IBNR {
+  buyers: number;
+  receivers: number;
+}
+
+const postTypes = [
+  ["같이먹자", "같이 밥 먹을 사람을 구해요. 모두 더치페이해요."],
+  [
+    "내가산다",
+    "내가 밥 사주고 싶은 사람을 구해요. 나는 사는 사람으로 참가해요.",
+  ],
+  ["사주세요", "나한테 밥 사줄 사람을 구해요. 나는 먹는 사람으로 참가해요."],
+];
 
 const getHashTag = (str: string | null): string[] | null => {
   if (!str) return null;
-
   const re = /#[가-힣|a-z|A-Z|0-9|\_]+/g;
   return str.match(re)?.flatMap((x) => x.slice(1)) ?? null;
 };
 
 const Compose = () => {
-  const [formData, setFormData] = useState<composeData>({
+  const [formData, setFormData] = useState<basicData>({
     title: "",
-    contexts: null,
-    tags: null,
+    contexts: "",
   });
+  const [hashtags, setHashtags] = useState<string[] | null>(null);
+  const [coords, setCoords] = useState<ICoordinate | null>(null);
+  const [location, setLocation] = useState<string | null>(null);
+  const [meetingAt, setMeetingAt] = useState<string | null>(null);
+  const [postType, setPostType] = useState<string | null>(postTypes[0][0]);
   const [maxMember, setMaxMember] = useState<number>(2);
+  const [BNR, setBNR] = useState<IBNR | null>(null);
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
-  const [onlyForAnonymous, setOnlyForAnonymous] = useState<boolean>(false);
-  const [disableSubmit, setDisableSubmit] = useState<boolean>(true);
+  const [onlyForRealName, setOnlyForRealName] = useState<boolean>(false);
+  const [showLocationSetModal, setShowLocationSetModal] = useState(false);
+  const [showMeetingAtSetModal, setShowMeetingAtSetModal] = useState(false);
+
+  const isSubmittable = useMemo(() => {
+    return (
+      !validator.isEmpty(formData.title) &&
+      !validator.isEmpty(formData.contexts)
+    );
+  }, [formData]);
 
   const onSubmitComposeForm = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      console.log("제출");
       //TODO: form제출
-      console.log({ formData, maxMember, onlyForSameMajor, onlyForAnonymous });
+      postFetcher
+        .post("", {
+          title: formData.title,
+          contexts: formData.contexts,
+          tags: hashtags,
+        })
+        .then((res) => {
+          console.log("제출" + res);
+        })
+        .catch((err) => console.log(err));
+      console.log({
+        formData,
+        hashtags,
+        maxMember,
+        onlyForSameMajor,
+        onlyForRealName,
+      });
     },
-    [formData, maxMember, onlyForSameMajor, onlyForAnonymous]
+    [formData, hashtags, maxMember, onlyForSameMajor, onlyForRealName]
   );
-
-  const checkSubmitCondition = useCallback(() => {
-    if (formData.title === "" || !formData.contexts) setDisableSubmit(true);
-    else setDisableSubmit(false);
-  }, [formData]);
 
   const onInputTitle = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       setFormData((prevState) => {
         return { ...prevState, title: e.target.value };
       });
-      checkSubmitCondition();
     },
     [formData]
   );
 
-  const onInputContext = useCallback(
+  const onInputContexts = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       setFormData((prevState) => {
         return { ...prevState, contexts: e.target.value };
       });
-      checkSubmitCondition();
     },
     [formData]
   );
 
-  const onPointerOutContext = useCallback(() => {
+  const onChangeNumOfBuyers = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const targetValue = parseInt(e.target.value);
+      if (targetValue < maxMember)
+        setBNR({ buyers: targetValue, receivers: maxMember - targetValue });
+    },
+    [maxMember]
+  );
+
+  const onChangeNumOfReceivers = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const targetValue = parseInt(e.target.value);
+      if (targetValue < maxMember)
+        setBNR({ receivers: targetValue, buyers: maxMember - targetValue });
+    },
+    [maxMember]
+  );
+
+  const onClickLocation = useCallback(() => {
+    if (!location) {
+      setShowLocationSetModal(true);
+    } else {
+      setLocation(null);
+    }
+  }, [location]);
+
+  const onClickMeetingAt = useCallback(() => {
+    if (!meetingAt) {
+      setShowMeetingAtSetModal(true);
+    } else {
+      setMeetingAt(null);
+    }
+  }, [meetingAt]);
+
+  useEffect(() => {
     const tags = getHashTag(formData.contexts);
-    setFormData((prevState) => {
-      return { ...prevState, tags: tags ? tags : null };
+    const uniqTags = tags?.filter((element, index) => {
+      return tags?.indexOf(element) === index;
     });
-    checkSubmitCondition();
+    setHashtags(uniqTags ?? null);
   }, [formData]);
+
+  useEffect(() => {
+    if (postType === postTypes[0][0]) {
+      setBNR(null);
+    }
+    const halfNum = Math.round(maxMember / 2);
+    setBNR({ buyers: halfNum, receivers: maxMember - halfNum });
+  }, [maxMember, postType]);
 
   return (
     <ComposeWrapper>
@@ -122,19 +216,19 @@ const Compose = () => {
             onChange={onInputTitle}
             style={{ width: "100%", fontSize: "16px" }}
             placeholder={"제목을 입력해주세요."}
+            maxLength={16}
           />
 
           <Label>내용</Label>
           <TextArea
             id={"context"}
-            value={formData.contexts ?? undefined}
-            onChange={onInputContext}
-            onPointerOut={onPointerOutContext}
+            value={formData.contexts}
+            onChange={onInputContexts}
             placeholder={"내용을 입력해주세요."}
           />
-          {formData.tags ? (
+          {hashtags ? (
             <HashTagContainer style={{ paddingTop: "10px" }}>
-              {formData.tags?.map((value) => {
+              {hashtags?.map((value) => {
                 return (
                   <span
                     style={{
@@ -161,24 +255,82 @@ const Compose = () => {
               #로 해시태그를 추가할 수 있어요.
             </span>
           )}
-
+          <Label>장소</Label>
+          <LAMButton
+            animate={location ? "on" : "off"}
+            variants={LAM_Variant}
+            whileTap={{ scale: 0.9 }}
+            onClick={onClickLocation}
+          >
+            <ResultSpan>{location ? location : "정하지 못했어요."}</ResultSpan>
+            <LAMDetailsSpan>나중에 변경할 수 있어요.</LAMDetailsSpan>
+          </LAMButton>
+          <Label>시간</Label>
+          <LAMButton
+            animate={meetingAt ? "on" : "off"}
+            variants={LAM_Variant}
+            whileTap={{ scale: 0.9 }}
+            onClick={onClickMeetingAt}
+          >
+            <ResultSpan>
+              {meetingAt
+                ? dayjsAll(meetingAt).appointmentDate() +
+                  " " +
+                  dayjsAll(meetingAt).appointmentTime()
+                : "정하지 못했어요."}
+            </ResultSpan>
+            <LAMDetailsSpan>나중에 변경할 수 있어요.</LAMDetailsSpan>
+          </LAMButton>
           <Label>종류</Label>
-          <fieldset>
-            <div>
-              <input type={"radio"} name={"category"} />
-              <label htmlFor={"category1"}>같이먹자</label>
-            </div>
-            <div>
-              <input type={"radio"} name={"category"} />
-              <label htmlFor={"category2"}>내가산다</label>
-            </div>
-            <div>
-              <input type={"radio"} name={"category"} />
-              <label htmlFor={"category3"}>사주세요</label>
-            </div>
-          </fieldset>
+          <TypeRadioWrapper>
+            <RadioBox
+              onClick={() => setPostType(postTypes[0][0])}
+              animate={postType === postTypes[0][0] ? "on" : "off"}
+              variants={SwitchVariant}
+            >
+              <span>{postTypes[0][0]}</span>
+            </RadioBox>
+            <RadioBox
+              onClick={() => setPostType(postTypes[1][0])}
+              animate={postType === postTypes[1][0] ? "on" : "off"}
+              variants={SwitchVariant}
+            >
+              <span>{postTypes[1][0]}</span>
+            </RadioBox>
+            <RadioBox
+              onClick={() => setPostType(postTypes[2][0])}
+              animate={postType === postTypes[2][0] ? "on" : "off"}
+              variants={SwitchVariant}
+            >
+              <span>{postTypes[2][0]}</span>
+            </RadioBox>
+          </TypeRadioWrapper>
+          <RadioDetailsBox>
+            <span>
+              {postTypes.find((value) => value[0] === postType)?.at(1)}
+            </span>
+          </RadioDetailsBox>
           <Label>최대 인원수</Label>
-          <RangeInput value={maxMember} setValue={setMaxMember} />
+          <RangeInput
+            value={maxMember}
+            onChange={(e) => setMaxMember(parseInt(e.target.value))}
+          />
+          {postType != postTypes[0][0] && (
+            <>
+              <Label>사는 사람</Label>
+              <RangeInput
+                value={BNR?.buyers ?? 0}
+                onChange={onChangeNumOfBuyers}
+                min={1}
+              />
+              <Label>먹는 사람</Label>
+              <RangeInput
+                value={BNR?.receivers ?? 0}
+                onChange={onChangeNumOfReceivers}
+                min={1}
+              />
+            </>
+          )}
           <Label>추가 설정</Label>
           <SwitchWrapper>
             <SwitchSpan
@@ -197,7 +349,6 @@ const Compose = () => {
             >
               <Handle
                 layout
-                transition={spring}
                 animate={onlyForSameMajor ? "on" : "off"}
                 variants={HandleVariant}
               />
@@ -205,35 +356,48 @@ const Compose = () => {
           </SwitchWrapper>
           <SwitchWrapper>
             <SwitchSpan
-              animate={onlyForAnonymous ? "on" : "off"}
+              animate={onlyForRealName ? "on" : "off"}
               variants={SpanVariant}
             >
-              {onlyForAnonymous ? "익명으로 참가해요." : "실명으로 참가해요."}
+              {onlyForRealName
+                ? "서로 실명으로 보여요."
+                : "서로 익명으로 보여요."}
             </SwitchSpan>
             <SwitchDiv
-              id={onlyForAnonymous ? "on" : "off"}
-              onClick={() => setOnlyForAnonymous((prevState) => !prevState)}
-              animate={onlyForAnonymous ? "on" : "off"}
+              id={onlyForRealName ? "on" : "off"}
+              onClick={() => setOnlyForRealName((prevState) => !prevState)}
+              animate={onlyForRealName ? "on" : "off"}
               variants={SwitchVariant}
             >
               <Handle
                 layout
-                transition={spring}
-                animate={onlyForAnonymous ? "on" : "off"}
+                animate={onlyForRealName ? "on" : "off"}
                 variants={HandleVariant}
               />
             </SwitchDiv>
           </SwitchWrapper>
-          <SubmitButton
-            type={"submit"}
-            disabled={disableSubmit}
-            animate={disableSubmit ? "off" : "on"}
+          <BottomButton
+            disabled={!isSubmittable}
             variants={HandleVariant}
+            animate={isSubmittable ? "on" : "off"}
           >
             약속 만들기
-          </SubmitButton>
+          </BottomButton>
         </ComposeForm>
       </ComposeMain>
+      {showLocationSetModal && (
+        <LocationSetModal
+          setShow={setShowLocationSetModal}
+          setLocation={setLocation}
+          setCoords={setCoords}
+        />
+      )}
+      {showMeetingAtSetModal && (
+        <MeetingAtSetModal
+          setShow={setShowMeetingAtSetModal}
+          setMeetingAt={setMeetingAt}
+        />
+      )}
     </ComposeWrapper>
   );
 };

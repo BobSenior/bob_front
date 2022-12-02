@@ -2,13 +2,16 @@ import { AlarmListWrapper, ListModalContainer } from "./style";
 import AlarmInfoDiv from "../AlarmInfoDiv";
 import Scrollbars from "react-custom-scrollbars-2";
 import useSWR from "swr";
-import fetcher from "../../utils/fetcher";
-import {BaseResponse, ShownNotice} from "../../types/db";
-import HashTag from "../HashTag";
+import { BaseResponse, ShownNotice } from "../../types/db";
 import React from "react";
+import { getFetcher } from "../../utils/fetchers";
+import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 
 const ListAlarm = () => {
-  const {data:alarms,error} = useSWR<BaseResponse<ShownNotice[]>>(`/notice/list?userIdx=1`,fetcher);
+  const { data: alarms, error } = useSWR<BaseResponse<ShownNotice[]>>(
+    `/notice/list?userIdx=1`,
+    getFetcher
+  );
 
   return (
     <ListModalContainer
@@ -18,7 +21,9 @@ const ListAlarm = () => {
     >
       <AlarmListWrapper>
         <Scrollbars>
-          {alarms?.result.map((content)=>(<AlarmInfoDiv key={content.noticeIdx} data={content} />))}
+          {alarms?.result?.map((content) => (
+            <AlarmInfoDiv key={generateUniqueID()} data={content} />
+          ))}
         </Scrollbars>
       </AlarmListWrapper>
     </ListModalContainer>

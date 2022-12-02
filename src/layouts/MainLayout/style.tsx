@@ -5,7 +5,7 @@ export const MainBox = styled.div`
   justify-content: center;
   min-width: 320px;
   & div {
-    max-width: 1200px;
+    max-width: 800px;
   }
 `;
 

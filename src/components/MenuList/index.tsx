@@ -1,9 +1,13 @@
-import React from "react";
+import React, { Dispatch, memo, SetStateAction } from "react";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { useNavigate } from "react-router-dom";
 import { ListModalContainer } from "../AlarmList/style";
 
-const ListMenu = () => {
+interface Props {
+  setShow: Dispatch<SetStateAction<number>>;
+}
+
+const MenuList = ({ setShow }: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -16,6 +20,7 @@ const ListMenu = () => {
         text={"새 약속 만들기"}
         fontSize={"1em"}
         onClick={() => {
+          setShow(0);
           navigate("../main/compose");
         }}
       />
@@ -23,7 +28,8 @@ const ListMenu = () => {
         text={"프로필 수정"}
         fontSize={"1em"}
         onClick={() => {
-          navigate("../main/profile");
+          setShow(0);
+          navigate("../main/profile/me");
         }}
       />
       <LayoutBtn text={"로그아웃"} fontSize={"1em"} onClick={() => {}} />
@@ -31,4 +37,4 @@ const ListMenu = () => {
   );
 };
 
-export default ListMenu;
+export default memo(MenuList);

@@ -8,44 +8,30 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div>
-      {/*<Header>*/}
-      {/*  /!*<nav>*!/*/}
-      {/*  /!*  <a href="/story">*!/*/}
-      {/*  /!*    <span>Out Story</span>*!/*/}
-      {/*  /!*  </a>*!/*/}
-      {/*  /!*  <a href="/collection">*!/*/}
-      {/*  /!*    <span>Collection</span>*!/*/}
-      {/*  /!*  </a>*!/*/}
-      {/*  /!*  <a href="/contact">*!/*/}
-      {/*  /!*    <span>Contact</span>*!/*/}
-      {/*  /!*  </a>*!/*/}
-      {/*  /!*</nav>*!/*/}
-      {/*</Header>*/}
+    <div style={{ width: "100%" }}>
       <Section>
         <Container>
           <Column>
             <motion.h4
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
               style={{ marginBottom: 0 }}
             >
               선배랑 밥먹고 싶을 때,
             </motion.h4>
             <motion.h4
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
               style={{ marginBottom: 0 }}
             >
               후배 밥 사주고 싶을 때,
             </motion.h4>
             <motion.h1
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 1 }}
-              style={{ marginBottom: "10px" }}
             >
               밥선배
             </motion.h1>
@@ -57,8 +43,8 @@ const Home = () => {
               onClick={() => {
                 navigate("/login");
               }}
-              isHover={true}
-              isTap={true}
+              useHover={true}
+              useTap={true}
             >
               <span>로그인</span>
             </ColoredBtn>
@@ -68,8 +54,8 @@ const Home = () => {
               onClick={() => {
                 navigate("/signup");
               }}
-              isHover={true}
-              isTap={true}
+              useHover={true}
+              useTap={true}
             >
               <span>회원가입</span>
             </ColoredBtn>
@@ -79,10 +65,21 @@ const Home = () => {
               onClick={() => {
                 navigate("/main");
               }}
-              isHover={true}
-              isTap={true}
+              useHover={true}
+              useTap={true}
             >
               <span>(개발용)메인으로 가기</span>
+            </ColoredBtn>
+            <ColoredBtn
+              width={"80%"}
+              height={"50px"}
+              onClick={() => {
+                navigate("/test");
+              }}
+              useHover={true}
+              useTap={true}
+            >
+              <span>(개발용)test</span>
             </ColoredBtn>
           </JoinDiv>
         </Container>
