@@ -246,8 +246,8 @@ export const VoteSection = styled.section`
   margin-left:5%;
   display:flex;
   flex-direction: column;
-  background-color: whitesmoke;
-  border: gray 1px solid;
+  background-color: navajowhite;
+  border-radius: 5px;
 `;
 
 export const PlusButton = styled.button`

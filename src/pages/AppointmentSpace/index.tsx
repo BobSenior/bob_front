@@ -73,7 +73,7 @@ const AppointmentSpace = ()=>{
     const [records, setRecords] = useState<string[]>(["",""]);
     const [numRecord, setNumRecord] = useState<number>(2);
     const [recordsDate, setRecordsDate] = useState<String[]>([]);
-    const [voteMode, setVoteMode] = useState<string>("normal");
+    const [voteMode, setVoteMode] = useState<boolean>(true);
     const [voteTitle, setVoteTitle] = useState<String>("");
 
 
@@ -200,7 +200,7 @@ const AppointmentSpace = ()=>{
                     toast.error(reason.data.message);
                 }
                 else{
-                    navigate(`/main`);
+                    mutate();
                 }
 
             }).finally(()=>{setSelected(0);}
@@ -245,27 +245,47 @@ const AppointmentSpace = ()=>{
     },[appointment, inputUUID,invitedPosition]);
 
     const onClickMakeVote = useCallback(()=>{
-        postFetcher.post(
-            `/vote/init/${id}`,
-            {
-                makerIdx:1,
-                title:voteTitle,
-                contents:records,
-                voteType:voteMode
+        //TODO : vote생성 검증하기
+        let flag = true;
+        console.log(voteTitle.length)
+        console.log(records.length)
+        if(voteTitle.length === 0) flag = false;
+        for (let record of records) {
+            if(record.length === 0){
+                flag = false;
+                break;
             }
-        ).then((response:AxiosResponse<BaseResponse<any>>)=>{
-            if(!response.data.isSuccess){
-                toast.error(response.data.message)
-            }
-            else{
-                toast.info("투표가 개시되었습니다!");
-            }
-        }).finally(()=>{
-            setRecords([]);
-            setNumRecord(0);
-            setVoteMode("normal");
-            setVoteTitle("");
-        })
+        }
+        console.log(flag);
+        if(flag){
+            postFetcher.post(
+                `/vote/init/${id}`,
+                {
+                    makerIdx:1,
+                    title:voteTitle,
+                    contents:records,
+                    voteType:voteMode?"NORMAL":"FIX",
+                }
+            ).then((response:AxiosResponse<BaseResponse<any>>)=>{
+                if(!response.data.isSuccess){
+                    toast.error(response.data.message)
+                }
+                else{
+                    toast.info("투표가 개시되었습니다!");
+                    mutate();
+                }
+            }).finally(()=>{
+                setRecords(["",""]);
+                setNumRecord(0);
+                setVoteMode(true);
+                setVoteTitle("");
+                setOnMakeVote(false);
+            })
+        }
+        else{
+            toast.error("잘못된 입력입니다");
+        }
+
     },[appointment, records, numRecord,voteMode,voteTitle])
 
 
@@ -327,13 +347,24 @@ return(
                     </MembersColumn>
                 </LargeMembersDiv>
 
-                <CenterModal isVisible={onMakeVote} onClickForClose={()=>{setOnMakeVote(false); setNumRecord(2); setRecords([])}}>
-                    <VoteSection><div>selector area</div>
-                    <div style={{fontWeight:"bold",fontSize:"22px"}}>투표 제목</div>
-                    <RecordInputBox style={{width:"90%",marginLeft:"5%"}} placeholder={"제목을 입력하세요"}></RecordInputBox>
+                <CenterModal isVisible={onMakeVote} onClickForClose={()=>{setOnMakeVote(false); setNumRecord(2); setRecords(["",""]); setVoteMode(true)}}>
+                    <VoteSection>
+                        <div>
+                            <button onClick={()=>{setVoteMode(true); setRecords(["",""]); setNumRecord(2)}}
+                                    style={{backgroundColor:voteMode?"navajowhite":"white",width:"50%",border:"none",paddingTop:"5px",paddingBottom:"5px",fontSize:"15px",fontWeight:"bold"}}
+                            >일반</button>
+                            <button onClick={()=>{setVoteMode(false);setRecords(["",""]); setNumRecord(2)}}
+                                    style={{backgroundColor:voteMode?"white":"navajowhite",width:"50%",border:"none",paddingTop:"5px",paddingBottom:"5px",fontSize:"15px",fontWeight:"bold"}}
+                            >약속</button>
+                        </div>
+                    <div style={{fontWeight:"bold",fontSize:"22px",paddingTop:"15px",paddingBottom:"15px",border:"none"}}>투표 제목</div>
+                    <RecordInputBox style={{width:"90%",marginLeft:"5%", backgroundColor:"ivory",border:"none",paddingLeft:"8px"}} placeholder={"제목을 입력하세요"}
+                        onChange={(e)=>setVoteTitle(e.target.value)}
+                    ></RecordInputBox>
+
                     <div style={{fontWeight:"bold",marginBottom:"10px",marginTop:"10px"}}>항목 입력</div>
                     <VoteRecordSection>
-                        {voteRecordSpan}
+                        {voteMode?voteRecordSpan:<div>hello</div>}
                     </VoteRecordSection>
                     <PlusButton onClick={()=>setNumRecord(numRecord+1)}>+</PlusButton>
                         <BottomButton style={{marginBottom:"10px",width:"80%",marginLeft:"10%"}} onClick={onClickMakeVote}>submit</BottomButton>
