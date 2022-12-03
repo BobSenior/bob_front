@@ -1,9 +1,9 @@
 import React, {
-  FormEvent,
   useCallback,
-  useEffect,
-  useRef,
   useState,
+  useRef,
+  useEffect,
+  FormEvent,
 } from "react";
 import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
@@ -36,6 +36,9 @@ const ChatRoom = () => {
   const [chatInput, setChatInput] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+
+
 
   const onSubmitChat = useCallback(
     (e: FormEvent) => {

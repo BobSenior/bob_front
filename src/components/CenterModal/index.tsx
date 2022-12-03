@@ -46,14 +46,12 @@ const Modal = ({
               --saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
               box-shadow: 0 0 0 1px var(--saf-0),
                 0 4px 12px 0 rgba(0, 0, 0, 0.12);
-              background: rgba(
-                var(--sk_foreground_min_solid, 248, 248, 248),
-                1
+              background: white;
               );
               border-radius: 6px;
               user-select: none;
               top:50px;
-              width: 50%;
+              width: 70%;
               max-width: 700px;
               max-height: 80vh;
               padding: 35px 15px 20px 15px;

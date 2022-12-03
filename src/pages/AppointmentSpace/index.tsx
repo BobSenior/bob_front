@@ -2,8 +2,8 @@ import React, {FormEvent, useCallback, useMemo, useState} from "react";
 import {
     ComposeForm,
     ComposeMain, ComposeWrapper, Handle, HandleVariant,
-    Label,
-    MainSpan,
+    Label, LAM_Variant, LAMButton, LAMDetailsSpan,
+    MainSpan, ResultSpan,
     SpanVariant, SwitchDiv,
     SwitchSpan, SwitchVariant,
     SwitchWrapper,
@@ -15,15 +15,15 @@ import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
 import RangeInput from "../../components/RangeInput";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import {Bottom} from "../../layouts/MainLayout/style";
-import {useNavigate, useParams} from "react-router-dom";
+import {useLinkClickHandler, useNavigate, useParams} from "react-router-dom";
 import {
     AddButton,
     BottomButton,
     BottomButtonSection,
     BoxSection,
-    Commit, InviteBuyerButton, KickButton, LargeMembersDiv,
+    Commit, FixLabel, InviteBuyerButton, KickButton, LAMButtonVote, LargeMembersDiv,
     LocationWrapper, MakeVoteButton, MemberSection, MyPlaceInfoDiv, MyTimeInfoDiv,
-    NoOneSpanVote, PlusButton, RecordInputBox, RecordLabel,
+    NoOneSpanVote, PlaceButton, PlusButton, PrevButton, RecordInputBox, RecordLabel, RemainsButton, SpaceInput,
     Title,
     TitleWrapper,
     TLSection,
@@ -32,7 +32,7 @@ import {
 } from "./style";
 import HorizonLine from "../../components/Horizon";
 import useSWR from "swr";
-import {AppointmentViewDTO, BaseResponse} from "../../types/db";
+import {AppointmentViewDTO, BaseResponse, ICoordinate} from "../../types/db";
 import {fetcher, postFetcher} from "../../utils/fetchers";
 import app from "../../App";
 import {
@@ -57,6 +57,11 @@ import Modal from "../../components/Modal";
 import CenterModal from "../../components/CenterModal";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
+import RecordBox from "../../components/RecordBox";
+import RecordFixBox from "../../components/RecordFixBox";
+import LocationSetModal from "../../components/LocationSetModal";
+import MeetingAtSetModal from "../../components/MeetingAtSetModal";
+import RequestListModal from "../../components/RequestListModal";
 
 const AppointmentSpace = ()=>{
 
@@ -69,10 +74,20 @@ const AppointmentSpace = ()=>{
     const [inputUUID, setInputUUID]= useState<string>("");
     const [invitedPosition, setInvitedPosition] = useState<string>("");
     const [onMakeVote, setOnMakeVote] = useState<boolean>(false);
-    const [records, setRecords] = useState<string[]>([]);
+    const [records, setRecords] = useState<string[]>(["",""]);
     const [numRecord, setNumRecord] = useState<number>(2);
     const [recordsDate, setRecordsDate] = useState<String[]>([]);
+    const [voteMode, setVoteMode] = useState<boolean>(true);
+    const [voteTitle, setVoteTitle] = useState<String>("");
+    const [showLocator,setShowLocator] = useState<boolean>(false);
+    const [showCalendar,setShowCalendar] = useState<boolean>(false);
+    const [location, setLocation] = useState<string|null>(null);
+    const [coords, setCoords] = useState<ICoordinate | null>(null);
+    const [meetingAt, setMeetingAt] = useState<string | null>(null);
+    const [requestModal, setRequestModal] = useState<boolean>(false);
 
+
+    console.log(records)
 
 
 
@@ -172,14 +187,33 @@ const AppointmentSpace = ()=>{
         let buf = numRecord;
         let count = 1;
         for(buf;buf>0;buf--){
-            remainings.push(<RecordLabel><>{count}번</>
-                <RecordInputBox id={`${count}`} placeholder={"항목을 입력하세요"}></RecordInputBox></RecordLabel>);
+            remainings.push(<RecordBox count={count} setRecords={setRecords} />);
             count++;
         }
         return remainings;
 
 
     },[appointment, numRecord]);
+
+    const ReqList = useMemo(()=>{
+        if(!appointment) return null;
+        if(!id) return null;
+        return <RequestListModal postIdx={id} currUserIdx={1} mutator = {mutate}></RequestListModal>
+    },[appointment,id])
+
+    const VoteFixRecordSpan = useMemo(()=>{
+        if(!appointment) return null;
+        if(!appointment.result.fixVote) return null;
+        if(!appointment.result.voteTitle) return null;
+        console.log("title",appointment.result.voteTitle)
+        let words = appointment.result.voteTitle.split('$');
+        return(
+            <>
+                <div>{"장소 :" +words[0]}</div>
+                <div>{"시간 : "+words[1]}</div>
+            </>
+        )
+    },[appointment]);
 
     const onSubmitVote = useCallback((e:FormEvent)=>{
         e.preventDefault();
@@ -196,10 +230,11 @@ const AppointmentSpace = ()=>{
                     toast.error(reason.data.message);
                 }
                 else{
-                    navigate(`/main`);
+                    mutate();
                 }
 
-            })
+            }).finally(()=>{setSelected(0);}
+        )
     },[selected,isSelected]);
 
     const onClickExit = useCallback(() =>{
@@ -215,6 +250,31 @@ const AppointmentSpace = ()=>{
                         navigate('/main');
                     }
         })
+    },[appointment]);
+
+    const onClickUsePrevLocation = useCallback(()=>{
+        if(!appointment) return null;
+        if(!appointment.result.location){
+            toast.error("설정된 장소가 없습니다! 새로 입력해주세요")
+            return null;
+        }
+        else{
+            if(appointment.result.longitude===null || appointment.result.latitude === null) return null;
+            setLocation(appointment.result.location)
+            setCoords({latitude:appointment.result.latitude,longitude:appointment.result.longitude})
+            console.log("setted = ",coords)
+        }
+    },[appointment]);
+
+    const onClickUsePrevTime = useCallback(()=>{
+        if(!appointment) return null;
+        if(!appointment.result.meetingAt){
+            toast.error("설정된 시간이 없습니다! 새로 입력해주세요")
+            return null;
+        }
+        else{
+            setMeetingAt(appointment.result.meetingAt)
+        }
     },[appointment]);
 
     const onClickInviteBuyer = useCallback(()=>{
@@ -234,9 +294,97 @@ const AppointmentSpace = ()=>{
             }
         }).finally(()=>{
             setOnInvite(false);
+            setInputUUID("");
             mutate();
         })
     },[appointment, inputUUID,invitedPosition]);
+
+    const onClickMakeVote = useCallback(()=>{
+        //TODO : vote생성 검증하기
+        let flag = true;
+        if(voteTitle.length === 0) {
+            flag = false;
+        }
+        for (let record of records) {
+            if(record.length === 0){
+                console.log('record problem')
+                flag = false;
+                break;
+            }
+        }
+        if(!voteMode){
+            if(meetingAt === null){
+                if(appointment?.result.meetingAt){
+                    setMeetingAt(appointment.result.meetingAt);
+                }
+                else flag = false;
+            }
+            if(location === null){
+                if(appointment?.result.location && appointment.result.latitude && appointment.result.longitude){
+                    setLocation(appointment.result.location)
+                    setCoords({
+                        latitude:appointment.result.latitude,
+                        longitude:appointment.result.longitude
+                    })
+                }
+                else flag = false;
+            }
+        }
+        console.log(flag);
+        if(flag){
+            postFetcher.post(
+                `/vote/init/${id}`,
+                {
+                    makerIdx:1,
+                    title:voteTitle,
+                    contents:records,
+                    location:voteMode?"normal":location?location:appointment?.result.location,
+                    longitude:voteMode?"normal":coords?coords?.longitude:appointment?.result.longitude,
+                    latitude:voteMode?"normal":coords?coords?.latitude:appointment?.result.latitude,
+                    time:voteMode?"normal":meetingAt?meetingAt:appointment?.result.meetingAt,
+                    voteType:voteMode?"NORMAL":"FIX",
+                }
+            ).then((response:AxiosResponse<BaseResponse<any>>)=>{
+                if(!response.data.isSuccess){
+                    toast.error(response.data.message)
+                }
+                else{
+                    toast.info("투표가 개시되었습니다!");
+                    mutate();
+                }
+            }).finally(()=>{
+                setRecords(["",""]);
+                setNumRecord(0);
+                setVoteMode(true);
+                setVoteTitle("");
+                setOnMakeVote(false);
+                setVoteMode(true);
+                setLocation(null);
+                setMeetingAt(null);
+            })
+        }
+        else{
+            toast.error("잘못된 입력입니다");
+        }
+
+    },[appointment, records, numRecord,voteMode,voteTitle,location,meetingAt])
+
+    const onClickTerminateVote = useCallback(()=>{
+        postFetcher.post(
+            `/vote/terminate/${id}`,{
+                terminatorIdx:1,
+                voteIdx:appointment?.result.voteIdx
+            }
+        ).then((response:AxiosResponse<BaseResponse<any>>)=>{
+            if(!response.data.isSuccess){
+                toast.error(response.data.message)
+            }
+            else{
+                toast.info("투표가 종료되었습니다!")
+            }
+            mutate();
+        })
+    },[appointment,selected])
 
 
 
@@ -297,15 +445,89 @@ return(
                     </MembersColumn>
                 </LargeMembersDiv>
 
-                <CenterModal isVisible={onMakeVote} onClickForClose={()=>{setOnMakeVote(false); setNumRecord(2); setRecords([])}}>
-                    <VoteSection><div>selector area</div>
-                    <div style={{fontWeight:"bold",fontSize:"22px"}}>투표 제목</div>
-                    <RecordInputBox style={{width:"90%",marginLeft:"5%"}} placeholder={"제목을 입력하세요"}></RecordInputBox>
+                <CenterModal isVisible={onMakeVote} onClickForClose={()=>{setOnMakeVote(false); setNumRecord(2); setRecords(["",""]); setVoteMode(true)}}>
+                    <VoteSection>
+                        <div>
+                            <button onClick={()=>{setVoteMode(true); setRecords(["",""]); setNumRecord(2);setMeetingAt(null);setLocation(null)}}
+                                    style={{backgroundColor:voteMode?"navajowhite":"white",width:"50%",border:"none",paddingTop:"5px",paddingBottom:"5px",fontSize:"15px",fontWeight:"bold"}}
+                            >일반</button>
+                            <button onClick={()=>{setVoteMode(false);setVoteTitle("fix");setRecords(["찬성","반대"]); setNumRecord(2);setMeetingAt(null);setLocation(null)}}
+                                    style={{backgroundColor:voteMode?"white":"navajowhite",width:"50%",border:"none",paddingTop:"5px",paddingBottom:"5px",fontSize:"15px",fontWeight:"bold"}}
+                            >약속</button>
+                        </div>
+                        {showLocator && (
+                            <LocationSetModal
+                                setShow={setShowLocator}
+                                setLocation={setLocation}
+                                setCoords={setCoords}
+                            />
+                        )}
+                        {showCalendar && (
+                            <MeetingAtSetModal
+                                setShow={setShowCalendar}
+                                setMeetingAt={setMeetingAt}
+                            />
+                        )}
+                        {voteMode&& <>
+                            <div style={{
+                                fontWeight: "bold",
+                                fontSize: "22px",
+                                paddingTop: "15px",
+                                paddingBottom: "15px",
+                                border: "none"
+                            }}>투표 제목
+                            </div>
+                            <RecordInputBox style={{
+                                width: "90%",
+                                marginLeft: "5%",
+                                backgroundColor: "ivory",
+                                border: "none",
+                                paddingLeft: "8px"
+                            }} placeholder={"제목을 입력하세요"}
+                                            onChange={(e) => setVoteTitle(e.target.value)}
+                            ></RecordInputBox></>}
+
                     <div style={{fontWeight:"bold",marginBottom:"10px",marginTop:"10px"}}>항목 입력</div>
                     <VoteRecordSection>
-                        {voteRecordSpan}
+                        {voteMode?voteRecordSpan:
+                            <label style={{width:"100%"}}>
+                                <label style={{fontWeight:"bold",fontSize:"22px",paddingBottom:"13px"}}>장소 선택</label>
+                                <LAMButtonVote
+                                    animate={location ? "on" : "off"}
+                                    variants={LAM_Variant}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={()=>setShowLocator(true)}
+                                >
+                                    <ResultSpan>{location ? location : appointment?.result.location?appointment.result.location:"장소가 정해지지 않았어요!"}</ResultSpan>
+                                    <LAMDetailsSpan>변경할 수 있어요!</LAMDetailsSpan>
+                                </LAMButtonVote>
+                                <div></div>
+                                <label style={{fontWeight:"bold",fontSize:"22px",paddingBottom:"13px",width:"100%"}}>시간 선택</label>
+                                <LAMButtonVote
+                                    animate={meetingAt ? "on" : "off"}
+                                    variants={LAM_Variant}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={()=>setShowCalendar(true)}
+                                >
+                                    <ResultSpan>
+                                        {meetingAt
+                                            ? dayjsAll(meetingAt).appointmentDate() +
+                                            " " +
+                                            dayjsAll(meetingAt).appointmentTime()
+                                            : appointment?.result.meetingAt?
+                                                dayjsAll(appointment.result.meetingAt).appointmentDate() +
+                                                " " +
+                                                dayjsAll(appointment.result.meetingAt).appointmentTime()
+                                                :
+                                                "아직 시간이 정해지지 않았어요!"}
+                                    </ResultSpan>
+                                    <LAMDetailsSpan>변경할 수 있어요!</LAMDetailsSpan>
+                                </LAMButtonVote>
+                            </label>
+                        }
                     </VoteRecordSection>
-                    <PlusButton onClick={()=>setNumRecord(numRecord+1)}>+</PlusButton>
+                        {voteMode&& <PlusButton onClick={()=>setNumRecord(numRecord+1)}>+</PlusButton>}
+                        <BottomButton style={{marginBottom:"10px",width:"80%",marginLeft:"10%"}} onClick={onClickMakeVote}>submit</BottomButton>
                     </VoteSection>
                 </CenterModal>
 
@@ -314,21 +536,27 @@ return(
                     <Input placeholder={"uuid"} onChange={(e)=>setInputUUID(e.target.value)}></Input>
                     <AddButton onClick={onClickInviteBuyer}>+</AddButton>
                 </CenterModal>
+                <CenterModal isVisible={requestModal} onClickForClose={()=>setRequestModal(false)}>
+                    {ReqList}
+                </CenterModal>
             </MemberSection>
+            {appointment?.result.writerIdx === 1 && <BottomButton onClick={()=>setRequestModal(true)}>신청 목록</BottomButton>}
             <HorizonLine text={''}/>
             <Title style={{paddingTop:"1px"}}>VOTE</Title>
             <BoxSection>
                 {appointment?(<>
-                    <VoteSequence style={{color:"black"}}>{appointment.result.voteTitle}</VoteSequence>
+                    <VoteSequence style={{color:appointment.result.fixVote?"red":"black"}}>{appointment.result.fixVote?"약속 설정 투표":appointment.result.voteTitle}</VoteSequence>
+
+                    {appointment.result.fixVote && VoteFixRecordSpan}
                     <>{voteSpan}</>
-                    {appointment.result.records !== null && appointment.result.records.length>0 && 
-                        <Commit 
-                        type={"submit"}
-                        disabled={!isSelected}
-                        animate={isSelected?"on":"off"}
-                        variants={HandleVariant}
-                        onClick={onSubmitVote}
-                        >투표하기</Commit>}
+                    {appointment.result.records !== null && appointment.result.records.length>0 &&
+                        <><Commit
+                            type={"submit"}
+                            disabled={!isSelected}
+                            animate={isSelected ? "on" : "off"}
+                            variants={HandleVariant}
+                            onClick={onSubmitVote}
+                        >투표하기</Commit>{(appointment.result.writerIdx === 1 || appointment.result.voteOwnerIdx === 1) && <Commit onClick={onClickTerminateVote}>투표 종료</Commit>}</>}
                 </>)  : (
                     <Skeleton count={2} height={"0.95em"} width={"75px"} />
                     )}
@@ -336,7 +564,7 @@ return(
             <BottomButtonSection>
                 <BottomButton onClick={onClickExit}>나가기</BottomButton>
                 <BottomButton onClick={()=>navigate(`/main`)}>메인으로</BottomButton>
-                <BottomButton onClick={()=>navigate(`/main/chat_test`)}>채팅방으로</BottomButton>
+                <BottomButton onClick={()=>navigate(`/main/chat_test`)}>채팅방</BottomButton>
             </BottomButtonSection>
         </ComposeMain>
     </ComposeWrapper>
