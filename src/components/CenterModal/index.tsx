@@ -51,7 +51,7 @@ const Modal = ({
               border-radius: 6px;
               user-select: none;
               top:50px;
-              width: 50%;
+              width: 70%;
               max-width: 700px;
               max-height: 80vh;
               padding: 35px 15px 20px 15px;
