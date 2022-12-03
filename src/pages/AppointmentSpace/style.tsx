@@ -277,3 +277,72 @@ export const RecordInputBox = styled.input`
   border: gray solid 1px;
   border-radius: 3px;
 `;
+
+export const FixLabel = styled.label`
+  display: flex;
+  width: 100%;
+  padding-left: 8px;
+  margin-bottom: 5px;
+`;
+
+export const PlaceButton = styled.button`
+  margin-left:5%;
+  margin-right:5%;
+  width: 40%;
+  height: 30px;
+  border-radius: 15px;
+`;
+
+export const RemainsButton = styled.button`
+  width: 40%;
+  border-radius: 15px;
+  margin-left:5%;
+  margin-right:5%; 
+`;
+
+export const SpaceInput = styled.label`
+  width: 10000px;
+  height: 150px;
+  font-weight: bold;
+  font-size: 22px;
+  background-color: navajowhite;
+  padding-bottom: 5px;
+  padding-top: 5px;
+`;
+
+export const LAMButtonVote = styled(motion.div)`
+  border-radius: 3px;
+  margin-left:8%;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+  cursor: pointer;
+  border: 0.5px solid #000000;
+  padding: 3px;
+`;
+export const ResultSpanVote = styled.span`
+  font-size: 0.95em;
+  display: table-cell;
+  text-align: center;
+  text-align: -moz-center;
+  text-align: -webkit-center;
+  vertical-align: middle;
+  margin-top: 2px;
+`;
+
+export const PrevButton = styled.button`
+  width: 50%;
+  border-radius: 11px;
+  background-color: ghostwhite;
+  font-size: 15px;
+  font-weight: bold;
+  height: 33px;
+  margin-top: 8px;
+  cursor: pointer;
+  margin-bottom: 8px;
+`;

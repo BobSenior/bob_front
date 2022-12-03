@@ -108,6 +108,13 @@ export interface AppointmentViewDTO {
   maxReceiverNum:number;
   alreadyVoted: boolean | null;
   chatRoomIdx: number;
+  fixVote:boolean;
+  voteOwnerIdx:number;
+}
+
+export interface RequestData {
+  simp : SimplifiedUserProfileDTO;
+  position:string;
 }
 
 export interface MakeNewPostReqDTO {

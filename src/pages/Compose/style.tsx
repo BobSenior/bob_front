@@ -149,9 +149,10 @@ export const RadioDetailsBox = styled.div`
 
 export const LAMButton = styled(motion.div)`
   border-radius: 3px;
-  width: 100%;
+  width: 60%;
   display: flex;
   flex-direction: column;
+  background-color: navajowhite;
   align-items: center;
   justify-content: center;
   height: fit-content;
