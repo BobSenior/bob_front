@@ -13,8 +13,11 @@ import {
   FormSection,
   SocialLoginContainer,
 } from "./styles";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import { Link } from "react-router-dom";
+import {postFetcher} from "../../utils/fetchers";
+import {BaseResponse} from "../../types/db";
+import {toast, ToastContainer} from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,10 +29,22 @@ const Login = () => {
     (e: any) => {
       e.preventDefault();
       setLogInError(false);
-      // axios
-      //   .post("URL FOR LOGIN CHECK", { id, password })
-      //   .then((response) => {})
-      //   .catch((error) => {});
+      postFetcher.post(
+          `/login`,{
+              userId:id,
+              password:password
+          }
+      ).then((response:AxiosResponse<BaseResponse<any>>)=>{
+          if(!response.data.isSuccess){
+              toast.error(response.data.message);
+              setId("");
+              setPassword("");
+          }
+          else{
+
+          }
+      })
+
     },
     [id, password]
   );
@@ -70,6 +85,7 @@ const Login = () => {
           <img src={kakaoLoginImg} alt={"카카오 소셜 로그인"} />
         </div>
       </SocialLoginContainer>
+        <ToastContainer />
     </LoginPageWrapper>
   );
 };

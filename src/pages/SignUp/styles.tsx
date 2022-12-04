@@ -69,7 +69,7 @@ export const InputBox = styled.input`
   color: #b4b4b4;
   font-size: 20px;
   height: 50px;
-  width: 80%;
+  width: 70%;
   margin-left: 10%;
   &:focus {
     color: black;

@@ -130,7 +130,7 @@ const MainLayout = () => {
                   <Route path={":userIdx"} />
                   <Route path={"me"} />
                 </Route>
-                <Route path={"chat_test"} element={<ChatRoom />} />
+                <Route path={"chat_test/:id"} element={<ChatRoom />} />
                 <Route path={"compose"} element={<Compose />} />
                 <Route path={"*"} element={<div>404 error</div>} />
                 <Route path={"appointment/:id"} element={<AppointmentSpace />} />

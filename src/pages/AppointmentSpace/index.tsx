@@ -564,7 +564,7 @@ return(
             <BottomButtonSection>
                 <BottomButton onClick={onClickExit}>나가기</BottomButton>
                 <BottomButton onClick={()=>navigate(`/main`)}>메인으로</BottomButton>
-                <BottomButton onClick={()=>navigate(`/main/chat_test`)}>채팅방</BottomButton>
+                <BottomButton onClick={()=>navigate(`/main/chat_test/${id}`)}>채팅방</BottomButton>
             </BottomButtonSection>
         </ComposeMain>
     </ComposeWrapper>
