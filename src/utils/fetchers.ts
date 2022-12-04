@@ -11,17 +11,13 @@ export const postFetcher = axios.create({});
 export const getFetcher = axios.create({});
 
 export const postDetailsFetcher = (url: string) => {
-  return axios(url)
-    .then((res) => res.data.result)
-    .catch((err) => console.log(err));
+  return axios(url).then((res) => res.data.result);
 };
 
 export const infiniteFetcher = (url: string) => {
-  return axios(url)
-    .then((res) => {
-      //TODO 배포 시 콘솔 삭제
-      console.log(res.config.url);
-      return res.data.result;
-    })
-    .catch((error) => console.log(error));
+  return axios(url).then((res) => {
+    //TODO 배포 시 콘솔 삭제
+    console.log(res.config.url);
+    return res.data.result;
+  });
 };

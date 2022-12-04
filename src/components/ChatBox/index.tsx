@@ -16,6 +16,7 @@ interface Props {
   onChangeChat: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
 }
+
 const ChatBox = forwardRef<HTMLTextAreaElement, Props>(
   (
     { chat, onKeyDownChat, onSubmitForm, onChangeChat, placeholder },

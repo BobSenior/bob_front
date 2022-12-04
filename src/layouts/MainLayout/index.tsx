@@ -17,9 +17,8 @@ import {
 const Profile = lazy(() => import("../../pages/Profile"));
 const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
-const AppointmentSpace = lazy(()=>import ("../../pages/AppointmentSpace"));
+const AppointmentSpace = lazy(() => import("../../pages/AppointmentSpace"));
 const Main = lazy(() => import("../../pages/Main"));
-import ChatRoom from "../../components/ChatRoom";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
@@ -30,11 +29,9 @@ import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { SWRConfig } from "swr";
+import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
-import { testUserIdx } from "../../pages/Main";
 import ChatRoomModal from "../../components/ChatRoomModal";
-import Search from "../../pages/Search";
 
 const emailExample = "123";
 
@@ -49,7 +46,7 @@ const MainLayout = () => {
     error,
     isValidating,
     mutate: alarmMuate,
-  } = useSWR(``, getFetcher);
+  } = useSWR(null, getFetcher);
 
   const ListModal = useMemo(() => {
     switch (showListModal) {
@@ -120,23 +117,20 @@ const MainLayout = () => {
           )}
         </Header>
         <Body>
-          <SWRConfig>
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                <Route index element={<Main />} />
-                <Route path={"plans/:plan"} element={<Plans />} />
-                <Route path={"search/:searchInput"} element={<Search />} />
-                <Route path={"profile"} element={<Profile />}>
-                  <Route path={":userIdx"} />
-                  <Route path={"me"} />
-                </Route>
-                <Route path={"chat_test"} element={<ChatRoom />} />
-                <Route path={"compose"} element={<Compose />} />
-                <Route path={"*"} element={<div>404 error</div>} />
-                <Route path={"appointment/:id"} element={<AppointmentSpace />} />
-              </Routes>
-            </Suspense>
-          </SWRConfig>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route index element={<Main />} />
+              <Route path={"search/:searchInput"} element={<Main />} />
+              <Route path={"plans/:plan"} element={<Plans />} />
+              <Route path={"profile"} element={<Profile />}>
+                <Route path={":userIdx"} />
+                <Route path={"me"} />
+              </Route>
+              <Route path={"compose"} element={<Compose />} />
+              <Route path={"*"} element={<div>404 error</div>} />
+              <Route path={"appointment/:id"} element={<AppointmentSpace />} />
+            </Routes>
+          </Suspense>
         </Body>
         <Bottom>
           <LayoutBtn

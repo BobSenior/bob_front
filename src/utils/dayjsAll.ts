@@ -39,7 +39,15 @@ const dayjsAll = (timeStamp: string | number | dayjs.Dayjs | Date) => {
     return result;
   };
   const postDate: string = dayjs(timeStamp).format("YYYY-MM-DD");
-  return { fromNow, hourmin, appointmentDate, appointmentTime, postDate };
+  const chatDate: string = dayjs(timeStamp).format("YY[년] MMMM DD[일](dd)");
+  return {
+    fromNow,
+    hourmin,
+    appointmentDate,
+    appointmentTime,
+    postDate,
+    chatDate,
+  };
 };
 
 export default dayjsAll;
