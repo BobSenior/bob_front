@@ -1,34 +1,3 @@
-export interface promiseInfo {
-  name: string;
-  ID: number;
-  major: string;
-  title: string | null;
-  place: string | null;
-  time: string | null;
-  createdAt?: string;
-}
-
-export interface IUser {
-  id: number;
-  nickname: string;
-  email: string;
-  Workspaces: IWorkspace[];
-}
-
-export interface IChannel {
-  id: number;
-  name: string;
-  private: boolean; // 비공개 채널 여부, 강좌에서는 모두 false(공개)
-  WorkspaceId: number;
-}
-
-export interface IWorkspace {
-  id: number;
-  name: string;
-  url: string; // 주소 창에 보이는 주소
-  OwnerId: number; // 워크스페이스 만든 사람 아이디
-}
-
 export interface ICoordinate {
   latitude: number;
   longitude: number;
@@ -77,7 +46,7 @@ export interface PostViewDTO {
   receiver: SimplifiedUserProfileDTO[];
   contents: string;
   tagHead: string[];
-  requested: boolean;
+  isRequested: boolean;
 }
 
 export interface SimplifiedUserProfileDTO {
@@ -108,29 +77,24 @@ export interface AppointmentViewDTO {
   maxReceiverNum: number;
   alreadyVoted: boolean | null;
   chatRoomIdx: number;
-  fixVote:boolean;
-  voteOwnerIdx:number;
+  fixVote: boolean;
+  voteOwnerIdx: number;
 }
 
 export interface RequestData {
-  simp : SimplifiedUserProfileDTO;
-  position:string;
+  simp: SimplifiedUserProfileDTO;
+  position: string;
 }
 
 export interface MakeNewPostReqDTO {
-  // private Long writerIdx;
+  writerIdx: number;
   writerPosition: string;
   title: string;
-  location: string;
-  meetingAt: string;
+  location: string | null;
+  meetingAt: string | null;
   type: string;
   receiverNum: number | null;
-  buyerNum: number | null;
-
-  /*
-  //초대된 buyer의 목록
-  private List<Long> invitedIdx; // nullable, 지금은 무시할것
-  */
+  buyerNum: number;
   constraint: string;
   content: string;
   tags: string[] | null;
@@ -139,19 +103,17 @@ export interface MakeNewPostReqDTO {
 /**
  * 2. Chat
  */
-
-export interface ChatDto {
-  type: string;
-  senderIdx: number;
+export interface ShownChat {
   nickname: string;
-  data: string;
   writtenAt: string;
+  content: string;
+  senderIdx: number;
 }
 
 export interface ChatPage {
   curPage: number;
   length: number;
-  chatList: ChatDto[];
+  chatList: ShownChat[];
 }
 
 /**
@@ -159,10 +121,13 @@ export interface ChatPage {
  */
 
 export interface ShownNotice {
-  noticeIdx: number;
-  postIdx: number;
+  postIdx?: number;
+  unreadChatNum?: number;
   type: string;
-  text: string;
+}
+
+export interface TotalNotices {
+  totalCount: number;
 }
 
 /**

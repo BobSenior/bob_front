@@ -8,6 +8,7 @@ export const ChatBoxContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   margin: 5px 0;
+  box-shadow: 0px -2px 5px 1px rgba(0, 0, 0, 0.3);
 `;
 
 export const Form = styled.form`

@@ -5,6 +5,7 @@ import React, {
   lazy,
   MouseEvent,
   useMemo,
+  useEffect,
 } from "react";
 import {
   Body,
@@ -14,7 +15,6 @@ import {
   IconsContainer,
   AlarmMark,
 } from "./style";
-const Profile = lazy(() => import("../../pages/Profile"));
 const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
 const AppointmentSpace = lazy(() => import("../../pages/AppointmentSpace"));
@@ -32,6 +32,8 @@ import "react-toastify/dist/ReactToastify.css";
 import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
 import ChatRoomModal from "../../components/ChatRoomModal";
+import { testUserIdx } from "../../pages/Main";
+import { TotalNotices } from "../../types/db";
 
 const emailExample = "123";
 
@@ -39,19 +41,20 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
-  const [alarmCount, setAlarmCount] = useState(1);
+  const [alarmCount, setAlarmCount] = useState(0);
   const [showChatRoomModal, setShowChatRoomModal] = useState(false);
-  const {
-    data: alarmData,
-    error,
-    isValidating,
-    mutate: alarmMuate,
-  } = useSWR(null, getFetcher);
+  const { data: mainAlarms } = useSWR<TotalNotices>(
+    `/notice/total?userIdx=${testUserIdx}`,
+    getFetcher,
+    {
+      refreshInterval: 5000,
+    }
+  );
 
   const ListModal = useMemo(() => {
     switch (showListModal) {
       case 1:
-        return <AlarmList />;
+        return <AlarmList setShow={setShowListModal} />;
       case 2:
         return <MenuList setShow={setShowListModal} />;
       default:
@@ -67,6 +70,10 @@ const MainLayout = () => {
     e.stopPropagation();
     setShowListModal((prevState) => (prevState === 2 ? 0 : 2));
   }, []);
+
+  useEffect(() => {
+    setAlarmCount(mainAlarms?.totalCount ?? 0);
+  }, [mainAlarms]);
 
   return (
     <>
@@ -122,13 +129,9 @@ const MainLayout = () => {
               <Route index element={<Main />} />
               <Route path={"search/:searchInput"} element={<Main />} />
               <Route path={"plans/:plan"} element={<Plans />} />
-              <Route path={"profile"} element={<Profile />}>
-                <Route path={":userIdx"} />
-                <Route path={"me"} />
-              </Route>
               <Route path={"compose"} element={<Compose />} />
-              <Route path={"*"} element={<div>404 error</div>} />
               <Route path={"appointment/:id"} element={<AppointmentSpace />} />
+              <Route path={"*"} element={<div>404 error</div>} />
             </Routes>
           </Suspense>
         </Body>

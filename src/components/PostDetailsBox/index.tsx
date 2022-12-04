@@ -45,7 +45,10 @@ import dayjsAll from "../../utils/dayjsAll";
 
 interface props {
   postIdx: number;
+  type: string;
 }
+
+const DUTCH = "dutch";
 
 const errorAlarm = (message: string): void => {
   toast.error(message, {
@@ -60,7 +63,7 @@ const errorAlarm = (message: string): void => {
   });
 };
 
-const PostDetailsBox = ({ postIdx }: props) => {
+const PostDetailsBox = ({ postIdx, type }: props) => {
   const [postDetailData, setPostDetailData] = useState<PostViewDTO | null>(
     null
   );
@@ -70,8 +73,24 @@ const PostDetailsBox = ({ postIdx }: props) => {
 
   const receiversSpans = useMemo(() => {
     if (!postDetailData) return null;
-    else if (postDetailData.receiver.length === 0)
+    if (postDetailData.receiver.length === 0)
       return <NoOneSpan>아무도 없어요.</NoOneSpan>;
+
+    if (type === DUTCH) {
+      return postDetailData.buyer
+        .filter((value, index) => index % 2 === 0)
+        .map((member) => {
+          return (
+            <MemberBtn
+              userIdx={member.userIdx}
+              nickName={member.nickname}
+              department={member.department}
+              schoolId={member.schoolId}
+              key={generateUniqueID()}
+            />
+          );
+        });
+    }
 
     return postDetailData.receiver.map((member) => {
       return (
@@ -88,7 +107,24 @@ const PostDetailsBox = ({ postIdx }: props) => {
 
   const buyersSpans = useMemo(() => {
     if (!postDetailData) return null;
-    else if (postDetailData.buyer.length === 0)
+
+    if (type === DUTCH) {
+      return postDetailData.buyer
+        .filter((value, index) => index % 2 === 1)
+        .map((member) => {
+          return (
+            <MemberBtn
+              userIdx={member.userIdx}
+              nickName={member.nickname}
+              department={member.department}
+              schoolId={member.schoolId}
+              key={generateUniqueID()}
+            />
+          );
+        });
+    }
+
+    if (postDetailData.buyer.length === 0)
       return <NoOneSpan>아무도 없어요.</NoOneSpan>;
 
     return postDetailData.buyer.map((member) => {
@@ -109,7 +145,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
       e.stopPropagation();
       if (!postDetailData) return;
 
-      if (postDetailData.requested) {
+      if (postDetailData.isRequested) {
         postFetcher
           .post(`/api/post/request/reverse`, {
             userIdx: testUserIdx,
@@ -119,7 +155,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
             if (res.data.isSuccess) {
               setPostDetailData((prevState) => {
                 if (!prevState) return null;
-                return { ...prevState, requested: !prevState.requested };
+                return { ...prevState, requested: !prevState.isRequested };
               });
             } else errorAlarm(res.data.message);
           })
@@ -135,7 +171,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
             if (res.data.isSuccess) {
               setPostDetailData((prevState) => {
                 if (!prevState) return null;
-                return { ...prevState, requested: !prevState.requested };
+                return { ...prevState, requested: !prevState.isRequested };
               });
             } else errorAlarm(res.data.message);
           })
@@ -238,7 +274,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
             <h1>Members</h1>
             <MembersDiv>
               <MembersColumn>
-                <h4>buyers</h4>
+                {type != "dutch" ?? <h4>buyers</h4>}
                 {postDetailData ? (
                   <>{buyersSpans}</>
                 ) : (
@@ -246,7 +282,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
                 )}
               </MembersColumn>
               <MembersColumn>
-                <h4>receivers</h4>
+                {type != "dutch" ?? <h4>receivers</h4>}
                 {postDetailData ? (
                   <>{receiversSpans}</>
                 ) : (
@@ -287,12 +323,12 @@ const PostDetailsBox = ({ postIdx }: props) => {
             </HashTagContainer>
           </Section>
           <Footer>
-            {postDetailData && postDetailData.requested ? (
+            {postDetailData && postDetailData.isRequested ? (
               <ColoredBtn
                 width={"100%"}
                 height={"35px"}
                 animate={
-                  postDetailData && postDetailData.requested ? "In" : "Out"
+                  postDetailData && postDetailData.isRequested ? "In" : "Out"
                 }
                 variants={InNOut}
                 useTap={!!postDetailData}
@@ -308,7 +344,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
                   width={"100%"}
                   height={"35px"}
                   animate={
-                    postDetailData && postDetailData.requested ? "In" : "Out"
+                    postDetailData && postDetailData.isRequested ? "In" : "Out"
                   }
                   variants={InNOut}
                   useTap={!!postDetailData}
@@ -323,7 +359,7 @@ const PostDetailsBox = ({ postIdx }: props) => {
                   width={"100%"}
                   height={"35px"}
                   animate={
-                    postDetailData && postDetailData.requested ? "In" : "Out"
+                    postDetailData && postDetailData.isRequested ? "In" : "Out"
                   }
                   variants={InNOut}
                   useTap={!!postDetailData}

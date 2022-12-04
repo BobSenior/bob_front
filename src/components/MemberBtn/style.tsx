@@ -26,6 +26,15 @@ export const MemberInfoPopUp = styled(motion.div)`
   gap: 0;
 `;
 
+export const MemberRemoveBtn = styled.button`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--basic-color);
+  border-radius: 7px;
+`;
+
 export const MemberInfoDiv = styled(motion.div)`
   position: relative;
   top: -5px;

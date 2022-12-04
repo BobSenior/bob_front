@@ -8,7 +8,11 @@ export const fetcher = (url: string) => {
 };
 
 export const postFetcher = axios.create({});
-export const getFetcher = axios.create({});
+export const getFetcher = (url: string) =>
+  axios
+    .create({})
+    .get(url)
+    .then((res) => res.data.result);
 
 export const postDetailsFetcher = (url: string) => {
   return axios(url).then((res) => res.data.result);

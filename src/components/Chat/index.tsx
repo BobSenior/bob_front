@@ -2,17 +2,15 @@ import { ChatContainer, ChatUserDiv, ChatWrapper } from "./styles";
 import React, { memo } from "react";
 import gravatar from "gravatar";
 import dayjsAll from "../../utils/dayjsAll";
-import { ChatDto } from "../../types/db";
-import useMySWR from "../../data/useMySWR";
+import { ShownChat } from "../../types/db";
 
 interface Props {
-  chatData: ChatDto;
+  chatData: ShownChat;
 }
 
-const userIdx = 12;
+const userIdx = 122;
 
 const Chat = ({ chatData }: Props) => {
-  // const { data } = useMySWR;
   const chatOwner = chatData.senderIdx === userIdx ? "Sender" : "Receiver";
 
   return (
@@ -31,7 +29,7 @@ const Chat = ({ chatData }: Props) => {
             <b className={"user-name"}>{chatData.nickname}</b>
           </ChatUserDiv>
         )}
-        <pre>{chatData.data}</pre>
+        <pre>{chatData.content}</pre>
       </ChatContainer>
       <span className={"chat-time"}>
         {dayjsAll(chatData.writtenAt).hourmin}

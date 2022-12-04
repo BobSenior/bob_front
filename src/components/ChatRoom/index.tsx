@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  MouseEvent,
   useState,
   useRef,
   useEffect,
@@ -12,82 +11,80 @@ import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import useSWRInfinite from "swr/infinite";
 import { infiniteFetcher } from "../../utils/fetchers";
-import { ChatDto } from "../../types/db";
+import { ShownChat } from "../../types/db";
 import makeDateSection from "../../utils/makeDateSection";
-import { toast } from "react-toastify";
-import SockJs from "sockjs-client";
-import StompJs from "stompjs";
+import { Message } from "stompjs";
+import useStomp from "../../hooks/useStomp";
+import dayjs from "dayjs";
 
 const chatSize = 20;
 const postIdx = 1;
+const userIdx = 12;
 
 const ChatRoom = () => {
-  const { data: chats, mutate } = useSWRInfinite<ChatDto[]>(
-    (index) => `/chat/load/${roomIdx}?page=${index}&size=${chatSize}`,
+  const {
+    data: chats,
+    setSize,
+    mutate,
+  } = useSWRInfinite<ShownChat[]>(
+    (index) => `/chat/load/${postIdx}?page=${index}&size=${chatSize}`,
     infiniteFetcher,
-    {}
+    {
+      revalidateOnMount: true,
+      revalidateFirstPage: false,
+      revalidateOnReconnect: false,
+      revalidateOnFocus: false,
+    }
   );
-  const [chatInput, setChatInput] = useState<string>("");
+  const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const sock = new SockJs("http://localhost:8080/ws/chat");
-  const stomp = StompJs.over(sock);
-  console.log(sock)
+  const [stomp, disconnect] = useStomp();
 
-  const stompConnect = () => {
-    console.log(sock)
-    stomp.connect({}, ()=> {
-      stomp?.subscribe('/topic/room/77',(message)=>{
-        console.log(message)
-      })
-    })
-  };
+  const isEmpty = chats?.[0].length === 0;
+  const isReachingEnd =
+    isEmpty || (chats && chats[chats.length - 1]?.length < chatSize) || false;
 
-  const stompDisConnect = () => {
-    try {
-      stomp?.disconnect(() => {
-        stomp?.unsubscribe("sub-0");
-      });
-    } catch (err) {
-
-    }
-  };
-
-  const SendMessage = () => {
-    const data = {
-      type:"NORMAL",
-      senderIdx:1,
-      data:"제발 좀 되라"
-    };
-    //예시 - 데이터 보낼때 json형식을 맞추어 보낸다.
-    stomp?.send(`/app/stomp/77`, {},JSON.stringify(data));
-  };
-
-
-  useEffect(()=>{
-    stompConnect();
-  });
-
-
-
-  const onClickBackArrow = useCallback((e: MouseEvent<HTMLElement>) => {
-    console.log(e);
-  }, []);
+  const onReceiveChat = useCallback(
+    (message: Message) => {
+      const receivedBody = JSON.parse(message.body);
+      const receivedChat: ShownChat = receivedBody.data.result;
+      mutate((currentData: ShownChat[][] | undefined) => {
+        const fstChatList: ShownChat[] = [receivedChat];
+        if (currentData) return [fstChatList, ...currentData];
+        const newChats: ShownChat[][] = [];
+        newChats.push(fstChatList);
+        return newChats;
+      }, false)
+        .then()
+        .catch((err) => console.error(err));
+    },
+    [chat, textAreaRef]
+  );
 
   const onSubmitChat = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      toast(chat, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      setChat("");
+      if (!chat.trim()) return;
+      const sendChat: ShownChat = {
+        nickname: "123",
+        writtenAt: dayjs().toString(),
+        content: chat,
+        senderIdx: userIdx,
+      };
+      stomp?.send(`/app/stomp/${postIdx}`, {}, JSON.stringify(sendChat));
+      mutate((currentData: ShownChat[][] | undefined) => {
+        const fstChatList: ShownChat[] = [sendChat];
+        if (currentData) return [fstChatList, ...currentData];
+        const newChats: ShownChat[][] = [];
+        newChats.push(fstChatList);
+        return newChats;
+      }, false)
+        .then(() => {
+          scrollbarRef.current?.scrollToBottom();
+          setChat("");
+        })
+        .catch();
     },
     [chat, textAreaRef]
   );
@@ -96,11 +93,27 @@ const ChatRoom = () => {
     scrollbarRef.current?.scrollToBottom();
   }, []);
 
+  useEffect(() => {
+    stomp?.connect({}, () => {
+      stomp?.subscribe(`/topic/room/${postIdx}`, onReceiveChat);
+    });
+    return () => {
+      disconnect(() => {
+        stomp?.unsubscribe(`${postIdx}`);
+      });
+    };
+  }, [stomp]);
+
   const chatDateSections = makeDateSection(chats ? chats.flat().reverse() : []);
 
   return (
     <ChatRoomContainer className={"chat-room-container"}>
-      <ChatList ref={scrollbarRef} chatDateSections={chatDateSections} />
+      <ChatList
+        ref={scrollbarRef}
+        chatDateSections={chatDateSections}
+        setSize={setSize}
+        isReachingEnd={isReachingEnd}
+      />
       <ChatBox
         chat={chat}
         onSubmitForm={onSubmitChat}

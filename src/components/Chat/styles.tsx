@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const ChatUserDiv = styled.div`
-  display: grid;
+  display: flex;
   margin: 10px 7px 0;
   column-gap: 10px;
   align-items: center;
@@ -13,10 +13,7 @@ export const ChatUserDiv = styled.div`
   }
   & .user-name {
     grid-row: 1 / 2;
-  }
-  & .user-major {
-    grid-row: 2 / 3;
-    font-size: 0.7em;
+    font-size: 0.95em;
   }
 `;
 
