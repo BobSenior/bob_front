@@ -7,22 +7,26 @@ import {
   MajorSpan,
   MemberInfoDiv,
   MemberInfoPopUp,
+  MemberRemoveBtn,
   ProfileImg,
   ProfileScriptBox,
+  IdxSpan,
+  NickNameSpan,
+  DeportmentSpan,
 } from "./style";
 import { AnimatePresence } from "framer-motion";
 import gravatar from "gravatar";
-import ColoredBtn from "../../assets/buttons/ColoredBtn";
-import EnterSvg from "../../assets/icons/enter-outline.svg";
+import PersonRemoveSvg from "../../assets/icons/person-remove-outline.svg";
 import CopySvg from "../../assets/icons/copy-outline.svg";
 import { toast } from "react-toastify";
-import { NavLink } from "react-router-dom";
 
 const MemberBtn = (userData: {
   userIdx: number;
   nickName: string;
   department: string;
   schoolId: number;
+  isLeader?: boolean;
+  onClick?: () => void;
 }) => {
   const [showMemberInfoPopUp, setShowMemberInfoPopUp] =
     useState<boolean>(false);
@@ -119,9 +123,7 @@ const MemberBtn = (userData: {
                   })}
                 />
                 <ProfileScriptBox>
-                  <span style={{ whiteSpace: "pre-wrap" }}>
-                    {userData.nickName}
-                  </span>
+                  <NickNameSpan>{userData.nickName}</NickNameSpan>
                   <CopyToClipboard
                     text={userData.nickName + "@" + userData.userIdx}
                     onCopy={() => {
@@ -138,13 +140,7 @@ const MemberBtn = (userData: {
                       });
                     }}
                   >
-                    <span
-                      style={{
-                        color: "dimgray",
-                        fontSize: "0.8em",
-                        cursor: "pointer",
-                      }}
-                    >
+                    <IdxSpan>
                       @{userData.userIdx}
                       <img
                         src={CopySvg}
@@ -153,30 +149,23 @@ const MemberBtn = (userData: {
                         style={{ margin: "0 5px" }}
                         alt={"copy-icon"}
                       />
-                    </span>
+                    </IdxSpan>
                   </CopyToClipboard>
-                  <span style={{ fontSize: "0.7em" }}>
+                  <DeportmentSpan>
                     {userData.department}
                     <i>{userData.schoolId}</i>
-                  </span>
+                  </DeportmentSpan>
                 </ProfileScriptBox>
-                <NavLink
-                  to={`/main/profile/${userData.userIdx}`}
-                  style={{
-                    width: "30px",
-                    height: "50px",
-                  }}
-                  end={true}
-                >
-                  <ColoredBtn width={"100%"} height={"100%"}>
+                {userData.isLeader && (
+                  <MemberRemoveBtn onClick={userData?.onClick ?? undefined}>
                     <img
-                      src={EnterSvg}
-                      width={"25px"}
-                      height={"25px"}
-                      alt={"enter-icon"}
+                      src={PersonRemoveSvg}
+                      width={"20px"}
+                      height={"20px"}
+                      alt={"removeSvg"}
                     />
-                  </ColoredBtn>
-                </NavLink>
+                  </MemberRemoveBtn>
+                )}
               </MemberInfoDiv>
             </MemberInfoPopUp>
           </>

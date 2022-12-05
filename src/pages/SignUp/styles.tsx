@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import Down from "../../down.svg";
-import Glass from "../../glass.svg";
+import Down from "../../assets/icons/down.svg";
+import Glass from "../../assets/icons/glass.svg";
 
 export const Container = styled.div`
   padding-top: 100px;

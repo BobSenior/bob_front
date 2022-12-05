@@ -1,59 +1,39 @@
 import { ChatContainer, ChatUserDiv, ChatWrapper } from "./styles";
-import React, { memo, useRef } from "react";
+import React, { memo } from "react";
 import gravatar from "gravatar";
-import dayjs from "dayjs";
 import dayjsAll from "../../utils/dayjsAll";
+import { ShownChat } from "../../types/db";
 
 interface Props {
-  chat?: string;
+  chatData: ShownChat;
 }
 
-const Chat = ({ chat }: Props) => {
-  // const user = "Sender" in data ? data.Sender : data.User;
-  const chatOwner = useRef<string>("Receiver");
+const userIdx = 122;
 
-  const user = {
-    email: "123@gmail.com",
-    nickname: "abc",
-    major: "소프트웨어학부",
-  };
-  const data = {
-    createdAt: dayjs(),
-  };
-  const str =
-    "hi!" +
-    "By promptly disclosing medical errors and offering earnest apologies and fair compensation, doctors hope to make it easier to learn from mistakes and relieve the patient's anger.";
+const Chat = ({ chatData }: Props) => {
+  const chatOwner = chatData.senderIdx === userIdx ? "Sender" : "Receiver";
 
-  const result = (
-    <>
-      {str}
-      <br key={"123"} />
-    </>
-  );
   return (
     <ChatWrapper
       style={{
-        flexDirection:
-          chatOwner.current === "Sender" ? "row-reverse" : undefined,
+        flexDirection: chatOwner === "Sender" ? "row-reverse" : undefined,
       }}
     >
       <ChatContainer>
-        {chatOwner.current != "Sender" && (
+        {chatOwner != "Sender" && (
           <ChatUserDiv>
             <img
-              src={gravatar.url(user.email, { s: "32px", d: "retro" })}
-              alt={user.nickname + "'s avatar"}
+              src={gravatar.url(chatData.nickname, { s: "32px", d: "retro" })}
+              alt={chatData.nickname + "'s avatar"}
             />
-            <b className={"user-name"}>{user.nickname}</b>
-            <span className={"user-major"}>
-              {user.major}
-              {"12"}
-            </span>
+            <b className={"user-name"}>{chatData.nickname}</b>
           </ChatUserDiv>
         )}
-        <pre>{chat ?? result}</pre>
+        <pre>{chatData.content}</pre>
       </ChatContainer>
-      <span className={"chat-time"}>{dayjsAll(data.createdAt).hourmin}</span>
+      <span className={"chat-time"}>
+        {dayjsAll(chatData.writtenAt).hourmin}
+      </span>
     </ChatWrapper>
   );
 };

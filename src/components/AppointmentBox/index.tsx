@@ -42,7 +42,10 @@ const AppointmentBox = ({ data }: props) => {
               schoolId={data.writer.schoolId}
             />
           </MiddleContext>
-          <BottomContext></BottomContext>
+          <BottomContext>
+            <span>123</span>
+            <span>456</span>
+          </BottomContext>
         </PromiseContexts>
         <NavLink
           to={`/main/appointment/${data.postIdx}`}

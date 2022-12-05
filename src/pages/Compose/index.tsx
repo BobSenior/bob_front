@@ -38,7 +38,7 @@ import { BottomButton } from "../Login/styles";
 import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import dayjsAll from "../../utils/dayjsAll";
-import { ICoordinate } from "../../types/db";
+import { ICoordinate, MakeNewPostReqDTO } from "../../types/db";
 
 interface basicData {
   title: string;
@@ -51,18 +51,35 @@ interface IBNR {
 }
 
 const postTypes = [
-  ["같이먹자", "같이 밥 먹을 사람을 구해요. 모두 더치페이해요."],
+  [
+    "같이먹자",
+    "같이 밥 먹을 사람을 구해요. 모두 더치페이해요.",
+    "dutch",
+    "buyer",
+  ],
   [
     "내가산다",
     "내가 밥 사주고 싶은 사람을 구해요. 나는 사는 사람으로 참가해요.",
+    "buy",
+    "buyer",
   ],
-  ["사주세요", "나한테 밥 사줄 사람을 구해요. 나는 먹는 사람으로 참가해요."],
+  [
+    "사주세요",
+    "나한테 밥 사줄 사람을 구해요. 나는 먹는 사람으로 참가해요.",
+    "buy",
+    "receiver",
+  ],
 ];
 
 const getHashTag = (str: string | null): string[] | null => {
   if (!str) return null;
   const re = /#[가-힣|a-z|A-Z|0-9|\_]+/g;
   return str.match(re)?.flatMap((x) => x.slice(1)) ?? null;
+};
+
+const testUser = {
+  userIdx: 12,
+  major: "소프트웨어",
 };
 
 const Compose = () => {
@@ -74,11 +91,10 @@ const Compose = () => {
   const [coords, setCoords] = useState<ICoordinate | null>(null);
   const [location, setLocation] = useState<string | null>(null);
   const [meetingAt, setMeetingAt] = useState<string | null>(null);
-  const [postType, setPostType] = useState<string | null>(postTypes[0][0]);
+  const [postType, setPostType] = useState<number>(0);
   const [maxMember, setMaxMember] = useState<number>(2);
   const [BNR, setBNR] = useState<IBNR | null>(null);
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
-  const [onlyForRealName, setOnlyForRealName] = useState<boolean>(false);
   const [showLocationSetModal, setShowLocationSetModal] = useState(false);
   const [showMeetingAtSetModal, setShowMeetingAtSetModal] = useState(false);
 
@@ -89,30 +105,34 @@ const Compose = () => {
     );
   }, [formData]);
 
-  const onSubmitComposeForm = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-      //TODO: form제출
-      postFetcher
-        .post("", {
-          title: formData.title,
-          contexts: formData.contexts,
-          tags: hashtags,
-        })
-        .then((res) => {
-          console.log("제출" + res);
-        })
-        .catch((err) => console.log(err));
-      console.log({
-        formData,
-        hashtags,
-        maxMember,
-        onlyForSameMajor,
-        onlyForRealName,
-      });
-    },
-    [formData, hashtags, maxMember, onlyForSameMajor, onlyForRealName]
-  );
+  const onSubmitComposeForm = (e: FormEvent) => {
+    e.preventDefault();
+    if (!isSubmittable) return;
+    const composePost: MakeNewPostReqDTO = {
+      writerIdx: testUser.userIdx,
+      writerPosition: postTypes[postType][3],
+      title: formData.title,
+      location:
+        location +
+        "$" +
+        coords?.latitude.toString() +
+        "$" +
+        coords?.longitude.toString(),
+      meetingAt: meetingAt,
+      type: postTypes[postType][2],
+      receiverNum: BNR ? BNR.receivers : null,
+      buyerNum: BNR ? BNR.buyers : maxMember,
+      constraint: onlyForSameMajor ? testUser.major : "ANY",
+      content: formData.contexts,
+      tags: hashtags,
+    };
+    postFetcher
+      .post(`/post/write`, composePost)
+      .then((res) => {
+        console.log("제출");
+      })
+      .catch((err) => console.log(err));
+  };
 
   const onInputTitle = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -175,7 +195,7 @@ const Compose = () => {
   }, [formData]);
 
   useEffect(() => {
-    if (postType === postTypes[0][0]) {
+    if (postType === 0) {
       setBNR(null);
     }
     const halfNum = Math.round(maxMember / 2);
@@ -284,38 +304,36 @@ const Compose = () => {
           <Label>종류</Label>
           <TypeRadioWrapper>
             <RadioBox
-              onClick={() => setPostType(postTypes[0][0])}
-              animate={postType === postTypes[0][0] ? "on" : "off"}
+              onClick={() => setPostType(0)}
+              animate={postType === 0 ? "on" : "off"}
               variants={SwitchVariant}
             >
               <span>{postTypes[0][0]}</span>
             </RadioBox>
             <RadioBox
-              onClick={() => setPostType(postTypes[1][0])}
-              animate={postType === postTypes[1][0] ? "on" : "off"}
+              onClick={() => setPostType(1)}
+              animate={postType === 1 ? "on" : "off"}
               variants={SwitchVariant}
             >
               <span>{postTypes[1][0]}</span>
             </RadioBox>
             <RadioBox
-              onClick={() => setPostType(postTypes[2][0])}
-              animate={postType === postTypes[2][0] ? "on" : "off"}
+              onClick={() => setPostType(2)}
+              animate={postType === 2 ? "on" : "off"}
               variants={SwitchVariant}
             >
               <span>{postTypes[2][0]}</span>
             </RadioBox>
           </TypeRadioWrapper>
           <RadioDetailsBox>
-            <span>
-              {postTypes.find((value) => value[0] === postType)?.at(1)}
-            </span>
+            <span>{postTypes[postType][1]}</span>
           </RadioDetailsBox>
           <Label>최대 인원수</Label>
           <RangeInput
             value={maxMember}
             onChange={(e) => setMaxMember(parseInt(e.target.value))}
           />
-          {postType != postTypes[0][0] && (
+          {postType != 0 && (
             <>
               <Label>사는 사람</Label>
               <RangeInput
@@ -350,28 +368,6 @@ const Compose = () => {
               <Handle
                 layout
                 animate={onlyForSameMajor ? "on" : "off"}
-                variants={HandleVariant}
-              />
-            </SwitchDiv>
-          </SwitchWrapper>
-          <SwitchWrapper>
-            <SwitchSpan
-              animate={onlyForRealName ? "on" : "off"}
-              variants={SpanVariant}
-            >
-              {onlyForRealName
-                ? "서로 실명으로 보여요."
-                : "서로 익명으로 보여요."}
-            </SwitchSpan>
-            <SwitchDiv
-              id={onlyForRealName ? "on" : "off"}
-              onClick={() => setOnlyForRealName((prevState) => !prevState)}
-              animate={onlyForRealName ? "on" : "off"}
-              variants={SwitchVariant}
-            >
-              <Handle
-                layout
-                animate={onlyForRealName ? "on" : "off"}
                 variants={HandleVariant}
               />
             </SwitchDiv>
