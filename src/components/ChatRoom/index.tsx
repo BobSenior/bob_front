@@ -16,6 +16,7 @@ import makeDateSection from "../../utils/makeDateSection";
 import { Message } from "stompjs";
 import useStomp from "../../hooks/useStomp";
 import dayjs from "dayjs";
+import { testUserIdx } from "../../pages/Main";
 
 const chatSize = 20;
 const postIdx = 1;
@@ -34,6 +35,7 @@ const ChatRoom = () => {
       revalidateFirstPage: false,
       revalidateOnReconnect: false,
       revalidateOnFocus: false,
+      dedupingInterval: 2000,
     }
   );
   const [chat, setChat] = useState<string>("");
@@ -49,6 +51,7 @@ const ChatRoom = () => {
     (message: Message) => {
       const receivedBody = JSON.parse(message.body);
       const receivedChat: ShownChat = receivedBody.data.result;
+      if (receivedChat.senderIdx == testUserIdx) return;
       mutate((currentData: ShownChat[][] | undefined) => {
         const fstChatList: ShownChat[] = [receivedChat];
         if (currentData) return [fstChatList, ...currentData];

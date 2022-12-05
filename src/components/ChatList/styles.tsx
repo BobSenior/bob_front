@@ -1,7 +1,9 @@
 import styled from "@emotion/styled/macro";
+import { motion } from "framer-motion";
 
 export const ChatZone = styled.div`
   max-width: inherit;
+  height: 100%;
   & .scrollBarDiv {
     width: 100%;
     height: 100%;
@@ -13,13 +15,35 @@ export const Section = styled.section`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
-export const StickyHeader = styled.div`
+export const StickyHeader = styled(motion.div)`
   display: flex;
   justify-content: center;
   flex: 1;
   width: 100%;
   position: sticky;
   top: 14px;
+  & span {
+    font-weight: bold;
+    font-size: 13px;
+    height: 28px;
+    line-height: 27px;
+    padding: 0 16px;
+    z-index: 2;
+    box-shadow: 0 0 0 1px var(--saf-0), 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
+    position: relative;
+    top: -13px;
+    background: white;
+    border: none;
+    outline: none;
+  }
+`;
+
+export const StaticHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
   & span {
     font-weight: bold;
     font-size: 13px;

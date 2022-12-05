@@ -1,5 +1,11 @@
-import { ChatZone, Section, StickyHeader } from "./styles";
-import React, { forwardRef, MutableRefObject, useCallback } from "react";
+import { ChatZone, Section, StaticHeader, StickyHeader } from "./styles";
+import React, {
+  forwardRef,
+  MutableRefObject,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { positionValues, Scrollbars } from "react-custom-scrollbars-2";
 import { ShownChat } from "../../types/db";
 import Chat from "../Chat";
@@ -14,6 +20,7 @@ interface Props {
 }
 const ChatList = forwardRef<Scrollbars, Props>(
   ({ chatDateSections, setSize, isReachingEnd }, scrollBarRef) => {
+    const [isVisibleHeader, setVisiblieHeader] = useState(false);
     const onScroll = useCallback(
       (values: positionValues) => {
         if (values.scrollTop === 0 && !isReachingEnd) {
@@ -33,15 +40,37 @@ const ChatList = forwardRef<Scrollbars, Props>(
       [scrollBarRef, isReachingEnd, setSize]
     );
 
+    const onScrollStart = useCallback(() => {
+      setVisiblieHeader(true);
+      setTimeout(() => {
+        setVisiblieHeader(false);
+      }, 3000);
+    }, []);
+
     return (
       <ChatZone>
-        <Scrollbars ref={scrollBarRef} onScrollFrame={onScroll}>
+        <Scrollbars
+          ref={scrollBarRef}
+          onScrollFrame={onScroll}
+          onScrollStart={onScrollStart}
+        >
           {Object.entries(chatDateSections).map(([date, chats]) => {
             return (
               <Section className={`section-${date}`} key={date}>
-                <StickyHeader>
-                  <span>{date}</span>
-                </StickyHeader>
+                {!isVisibleHeader && (
+                  <StaticHeader>
+                    <span>{date}</span>
+                  </StaticHeader>
+                )}
+                {isVisibleHeader && (
+                  <StickyHeader
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0.5 }}
+                  >
+                    <span>{date}</span>
+                  </StickyHeader>
+                )}
                 {chats.map((chatData) => (
                   <Chat key={generateUniqueID()} chatData={chatData} />
                 ))}

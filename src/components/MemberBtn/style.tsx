@@ -6,6 +6,23 @@ export const MajorSpan = styled.span`
   color: rgb(50, 50, 50);
 `;
 
+export const IdxSpan = styled.span`
+  display: flex;
+  color: dimgray;
+  font-size: 0.8em;
+  cursor: pointer;
+  width: fit-content;
+  align-items: center;
+`;
+
+export const NickNameSpan = styled.span`
+  white-space: pre-wrap;
+`;
+
+export const DeportmentSpan = styled.span`
+  font-size: 0.7em;
+`;
+
 export const ProfileScriptBox = styled.div`
   display: flex;
   width: 80%;

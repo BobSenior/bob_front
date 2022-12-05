@@ -73,8 +73,6 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
 
   const receiversSpans = useMemo(() => {
     if (!postDetailData) return null;
-    if (postDetailData.receiver.length === 0)
-      return <NoOneSpan>아무도 없어요.</NoOneSpan>;
 
     if (type === DUTCH) {
       return postDetailData.buyer
@@ -91,6 +89,9 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
           );
         });
     }
+
+    if (postDetailData.receiver.length === 0)
+      return <NoOneSpan>아무도 없어요.</NoOneSpan>;
 
     return postDetailData.receiver.map((member) => {
       return (

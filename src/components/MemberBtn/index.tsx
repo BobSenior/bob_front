@@ -10,6 +10,9 @@ import {
   MemberRemoveBtn,
   ProfileImg,
   ProfileScriptBox,
+  IdxSpan,
+  NickNameSpan,
+  DeportmentSpan,
 } from "./style";
 import { AnimatePresence } from "framer-motion";
 import gravatar from "gravatar";
@@ -120,9 +123,7 @@ const MemberBtn = (userData: {
                   })}
                 />
                 <ProfileScriptBox>
-                  <span style={{ whiteSpace: "pre-wrap" }}>
-                    {userData.nickName}
-                  </span>
+                  <NickNameSpan>{userData.nickName}</NickNameSpan>
                   <CopyToClipboard
                     text={userData.nickName + "@" + userData.userIdx}
                     onCopy={() => {
@@ -139,14 +140,7 @@ const MemberBtn = (userData: {
                       });
                     }}
                   >
-                    <span
-                      style={{
-                        color: "dimgray",
-                        fontSize: "0.8em",
-                        cursor: "pointer",
-                        width: "fit-content",
-                      }}
-                    >
+                    <IdxSpan>
                       @{userData.userIdx}
                       <img
                         src={CopySvg}
@@ -155,12 +149,12 @@ const MemberBtn = (userData: {
                         style={{ margin: "0 5px" }}
                         alt={"copy-icon"}
                       />
-                    </span>
+                    </IdxSpan>
                   </CopyToClipboard>
-                  <span style={{ fontSize: "0.7em" }}>
+                  <DeportmentSpan>
                     {userData.department}
                     <i>{userData.schoolId}</i>
-                  </span>
+                  </DeportmentSpan>
                 </ProfileScriptBox>
                 {userData.isLeader && (
                   <MemberRemoveBtn onClick={userData?.onClick ?? undefined}>
