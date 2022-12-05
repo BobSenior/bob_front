@@ -48,6 +48,7 @@ const MainLayout = () => {
     getFetcher,
     {
       refreshInterval: 5000,
+      dedupingInterval: 2000,
     }
   );
 
