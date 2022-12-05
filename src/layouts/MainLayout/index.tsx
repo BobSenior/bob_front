@@ -28,7 +28,6 @@ import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
 import ChatRoomModal from "../../components/ChatRoomModal";
