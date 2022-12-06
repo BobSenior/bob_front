@@ -82,7 +82,9 @@ const PostBox = ({ data }: props) => {
           animate={toggleDetailsBox ? "rollDown" : "rollUp"}
         />
       </PromiseTail>
-      {toggleDetailsBox && <PromiseDetailsBox postIdx={data.postIdx} />}
+      {toggleDetailsBox && (
+        <PromiseDetailsBox postIdx={data.postIdx} type={data.type} />
+      )}
     </PBox>
   );
 };

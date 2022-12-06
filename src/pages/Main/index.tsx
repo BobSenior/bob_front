@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { PageSpinnerWrapper, PromisesColumn, PromisesWrapper } from "./style";
+import {
+  PageSpinnerWrapper,
+  PromisesColumn,
+  PromisesWrapper,
+  SearchInputDiv,
+} from "./style";
 import PostBox from "../../components/PostBox";
 import { AppointmentHeadDTO } from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
@@ -7,11 +12,13 @@ import countColumns from "../../utils/countColumns";
 import { Oval } from "react-loader-spinner";
 import useSWRInfinite from "swr/infinite";
 import { infiniteFetcher } from "../../utils/fetchers";
+import { useParams } from "react-router-dom";
 
 export const testUserIdx = 1;
 const pageSize = 10;
 
 const Main = () => {
+  const { searchInput } = useParams();
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
@@ -19,6 +26,7 @@ const Main = () => {
     data: PostHeads,
     isValidating,
     setSize,
+    error,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
       return `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${testUserIdx}`;
@@ -35,7 +43,8 @@ const Main = () => {
   const isEmpty = PostHeads?.[0].length === 0;
   const isReachingEnd =
     isEmpty ||
-    (PostHeads && PostHeads[PostHeads.length - 1]?.length < pageSize);
+    (PostHeads && PostHeads[PostHeads.length - 1]?.length < pageSize) ||
+    false;
 
   const columnDivs = useMemo(() => {
     const tempColDivs = new Array(numOfColumns);
@@ -96,8 +105,11 @@ const Main = () => {
     };
   }, []);
 
+  if (error) return <div>404 error</div>;
+
   return (
     <div>
+      {searchInput && <SearchInputDiv>{searchInput}의 검색결과</SearchInputDiv>}
       <PromisesWrapper
         style={{ gridTemplateColumns: `repeat(${numOfColumns}, 1fr)` }}
       >

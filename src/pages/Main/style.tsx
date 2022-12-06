@@ -24,3 +24,11 @@ export const PageSpinnerWrapper = styled.div`
     color: gray;
   }
 `;
+
+export const SearchInputDiv = styled.div`
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  position: sticky;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+`;

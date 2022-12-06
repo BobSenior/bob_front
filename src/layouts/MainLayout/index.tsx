@@ -5,6 +5,7 @@ import React, {
   lazy,
   MouseEvent,
   useMemo,
+  useEffect,
 } from "react";
 import {
   Body,
@@ -14,12 +15,10 @@ import {
   IconsContainer,
   AlarmMark,
 } from "./style";
-const Profile = lazy(() => import("../../pages/Profile"));
 const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
-const AppointmentSpace = lazy(()=>import ("../../pages/AppointmentSpace"));
+const AppointmentSpace = lazy(() => import("../../pages/AppointmentSpace"));
 const Main = lazy(() => import("../../pages/Main"));
-import ChatRoom from "../../components/ChatRoom";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
@@ -30,11 +29,11 @@ import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import useSWR, { SWRConfig } from "swr";
+import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
-import { testUserIdx } from "../../pages/Main";
 import ChatRoomModal from "../../components/ChatRoomModal";
-import Search from "../../pages/Search";
+import { testUserIdx } from "../../pages/Main";
+import { TotalNotices } from "../../types/db";
 
 const emailExample = "123";
 
@@ -42,19 +41,21 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
-  const [alarmCount, setAlarmCount] = useState(1);
+  const [alarmCount, setAlarmCount] = useState(0);
   const [showChatRoomModal, setShowChatRoomModal] = useState(false);
-  const {
-    data: alarmData,
-    error,
-    isValidating,
-    mutate: alarmMuate,
-  } = useSWR(``, getFetcher);
+  const { data: mainAlarms } = useSWR<TotalNotices>(
+    `/notice/total?userIdx=${testUserIdx}`,
+    getFetcher,
+    {
+      refreshInterval: 5000,
+      dedupingInterval: 2000,
+    }
+  );
 
   const ListModal = useMemo(() => {
     switch (showListModal) {
       case 1:
-        return <AlarmList />;
+        return <AlarmList setShow={setShowListModal} />;
       case 2:
         return <MenuList setShow={setShowListModal} />;
       default:
@@ -70,6 +71,10 @@ const MainLayout = () => {
     e.stopPropagation();
     setShowListModal((prevState) => (prevState === 2 ? 0 : 2));
   }, []);
+
+  useEffect(() => {
+    setAlarmCount(mainAlarms?.totalCount ?? 0);
+  }, [mainAlarms]);
 
   return (
     <>
@@ -120,23 +125,16 @@ const MainLayout = () => {
           )}
         </Header>
         <Body>
-          <SWRConfig>
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                <Route index element={<Main />} />
-                <Route path={"plans/:plan"} element={<Plans />} />
-                <Route path={"search/:searchInput"} element={<Search />} />
-                <Route path={"profile"} element={<Profile />}>
-                  <Route path={":userIdx"} />
-                  <Route path={"me"} />
-                </Route>
-                <Route path={"chat_test/:id"} element={<ChatRoom />} />
-                <Route path={"compose"} element={<Compose />} />
-                <Route path={"*"} element={<div>404 error</div>} />
-                <Route path={"appointment/:id"} element={<AppointmentSpace />} />
-              </Routes>
-            </Suspense>
-          </SWRConfig>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route index element={<Main />} />
+              <Route path={"search/:searchInput"} element={<Main />} />
+              <Route path={"plans/:plan"} element={<Plans />} />
+              <Route path={"compose"} element={<Compose />} />
+              <Route path={"appointment/:id"} element={<AppointmentSpace />} />
+              <Route path={"*"} element={<div>404 error</div>} />
+            </Routes>
+          </Suspense>
         </Body>
         <Bottom>
           <LayoutBtn
