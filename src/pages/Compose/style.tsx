@@ -152,7 +152,6 @@ export const LAMButton = styled(motion.div)`
   width: 60%;
   display: flex;
   flex-direction: column;
-  background-color: navajowhite;
   align-items: center;
   justify-content: center;
   height: fit-content;

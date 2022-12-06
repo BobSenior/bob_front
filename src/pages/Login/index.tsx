@@ -21,6 +21,7 @@ import {toast, ToastContainer} from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +42,7 @@ const Login = () => {
               setPassword("");
           }
           else{
-
+            navigate('/main')
           }
       })
 
@@ -80,10 +81,6 @@ const Login = () => {
         <Link to="/signup">회원가입</Link>
       </LinkContainer>
       <SocialLoginContainer>
-        <span>소셜 로그인</span>
-        <div>
-          <img src={kakaoLoginImg} alt={"카카오 소셜 로그인"} />
-        </div>
       </SocialLoginContainer>
         <ToastContainer />
     </LoginPageWrapper>

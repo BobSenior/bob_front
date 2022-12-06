@@ -62,6 +62,7 @@ import RecordFixBox from "../../components/RecordFixBox";
 import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import RequestListModal from "../../components/RequestListModal";
+import MapDisplayModal from "../../components/MapDisplayModal";
 
 const AppointmentSpace = ()=>{
 
@@ -85,6 +86,7 @@ const AppointmentSpace = ()=>{
     const [coords, setCoords] = useState<ICoordinate | null>(null);
     const [meetingAt, setMeetingAt] = useState<string | null>(null);
     const [requestModal, setRequestModal] = useState<boolean>(false);
+    const [showSetLocator, setShowSetLocator] = useState<boolean>(false);
 
 
     console.log(records)
@@ -330,7 +332,6 @@ const AppointmentSpace = ()=>{
                 else flag = false;
             }
         }
-        console.log(flag);
         if(flag){
             postFetcher.post(
                 `/vote/init/${id}`,
@@ -386,6 +387,21 @@ const AppointmentSpace = ()=>{
         })
     },[appointment,selected])
 
+    const onClickKickUser = useCallback((myIdx:number)=>{
+        postFetcher.post(
+            `/appointment/kick/${id}`,{
+                kickerIdx:1,
+                kickedIdx:myIdx
+            }
+        ).then((Response:AxiosResponse<BaseResponse<any>>)=>{
+            if(!Response.data.isSuccess){
+                toast.error(Response.data.message);
+            }
+            else{
+                mutate();
+            }
+        })
+    },[appointment])
 
 
 
@@ -400,6 +416,7 @@ return(
                 {appointment ? (
                     <LocationWrapper>
                         <MyPlaceInfoDiv
+                            onClick={()=>setShowSetLocator(true)}
                             whileTap={{ scale: 0.85 }}
                         >
                             <PickerImg src={PickerSvg} />
@@ -407,7 +424,7 @@ return(
                         </MyPlaceInfoDiv>
                         <MyTimeInfoDiv>
                   <span>
-
+                        {appointment.result.meetingAt?appointment.result.meetingAt:"아직 정해지지 않았어요!"}
                   </span>
                         </MyTimeInfoDiv>
                     </LocationWrapper>
@@ -422,28 +439,41 @@ return(
 
             <MemberSection>
                 <h1 style={{fontSize:"33px"}}>Members</h1>
-                <LargeMembersDiv>
-                    <MembersColumn style={{paddingLeft:"10px"}}>
-                        <h4>buyers</h4>
-                        {appointment ? (
-                            <><>{buyersSpans}</>
-                                <>{remainsBuyer}</>
-                            </>
-                        ) : (
-                            <Skeleton count={2} height={"0.95em"} width={"75px"} />
-                        )}
-                    </MembersColumn>
-                    <MembersColumn>
-                        <h4>receivers</h4>
-                        {appointment ? (
-                            <><>{receiversSpans}</>
-                                <>{remainsReceiver}</>
-                            </>
-                        ) : (
-                            <Skeleton count={2} height={"0.95em"} width={"75px"} />
-                        )}
-                    </MembersColumn>
-                </LargeMembersDiv>
+                {appointment?.result.type==="buy"?
+                    <LargeMembersDiv>
+                        <MembersColumn style={{paddingLeft: "10px"}}>
+                            <h4>buyers</h4>
+                            {appointment ? (
+                                <><>{buyersSpans}</>
+                                    <>{remainsBuyer}</>
+                                </>
+                            ) : (
+                                <Skeleton count={2} height={"0.95em"} width={"75px"}/>
+                            )}
+                        </MembersColumn>
+                        <MembersColumn>
+                            <h4>receivers</h4>
+                            {appointment ? (
+                                <><>{receiversSpans}</>
+                                    <>{remainsReceiver}</>
+                                </>
+                            ) : (
+                                <Skeleton count={2} height={"0.95em"} width={"75px"}/>
+                            )}
+                        </MembersColumn>
+                    </LargeMembersDiv>:
+                    <div>
+                        <MembersColumn>
+                            {appointment ? (
+                                <><>{buyersSpans}</>
+                                    <>{remainsBuyer}</>
+                                </>
+                            ) : (
+                                <Skeleton count={2} height={"0.95em"} width={"75px"}/>
+                            )}
+                        </MembersColumn>
+                    </div>
+                }
 
                 <CenterModal isVisible={onMakeVote} onClickForClose={()=>{setOnMakeVote(false); setNumRecord(2); setRecords(["",""]); setVoteMode(true)}}>
                     <VoteSection>
@@ -539,6 +569,20 @@ return(
                 <CenterModal isVisible={requestModal} onClickForClose={()=>setRequestModal(false)}>
                     {ReqList}
                 </CenterModal>
+                    {showSetLocator &&
+                        appointment &&
+                        appointment.result.latitude &&
+                        appointment.result.longitude &&
+                        appointment.result.location && (
+                            <MapDisplayModal
+                                setShow={setShowSetLocator}
+                                coordinate={{
+                                    latitude: appointment.result.latitude,
+                                    longitude: appointment.result.longitude,
+                                }}
+                                location={appointment.result.location}
+                            />
+                        )}
             </MemberSection>
             {appointment?.result.writerIdx === 1 && <BottomButton onClick={()=>setRequestModal(true)}>신청 목록</BottomButton>}
             <HorizonLine text={''}/>

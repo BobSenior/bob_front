@@ -104,6 +104,7 @@ export interface AppointmentViewDTO {
   voteTitle: string | null;
   records: ShownVoteRecord[] | null;
   maxNum: number;
+  type:string;
   maxBuyerNum:number;
   maxReceiverNum:number;
   alreadyVoted: boolean | null;

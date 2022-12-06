@@ -3,15 +3,27 @@ import AlarmInfoDiv from "../AlarmInfoDiv";
 import Scrollbars from "react-custom-scrollbars-2";
 import useSWR from "swr";
 import { BaseResponse, ShownNotice } from "../../types/db";
-import React from "react";
+import React, {useMemo} from "react";
 import { getFetcher } from "../../utils/fetchers";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
+import AppointmentMemberBtn from "../AppointmentMemberBtn";
 
 const ListAlarm = () => {
   const { data: alarms, error } = useSWR<BaseResponse<ShownNotice[]>>(
     `/notice/list?userIdx=1`,
     getFetcher
   );
+
+  const alarmSpan = useMemo(()=>{
+    if(!alarms?.result) return null;
+
+    return alarms.result.map((member) => {
+      return (
+          <AlarmInfoDiv key={generateUniqueID()} data={member} />
+      );
+    });
+
+  },[alarms]);
 
   return (
     <ListModalContainer
@@ -21,9 +33,7 @@ const ListAlarm = () => {
     >
       <AlarmListWrapper>
         <Scrollbars>
-          {alarms?.result?.map((content) => (
-            <AlarmInfoDiv key={generateUniqueID()} data={content} />
-          ))}
+          {alarmSpan}
         </Scrollbars>
       </AlarmListWrapper>
     </ListModalContainer>
