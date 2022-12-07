@@ -5,6 +5,7 @@ import {
   useState,
   useMemo,
   useEffect,
+  useContext,
 } from "react";
 import {
   ComposeForm,
@@ -39,6 +40,7 @@ import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import dayjsAll from "../../utils/dayjsAll";
 import { ICoordinate, MakeNewPostReqDTO } from "../../types/db";
+import GlobalContext from "../../hooks/GlobalContext";
 
 interface basicData {
   title: string;
@@ -77,12 +79,8 @@ const getHashTag = (str: string | null): string[] | null => {
   return str.match(re)?.flatMap((x) => x.slice(1)) ?? null;
 };
 
-const testUser = {
-  userIdx: 12,
-  major: "소프트웨어",
-};
-
 const Compose = () => {
+  const { myData } = useContext(GlobalContext);
   const [formData, setFormData] = useState<basicData>({
     title: "",
     contexts: "",
@@ -107,9 +105,10 @@ const Compose = () => {
 
   const onSubmitComposeForm = (e: FormEvent) => {
     e.preventDefault();
-    if (!isSubmittable) return;
+    if (!isSubmittable || !myData) return;
+    console.log(meetingAt);
     const composePost: MakeNewPostReqDTO = {
-      writerIdx: testUser.userIdx,
+      writerIdx: myData.userIdx,
       writerPosition: postTypes[postType][3],
       title: formData.title,
       location:
@@ -122,15 +121,13 @@ const Compose = () => {
       type: postTypes[postType][2],
       receiverNum: BNR ? BNR.receivers : null,
       buyerNum: BNR ? BNR.buyers : maxMember,
-      constraint: onlyForSameMajor ? testUser.major : "ANY",
+      constraint: onlyForSameMajor ? myData.department : "아무나",
       content: formData.contexts,
       tags: hashtags,
     };
     postFetcher
       .post(`/post/write`, composePost)
-      .then((res) => {
-        console.log("제출");
-      })
+      .then((res) => {})
       .catch((err) => console.log(err));
   };
 

@@ -19,7 +19,7 @@ const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
 const AppointmentSpace = lazy(() => import("../../pages/AppointmentSpace"));
 const Main = lazy(() => import("../../pages/Main"));
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { redirect, Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
@@ -29,11 +29,9 @@ import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
 import useSWR from "swr";
-import {fetcher, getFetcher} from "../../utils/fetchers";
-import { testUserIdx } from "../../pages/Main";
-import {BaseResponse} from "../../types/db";
+import { fetcher, getFetcher } from "../../utils/fetchers";
+import { BaseResponse } from "../../types/db";
 import { TotalNotices } from "../../types/db";
-import ChatRoomModal from "../../components/ChatRoomModal";
 
 const emailExample = "123";
 

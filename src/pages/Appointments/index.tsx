@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { PlansHeader, PlansWrapper } from "./style";
@@ -13,9 +19,9 @@ import { infiniteFetcher } from "../../utils/fetchers";
 import countColumns from "../../utils/countColumns";
 import PostHeadBox from "../../components/PostBox";
 import AppointmentBox from "../../components/AppointmentBox";
-import { testUserIdx } from "../Main";
 import useSWRInfinite from "swr/infinite";
 import { Oval } from "react-loader-spinner";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const pageParams = {
   참가중: "participating",
@@ -25,6 +31,7 @@ const pageParams = {
 const pageSize = 10;
 
 const Appointments = () => {
+  const { myData } = useContext(GlobalContext);
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
@@ -37,7 +44,7 @@ const Appointments = () => {
     setSize: PASetSize,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
-      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
+      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${myData?.userIdx}`;
     },
     infiniteFetcher,
     {
@@ -53,7 +60,7 @@ const Appointments = () => {
     setSize: WASetSize,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
-      return `/post/waiting?size=${pageSize}&page=${pageIndex}&userIdx=${testUserIdx}`;
+      return `/post/waiting?size=${pageSize}&page=${pageIndex}&userIdx=${myData?.userIdx}`;
     },
     infiniteFetcher,
     {

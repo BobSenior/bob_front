@@ -1,8 +1,6 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useNavigate, Navigate, NavLink } from "react-router-dom";
-import kakaoLoginImg from "../../assets/images/kakao_login_medium_narrow.png";
 import {
-  ArrowBotton,
   BottomButton,
   Header,
   Input,
@@ -11,20 +9,17 @@ import {
   Finding_string,
   LoginPageWrapper,
   FormSection,
-  SocialLoginContainer,
 } from "./styles";
 import { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
 import { postFetcher } from "../../utils/fetchers";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
-import useMySWR from "../../data/useMySWR";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const { myData, setMyData } = useContext(GlobalContext);
-  const { data, mutate, error, isValidating } = useMySWR();
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -44,13 +39,17 @@ const Login = () => {
             setId("");
             setPassword("");
           } else {
-              //여기서 데이터 받아옴
+            //여기서 데이터 받아옴
             setMyData(response.data.result);
           }
         });
     },
     [id, password]
   );
+
+  if (myData) {
+    <Navigate to={"/main"} />;
+  }
 
   return (
     <LoginPageWrapper>
@@ -79,7 +78,7 @@ const Login = () => {
           <Finding_string onClick={() => navigate(`/finding`)}>
             아이디/비밀번호 찾기
           </Finding_string>
-          <BottomButton onClick={()=>navigate('/main')}>로그인</BottomButton>
+          <BottomButton onClick={() => navigate("/main")}>로그인</BottomButton>
         </Form>
       </FormSection>
       <LinkContainer>

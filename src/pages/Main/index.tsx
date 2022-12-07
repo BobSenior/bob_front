@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   PageSpinnerWrapper,
   PromisesColumn,
@@ -13,12 +19,13 @@ import { Oval } from "react-loader-spinner";
 import useSWRInfinite from "swr/infinite";
 import { infiniteFetcher } from "../../utils/fetchers";
 import { useParams } from "react-router-dom";
+import GlobalContext from "../../hooks/GlobalContext";
 
-export const testUserIdx = 1;
 const pageSize = 10;
 
 const Main = () => {
   const { searchInput } = useParams();
+  const { myData } = useContext(GlobalContext);
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
@@ -31,7 +38,7 @@ const Main = () => {
     (pageIndex: number) => {
       return searchInput
         ? null
-        : `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${testUserIdx}`;
+        : `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${myData?.userIdx}`;
     },
     infiniteFetcher,
     {

@@ -28,18 +28,16 @@ const statusMatcher = {
 };
 
 const AppointmentBox = ({ data }: props) => {
-  const {
-    data: UnreadChatCount,
-    mutate,
-    error,
-    isValidating,
-  } = useSWR(`/chat/unread/${data.postIdx}?userIdx=1`, getFetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: true,
-    revalidateOnMount: true,
-  });
-
+  const { data: UnreadChatCount } = useSWR(
+    `/chat/unread/${data.postIdx}?userIdx=1`,
+    getFetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+    }
+  );
 
   return (
     <PBox>
