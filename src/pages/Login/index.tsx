@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useNavigate, Navigate, NavLink } from "react-router-dom";
 import kakaoLoginImg from "../../assets/images/kakao_login_medium_narrow.png";
 import {
@@ -13,15 +13,17 @@ import {
   FormSection,
   SocialLoginContainer,
 } from "./styles";
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
 import { postFetcher } from "../../utils/fetchers";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
 import useMySWR from "../../data/useMySWR";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { myData, setMyData } = useContext(GlobalContext);
   const { data, mutate, error, isValidating } = useMySWR();
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
@@ -42,6 +44,7 @@ const Login = () => {
             setId("");
             setPassword("");
           } else {
+            setMyData(response.data.result);
           }
         });
     },
@@ -50,7 +53,11 @@ const Login = () => {
 
   return (
     <LoginPageWrapper>
-      <Header><NavLink to={"/"} end={true}>밥선배</NavLink></Header>
+      <Header>
+        <NavLink to={"/"} end={true}>
+          밥선배
+        </NavLink>
+      </Header>
       <FormSection>
         <Form onSubmit={onSubmit}>
           <Input

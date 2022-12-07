@@ -6,17 +6,17 @@ const url = "http://localhost:8080/ws/chat";
 const socks: { [key: string]: WebSocket } = {};
 const stomps: { [key: string]: StompJs.Client } = {};
 const useStomp = (): [
+  sock: WebSocket,
   stomp: StompJs.Client,
-  disconnect: (unsubscribe: () => void) => void,
-    socks:WebSocket
+  disconnect: (unsubscribe: () => void) => void
 ] => {
   const disconnect = useCallback(
     (onUnsubscribe: () => void) => {
       if (stomps["chat"] && stomps["chat"].connected) {
         stomps["chat"].disconnect(onUnsubscribe);
         delete stomps["chat"];
+        if (socks["chat"]) delete socks["chat"];
       }
-      if (socks["chat"]) delete socks["chat"];
     },
     [stomps, socks]
   );
@@ -28,7 +28,7 @@ const useStomp = (): [
     stomps["chat"] = StompJs.over(socks["chat"]);
   }
 
-  return [stomps["chat"], disconnect,socks["chat"]];
+  return [socks["chat"], stomps["chat"], disconnect];
 };
 
 export default useStomp;
