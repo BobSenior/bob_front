@@ -1,9 +1,9 @@
 import React, {
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
-  FormEvent,
+    useCallback,
+    useState,
+    useRef,
+    useEffect,
+    FormEvent, useContext,
 } from "react";
 import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
@@ -18,6 +18,7 @@ import { Message } from "stompjs";
 import useStomp from "../../hooks/useStomp";
 import dayjs from "dayjs";
 import { testUserIdx } from "../../pages/Main";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const chatSize = 20;
 const postIdx = 1;
@@ -44,6 +45,7 @@ const ChatRoom = (data:{id:number}) => {
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [sock, stomp, disconnect] = useStomp();
+  const { myData, setMyData } = useContext(GlobalContext);
 
   const isEmpty = chats?.[0].length === 0;
   const isReachingEnd =
@@ -70,16 +72,17 @@ const ChatRoom = (data:{id:number}) => {
 
   const onSubmitChat = useCallback(
     (e: FormEvent) => {
+        if(!myData) return null;
       e.preventDefault();
       if (!chat.trim()) return;
       const sendChat:ShownChat = {
-        nickname: "123",
+        nickname: myData.nickname,
         writtenAt: dayjs().toString(),
         content: chat,
-        senderIdx: userIdx,
+        senderIdx: myData.userIdx,
       };
       stomp?.send(`/app/stomp/${data.id}`, {}, JSON.stringify({
-          senderIdx:userIdx,
+          senderIdx: myData.userIdx,
           data:chat
       }));
       mutate((currentData: ShownChat[][] | undefined) => {
@@ -95,7 +98,7 @@ const ChatRoom = (data:{id:number}) => {
         })
         .catch((err) => console.log(err));
     },
-    [chat, textAreaRef]
+    [chat, textAreaRef,myData]
   );
 
   useEffect(() => {
@@ -115,7 +118,7 @@ const ChatRoom = (data:{id:number}) => {
       postFetcher
         .post(`/stomp/record/${data.id}`, {
             sessionId:sessionParses[6],
-            userIdx:1,
+            userIdx:myData?.userIdx,
         })
         .then()
         .catch();

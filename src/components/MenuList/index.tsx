@@ -1,8 +1,9 @@
-import React, { Dispatch, memo, SetStateAction } from "react";
+import React, {Dispatch, memo, SetStateAction, useContext} from "react";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
 import { useNavigate } from "react-router-dom";
 import { ListModalContainer } from "../AlarmList/style";
 import MyProfileMenu from "../MyProfileMenu";
+import GlobalContext from "../../hooks/GlobalContext";
 
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 const MenuList = ({ setShow }: Props) => {
   const navigate = useNavigate();
+  const { myData, setMyData } = useContext(GlobalContext);
 
   return (
     <ListModalContainer
@@ -27,7 +29,7 @@ const MenuList = ({ setShow }: Props) => {
           navigate("../main/compose");
         }}
       />
-      <LayoutBtn text={"로그아웃"} fontSize={"1em"} onClick={() => {}} />
+      <LayoutBtn text={"로그아웃"} fontSize={"1em"} onClick={() => {setMyData(undefined)}} />
     </ListModalContainer>
   );
 };

@@ -43,7 +43,7 @@ const MeetingAtSetModal = ({ setShow, setMeetingAt }: Props) => {
         let min = m.toString();
         min = min.length < 2 ? "0" + min : min;
         let display = hour + ":" + min;
-        times.push([value, type, display]);
+        times.push([display, type, display]);
       }
     }
     return times;

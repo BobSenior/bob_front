@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, {FormEvent, useCallback, useContext, useState} from "react";
 import { useNavigate, Navigate, NavLink } from "react-router-dom";
 import kakaoLoginImg from "../../assets/images/kakao_login_medium_narrow.png";
 import {
@@ -30,7 +30,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const onSubmit = useCallback(
-    (e: any) => {
+    (e: FormEvent) => {
       e.preventDefault();
       setLogInError(false);
       postFetcher
@@ -46,11 +46,18 @@ const Login = () => {
           } else {
               //여기서 데이터 받아옴
             setMyData(response.data.result);
+            navigate('/main');
           }
         });
     },
     [id, password]
   );
+
+
+  console.log(myData,'hihihi');
+    if (myData) {
+        navigate('/main')
+    }
 
   return (
     <LoginPageWrapper>
@@ -79,7 +86,7 @@ const Login = () => {
           <Finding_string onClick={() => navigate(`/finding`)}>
             아이디/비밀번호 찾기
           </Finding_string>
-          <BottomButton onClick={()=>navigate('/main')}>로그인</BottomButton>
+          <BottomButton>로그인</BottomButton>
         </Form>
       </FormSection>
       <LinkContainer>

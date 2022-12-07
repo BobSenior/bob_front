@@ -3,16 +3,18 @@ import AlarmInfoDiv from "../AlarmInfoDiv";
 import Scrollbars from "react-custom-scrollbars-2";
 import useSWR from "swr";
 import { ShownNotice } from "../../types/db";
-import React, { Dispatch } from "react";
+import React, {Dispatch, useContext} from "react";
 import { getFetcher } from "../../utils/fetchers";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import { testUserIdx } from "../../pages/Main";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const ListAlarm = (props: {
   setShow: Dispatch<React.SetStateAction<number>>;
 }) => {
+  const { myData, setMyData } = useContext(GlobalContext);
   const { data: alarms } = useSWR<ShownNotice[]>(
-    `/notice/list?userIdx=${testUserIdx}`,
+    `/notice/list?userIdx=${myData?.userIdx}`,
     getFetcher
   );
 

@@ -9,13 +9,14 @@ import {
   UnreadChatSpan,
 } from "../PostBox/style";
 import { AppointmentHeadDTO } from "../../types/db";
-import React from "react";
+import React, {useContext} from "react";
 import MemberBtn from "../MemberBtn";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import EnterSvg from "../../assets/icons/enter-outline.svg";
 import { NavLink } from "react-router-dom";
 import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
+import GlobalContext from "../../hooks/GlobalContext";
 
 interface props {
   data: AppointmentHeadDTO;
@@ -28,12 +29,13 @@ const statusMatcher = {
 };
 
 const AppointmentBox = ({ data }: props) => {
+  const { myData, setMyData } = useContext(GlobalContext);
   const {
     data: UnreadChatCount,
     mutate,
     error,
     isValidating,
-  } = useSWR(`/chat/unread/${data.postIdx}?userIdx=1`, getFetcher, {
+  } = useSWR(`/chat/unread/${data.postIdx}?userIdx=${myData?.userIdx}`, getFetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: true,

@@ -2,7 +2,7 @@
 import HashColoredSpanBtn from "../../assets/buttons/HashColoredSpanBtn";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { css } from "@emotion/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {
     MajorSpan,
     MemberInfoDiv,
@@ -17,6 +17,7 @@ import EnterSvg from "../../assets/icons/enter-outline.svg";
 import CopySvg from "../../assets/icons/copy-outline.svg";
 import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const MemberBtn = (userData: {
     userIdx: number;
@@ -25,6 +26,7 @@ const MemberBtn = (userData: {
     schoolId: number;
     isOwner:boolean;
 }) => {
+    const { myData, setMyData } = useContext(GlobalContext);
     const [showMemberInfoPopUp, setShowMemberInfoPopUp] =
         useState<boolean>(false);
     const nameSpanRef = useRef<HTMLSpanElement>(null);

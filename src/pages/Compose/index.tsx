@@ -4,7 +4,7 @@ import {
   useCallback,
   useState,
   useMemo,
-  useEffect,
+  useEffect, useContext,
 } from "react";
 import {
   ComposeForm,
@@ -38,7 +38,10 @@ import { BottomButton } from "../Login/styles";
 import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import dayjsAll from "../../utils/dayjsAll";
-import { ICoordinate, MakeNewPostReqDTO } from "../../types/db";
+import {BaseResponse, ICoordinate, MakeNewPostReqDTO} from "../../types/db";
+import GlobalContext from "../../hooks/GlobalContext";
+import {AxiosResponse} from "axios";
+import {useNavigate} from "react-router-dom";
 
 interface basicData {
   title: string;
@@ -97,6 +100,8 @@ const Compose = () => {
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
   const [showLocationSetModal, setShowLocationSetModal] = useState(false);
   const [showMeetingAtSetModal, setShowMeetingAtSetModal] = useState(false);
+  const { myData, setMyData } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   const isSubmittable = useMemo(() => {
     return (
@@ -106,10 +111,11 @@ const Compose = () => {
   }, [formData]);
 
   const onSubmitComposeForm = (e: FormEvent) => {
+    if(!myData) return null;
     e.preventDefault();
     if (!isSubmittable) return;
     const composePost: MakeNewPostReqDTO = {
-      writerIdx: testUser.userIdx,
+      writerIdx: myData.userIdx,
       writerPosition: postTypes[postType][3],
       title: formData.title,
       location:
@@ -122,14 +128,17 @@ const Compose = () => {
       type: postTypes[postType][2],
       receiverNum: BNR ? BNR.receivers : null,
       buyerNum: BNR ? BNR.buyers : maxMember,
-      constraint: onlyForSameMajor ? testUser.major : "ANY",
+      constraint: onlyForSameMajor ? myData.department : "ANY",
       content: formData.contexts,
       tags: hashtags,
     };
     postFetcher
       .post(`/post/write`, composePost)
-      .then((res) => {
+      .then((res:AxiosResponse<BaseResponse<any>>) => {
         console.log("제출");
+        if(res.data.isSuccess){
+          navigate('/main');
+        }
       })
       .catch((err) => console.log(err));
   };

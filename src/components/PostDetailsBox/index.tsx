@@ -76,7 +76,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
 
     if (type === DUTCH) {
       return postDetailData.buyer
-        .filter((value, index) => index % 2 === 0)
+        .filter((value, index) => index % 2 === 1)
         .map((member) => {
           return (
             <MemberBtn
@@ -111,7 +111,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
 
     if (type === DUTCH) {
       return postDetailData.buyer
-        .filter((value, index) => index % 2 === 1)
+        .filter((value, index) => index % 2 === 0)
         .map((member) => {
           return (
             <MemberBtn
