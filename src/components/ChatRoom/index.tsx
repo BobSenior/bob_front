@@ -10,7 +10,7 @@ import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import useSWRInfinite from "swr/infinite";
-import { infiniteFetcher } from "../../utils/fetchers";
+import { infiniteFetcher, postFetcher } from "../../utils/fetchers";
 import { ShownChat } from "../../types/db";
 import makeDateSection from "../../utils/makeDateSection";
 import { Message } from "stompjs";
@@ -41,7 +41,7 @@ const ChatRoom = () => {
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [stomp, disconnect] = useStomp();
+  const [sock, stomp, disconnect] = useStomp();
 
   const isEmpty = chats?.[0].length === 0;
   const isReachingEnd =
@@ -97,9 +97,21 @@ const ChatRoom = () => {
   }, []);
 
   useEffect(() => {
+    let sessionUrl: string = "";
     stomp?.connect({}, () => {
       stomp?.subscribe(`/topic/room/${postIdx}`, onReceiveChat);
+      // @ts-ignore
+      sessionUrl = sock._transport.url;
+      const sessionParses = sessionUrl.split("/");
+      console.log(sessionParses);
+      postFetcher
+        .post(`/stomp/record/${postIdx}`, {
+          sessionId: sessionParses[6],
+        })
+        .then()
+        .catch();
     });
+
     return () => {
       disconnect(() => {
         stomp?.unsubscribe(`${postIdx}`);

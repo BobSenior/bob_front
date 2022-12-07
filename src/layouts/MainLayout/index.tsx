@@ -32,12 +32,14 @@ import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
 import { testUserIdx } from "../../pages/Main";
 import { TotalNotices } from "../../types/db";
+import ChatRoomModal from "../../components/ChatRoomModal";
 
 const emailExample = "123";
 
 const MainLayout = () => {
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [showChatRoom, setShowChatRoom] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
   const [alarmCount, setAlarmCount] = useState(0);
   const { data: mainAlarms } = useSWR<TotalNotices>(
@@ -86,7 +88,7 @@ const MainLayout = () => {
           )}
           <IconsContainer>
             <button onClick={onClickAlarmBtn}>
-              {alarmCount > 0 && <AlarmMark/>}
+              {alarmCount > 0 && <AlarmMark />}
               <img
                 className={"alarm-image"}
                 src={AlarmSvg}
@@ -148,6 +150,12 @@ const MainLayout = () => {
             }}
           />
           <LayoutBtn
+            text={"채팅룸"}
+            onClick={() => {
+              setShowChatRoom(true);
+            }}
+          />
+          <LayoutBtn
             text={"검색"}
             onClick={(e) => {
               e.stopPropagation();
@@ -158,6 +166,7 @@ const MainLayout = () => {
           />
         </Bottom>
       </MainBox>
+      {showChatRoom && <ChatRoomModal setShow={setShowChatRoom} />}
       <ToastContainer />
     </>
   );

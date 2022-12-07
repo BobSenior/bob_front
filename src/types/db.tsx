@@ -3,6 +3,18 @@ export interface ICoordinate {
   longitude: number;
 }
 
+export interface MyDataDTO {
+  resultMessage: string;
+  userIdx: number;
+  nickname: string;
+  uuid: string;
+  school: string;
+  department: string;
+  imageURL: string;
+  jwtAccessToken: string;
+  jwtRefreshToken: string;
+}
+
 /**
  * 0. BaseResponse
  */
