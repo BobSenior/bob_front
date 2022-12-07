@@ -69,13 +69,16 @@ const ChatRoom = () => {
     (e: FormEvent) => {
       e.preventDefault();
       if (!chat.trim()) return;
-      const sendChat: ShownChat = {
+      const sendChat:ShownChat = {
         nickname: "123",
         writtenAt: dayjs().toString(),
         content: chat,
         senderIdx: userIdx,
       };
-      stomp?.send(`/app/stomp/${postIdx}`, {}, JSON.stringify(sendChat));
+      stomp?.send(`/app/stomp/${postIdx}`, {}, JSON.stringify({
+          senderIdx:userIdx,
+          data:chat
+      }));
       mutate((currentData: ShownChat[][] | undefined) => {
         const fstChatList: ShownChat[] = [sendChat];
         if (currentData) return [fstChatList, ...currentData];
@@ -91,7 +94,6 @@ const ChatRoom = () => {
     },
     [chat, textAreaRef]
   );
-
   useEffect(() => {
     scrollbarRef.current?.scrollToBottom();
   }, []);

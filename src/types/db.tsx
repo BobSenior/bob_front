@@ -109,7 +109,6 @@ export interface ShownChat {
   writtenAt: string;
   content: string;
   senderIdx: number;
-  data: string;
 }
 
 export interface ChatPage {
