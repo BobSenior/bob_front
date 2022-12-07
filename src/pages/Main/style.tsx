@@ -31,4 +31,5 @@ export const SearchInputDiv = styled.div`
   padding: 10px 0;
   position: sticky;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  color: gray;
 `;

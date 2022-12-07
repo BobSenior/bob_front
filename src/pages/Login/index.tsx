@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 import kakaoLoginImg from "../../assets/images/kakao_login_medium_narrow.png";
 import {
   ArrowBotton,
@@ -13,51 +13,44 @@ import {
   FormSection,
   SocialLoginContainer,
 } from "./styles";
-import axios, {AxiosResponse} from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
-import {postFetcher} from "../../utils/fetchers";
-import {BaseResponse, LoginResDTO} from "../../types/db";
-import {toast, ToastContainer} from "react-toastify";
+import { postFetcher } from "../../utils/fetchers";
+import { BaseResponse } from "../../types/db";
+import { toast, ToastContainer } from "react-toastify";
 import useMySWR from "../../data/useMySWR";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const { data, mutate, error, isValidating } = useMySWR();
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const {data:loginInfo,mutate:loginMutate} = useMySWR();
 
   const onSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
       setLogInError(false);
-      postFetcher.post(
-          `/login`,{
-              userId:id,
-              password:password
+      postFetcher
+        .post(`/login`, {
+          userId: id,
+          password: password,
+        })
+        .then((response: AxiosResponse<BaseResponse<any>>) => {
+          if (!response.data.isSuccess) {
+            toast.error(response.data.message);
+            setId("");
+            setPassword("");
+          } else {
           }
-      ).then((response:AxiosResponse<BaseResponse<any>>)=>{
-          if(!response.data.isSuccess){
-              toast.error(response.data.message);
-              setId("");
-              setPassword("");
-          }
-          else{
-              console.log(response.data.result)
-              loginMutate(response.data.result)
-              console.log('ibnfo',loginInfo)
-            navigate('/main')
-          }
-      })
-
+        });
     },
     [id, password]
   );
 
   return (
     <LoginPageWrapper>
-      <Header>밥선배</Header>
+      <Header><NavLink to={"/"} end={true}>밥선배</NavLink></Header>
       <FormSection>
         <Form onSubmit={onSubmit}>
           <Input
@@ -86,8 +79,12 @@ const Login = () => {
         <Link to="/signup">회원가입</Link>
       </LinkContainer>
       <SocialLoginContainer>
+        <span>소셜 로그인</span>
+        <div>
+          <img src={kakaoLoginImg} alt={"카카오 소셜 로그인"} />
+        </div>
       </SocialLoginContainer>
-        <ToastContainer />
+      <ToastContainer />
     </LoginPageWrapper>
   );
 };

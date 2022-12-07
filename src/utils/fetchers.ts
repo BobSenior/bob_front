@@ -1,6 +1,7 @@
 import axios from "axios";
 import {LoginResDTO} from "../types/db";
 axios.defaults.withCredentials = true;
+// axios.defaults.baseURL = "https://bobsenior.co.kr";
 
 export const fetcher = (url: string) => {
   return axios(url)

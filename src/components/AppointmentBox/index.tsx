@@ -1,5 +1,4 @@
 import {
-  BottomContext,
   MiddleContext,
   PBox,
   PlanTail,
@@ -7,6 +6,7 @@ import {
   PromiseHead,
   PromiseImg,
   TopContext,
+  UnreadChatSpan,
 } from "../PostBox/style";
 import { AppointmentHeadDTO } from "../../types/db";
 import React from "react";
@@ -14,6 +14,8 @@ import MemberBtn from "../MemberBtn";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import EnterSvg from "../../assets/icons/enter-outline.svg";
 import { NavLink } from "react-router-dom";
+import useSWR from "swr";
+import { getFetcher } from "../../utils/fetchers";
 
 interface props {
   data: AppointmentHeadDTO;
@@ -26,6 +28,18 @@ const statusMatcher = {
 };
 
 const AppointmentBox = ({ data }: props) => {
+  const {
+    data: UnreadChatCount,
+    mutate,
+    error,
+    isValidating,
+  } = useSWR(`/chat/unread/${data.postIdx}`, getFetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+  });
+
   return (
     <PBox>
       <PromiseHead>
@@ -33,6 +47,7 @@ const AppointmentBox = ({ data }: props) => {
         <PromiseContexts>
           <TopContext>
             <span>{data.title}</span>
+            <UnreadChatSpan>1</UnreadChatSpan>
           </TopContext>
           <MiddleContext>
             <MemberBtn
@@ -42,10 +57,6 @@ const AppointmentBox = ({ data }: props) => {
               schoolId={data.writer.schoolId}
             />
           </MiddleContext>
-          <BottomContext>
-            <span>123</span>
-            <span>456</span>
-          </BottomContext>
         </PromiseContexts>
         <NavLink
           to={`/main/appointment/${data.postIdx}`}
@@ -86,7 +97,7 @@ const AppointmentBox = ({ data }: props) => {
               color: data.status === statusMatcher.모집중 ? "black" : "grey",
             }}
           >
-            모집 중
+            모집하고 있어요
           </span>
         </div>
         <div>
@@ -110,7 +121,7 @@ const AppointmentBox = ({ data }: props) => {
                 data.status === statusMatcher.약속잡는중 ? "black" : "grey",
             }}
           >
-            약속 정하는 중
+            약속을 정해요
           </span>
         </div>
         <div>
@@ -134,7 +145,7 @@ const AppointmentBox = ({ data }: props) => {
                 data.status === statusMatcher.만남대기중 ? "black" : "grey",
             }}
           >
-            약속
+            이제 만나요
           </span>
         </div>
       </PlanTail>

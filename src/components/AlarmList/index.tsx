@@ -1,4 +1,4 @@
-import { AlarmListWrapper, ListModalContainer } from "./style";
+import { AlarmListWrapper, ListModalContainer, NoAlarmDiv } from "./style";
 import AlarmInfoDiv from "../AlarmInfoDiv";
 import Scrollbars from "react-custom-scrollbars-2";
 import useSWR from "swr";
@@ -8,11 +8,6 @@ import { getFetcher } from "../../utils/fetchers";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import { testUserIdx } from "../../pages/Main";
 
-const test: ShownNotice = {
-  postIdx: 1,
-  type: "PAIRequest",
-  unreadChatNum: 9,
-};
 const ListAlarm = (props: {
   setShow: Dispatch<React.SetStateAction<number>>;
 }) => {
@@ -30,9 +25,9 @@ const ListAlarm = (props: {
     >
       <AlarmListWrapper>
         <Scrollbars>
-          {alarms?.map((content) => (
+          {alarms && alarms.length > 0 ? (alarms.map((content) => (
             <AlarmInfoDiv key={generateUniqueID()} data={content} />
-          ))}
+          ))): (<NoAlarmDiv> <span>알람이 없습니다.</span></NoAlarmDiv>)}
         </Scrollbars>
       </AlarmListWrapper>
     </ListModalContainer>

@@ -28,13 +28,10 @@ import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import useSWR from "swr";
 import { getFetcher } from "../../utils/fetchers";
-import ChatRoomModal from "../../components/ChatRoomModal";
 import { testUserIdx } from "../../pages/Main";
 import { TotalNotices } from "../../types/db";
-import ChatRoom from "../../components/ChatRoom";
 
 const emailExample = "123";
 
@@ -43,13 +40,11 @@ const MainLayout = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
   const [alarmCount, setAlarmCount] = useState(0);
-  const [showChatRoomModal, setShowChatRoomModal] = useState(false);
   const { data: mainAlarms } = useSWR<TotalNotices>(
     `/notice/total?userIdx=${testUserIdx}`,
     getFetcher,
     {
       refreshInterval: 5000,
-      dedupingInterval: 2000,
     }
   );
 
@@ -91,7 +86,7 @@ const MainLayout = () => {
           )}
           <IconsContainer>
             <button onClick={onClickAlarmBtn}>
-              {alarmCount > 0 && <AlarmMark></AlarmMark>}
+              {alarmCount > 0 && <AlarmMark/>}
               <img
                 className={"alarm-image"}
                 src={AlarmSvg}
@@ -153,13 +148,6 @@ const MainLayout = () => {
             }}
           />
           <LayoutBtn
-            text={"채팅 테스트"}
-            onClick={() => {
-              setShowSearchBar(false);
-              setShowChatRoomModal(true);
-            }}
-          />
-          <LayoutBtn
             text={"검색"}
             onClick={(e) => {
               e.stopPropagation();
@@ -171,7 +159,6 @@ const MainLayout = () => {
         </Bottom>
       </MainBox>
       <ToastContainer />
-      {/*{showChatRoomModal && <ChatRoomModal setShow={setShowChatRoomModal} />*/}
     </>
   );
 };

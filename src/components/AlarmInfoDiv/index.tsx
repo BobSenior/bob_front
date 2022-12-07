@@ -22,13 +22,13 @@ const AlarmInfos: { [type: string]: AlarmType } = {
   UnreadChat: {
     svg: UnreadChatSvg,
     context: "개의 읽지않은 채팅이 있습니다.",
-    url: (postIdx) => "/main/plans/participating",
+    url: () => "/main/plans/participating",
     postDetail: () => " ",
   },
   CanceledPlan: {
     svg: TrashBinSVg,
     context: "약속이 취소되었습니다.",
-    url: (postIdx) => `/main/plans/waiting`,
+    url: () => `/main/plans/waiting`,
     postDetail: (postIdx) => `#${postIdx}`,
   },
   PAIAccept: {
