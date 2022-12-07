@@ -63,6 +63,8 @@ import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import RequestListModal from "../../components/RequestListModal";
 import MapDisplayModal from "../../components/MapDisplayModal";
+import useMySWR from "../../data/useMySWR";
+import ChatRoomModal from "../../components/ChatRoomModal";
 
 const AppointmentSpace = ()=>{
 
@@ -87,9 +89,11 @@ const AppointmentSpace = ()=>{
     const [meetingAt, setMeetingAt] = useState<string | null>(null);
     const [requestModal, setRequestModal] = useState<boolean>(false);
     const [showSetLocator, setShowSetLocator] = useState<boolean>(false);
+    const [showChatRoomModal, setShowChatRoomModal] = useState(false);
+    const {data:userData} = useMySWR();
 
 
-    console.log(records)
+    console.log(`check`,userData)
 
 
 
@@ -114,7 +118,7 @@ const AppointmentSpace = ()=>{
                     nickName={member.nickname}
                     department={member.department}
                     schoolId={member.schoolId}
-                    isOwner={appointment.result.writerIdx === 1}
+                    isOwner={appointment.result.writerIdx === userData?.userIdx}
                     key={generateUniqueID()}
                 />
             );
@@ -390,6 +394,7 @@ const AppointmentSpace = ()=>{
     const onClickKickUser = useCallback((myIdx:number)=>{
         postFetcher.post(
             `/appointment/kick/${id}`,{
+                //TODO : 현재 로그인중인 유저의 idx가 userIdx
                 kickerIdx:1,
                 kickedIdx:myIdx
             }
@@ -406,7 +411,8 @@ const AppointmentSpace = ()=>{
 
 
 
-return(
+// @ts-ignore
+    return(
     <ComposeWrapper>
         <ComposeMain>
             <TitleWrapper style={{marginTop:"100px"}}> <Title>[{appointment?.result.constraint==='ANY'?'아무나':appointment?.result.constraint}]{appointment?.result.title}</Title></TitleWrapper>
@@ -605,10 +611,11 @@ return(
                     <Skeleton count={2} height={"0.95em"} width={"75px"} />
                     )}
             </BoxSection>
+            {showChatRoomModal && <ChatRoomModal setShow={setShowChatRoomModal} id={77}/>}
             <BottomButtonSection>
                 <BottomButton onClick={onClickExit}>나가기</BottomButton>
                 <BottomButton onClick={()=>navigate(`/main`)}>메인으로</BottomButton>
-                <BottomButton onClick={()=>navigate(`/main/chat_test/${id}`)}>채팅방</BottomButton>
+                <BottomButton onClick={()=>setShowChatRoomModal(true)}>채팅방</BottomButton>
             </BottomButtonSection>
         </ComposeMain>
     </ComposeWrapper>

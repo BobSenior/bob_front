@@ -13,9 +13,15 @@ import { toast } from "react-toastify";
 import SockJs from "sockjs-client";
 import StompJs from "stompjs";
 import {useParams} from "react-router-dom";
+import {postFetcher} from "../../utils/fetchers";
+import {AxiosResponse} from "axios";
+import {BaseResponse} from "../../types/db";
 
 
-const ChatRoom = () => {
+
+const ChatRoom = (data:{
+    id:number
+}) => {
     const {id} = useParams();
   const client = useRef({});
   const [showPromiseVote, setShowPromiseVote] = useState<boolean>(true);
@@ -25,14 +31,13 @@ const ChatRoom = () => {
   const sock = new SockJs("http://localhost:8080/ws/chat");
   const stomp = StompJs.over(sock);
 
-    const stompConnect = () => {
-        console.log(sock)
+    const stompConnect = useCallback(() => {
         stomp.connect({}, ()=> {
-            stomp?.subscribe(`/topic/room/${id}`,(message)=>{
+            stomp?.subscribe(`/topic/room/${data.id}`,(message)=>{
                 console.log(message)
             })
         })
-    };
+    },[id]);
 
     
 
@@ -40,13 +45,14 @@ const ChatRoom = () => {
     useEffect(()=>{
         stompConnect();
 
-    },[]);
+    },[id]);
 
 
 
 
     const onSubmitChat = useCallback(
     (e: FormEvent) => {
+        console.log(id,"id")
       e.preventDefault();
       toast(chat, {
         position: "top-right",
@@ -59,8 +65,15 @@ const ChatRoom = () => {
         theme: "light",
       });
       setChat("");
+
+      const data = {
+          senderIdx:1,
+          data:chat
+      };
+
+      stomp.send(`/app/stomp/77`,{},JSON.stringify(data))
     },
-    [chat, textAreaRef]
+    [chat, textAreaRef,id]
   );
 
   useEffect(() => {
@@ -69,16 +82,16 @@ const ChatRoom = () => {
 
   return (
     <ChatRoomContainer className={"chat-room-container"}>
-      <ChatList ref={scrollbarRef} />
-      <ChatBox
-        chat={chat}
-        onSubmitForm={onSubmitChat}
-        onChangeChat={(e) => {
-          setChat(e.target.value);
-        }}
-        ref={textAreaRef}
-        placeholder={"채팅을 시작하세요."}
-      />
+        {/*<ChatList ref={scrollbarRef} chatDateSections={} setSize={} isReachingEnd={}/>*/}
+        <ChatBox
+            chat={chat}
+            onSubmitForm={onSubmitChat}
+            onChangeChat={(e) => {
+                setChat(e.target.value);
+            }}
+            ref={textAreaRef}
+            placeholder={"채팅을 시작하세요."}
+        />
     </ChatRoomContainer>
   );
 };

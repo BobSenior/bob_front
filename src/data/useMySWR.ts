@@ -1,8 +1,9 @@
 import useSWR from "swr";
-import { fetcher } from "../utils/fetchers";
+import {datafetcher, fetcher} from "../utils/fetchers";
+import {LoginResDTO} from "../types/db";
 
 const useMySWR = () => {
-  return useSWR(``, fetcher, {
+  return useSWR<LoginResDTO>(null, datafetcher, {
     revalidateIfStale: false,
     revalidateOnMount: false,
     revalidateOnFocus: false,

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {LoginResDTO} from "../types/db";
 axios.defaults.withCredentials = true;
 
 export const fetcher = (url: string) => {
@@ -6,6 +7,10 @@ export const fetcher = (url: string) => {
     .then((res) => res.data)
     .catch((error) => console.log(error));
 };
+
+export const datafetcher = (data:LoginResDTO) =>{
+  return data;
+}
 
 export const postFetcher = axios.create({});
 export const getFetcher = (url: string) =>

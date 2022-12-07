@@ -4,12 +4,13 @@ import ChatRoom from "../ChatRoom";
 
 interface Props {
   setShow: Dispatch<React.SetStateAction<boolean>>;
+  id:number
 }
 
-const ChatRoomModal = ({ setShow }: Props) => {
+const ChatRoomModal = ({ setShow,id }: Props) => {
   return (
     <Modal setShow={setShow}>
-      <ChatRoom />
+      <ChatRoom id={id} />
     </Modal>
   );
 };

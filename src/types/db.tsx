@@ -79,6 +79,7 @@ export interface AppointmentViewDTO {
   chatRoomIdx: number;
   fixVote: boolean;
   voteOwnerIdx: number;
+  type: string;
 }
 
 export interface RequestData {
@@ -159,3 +160,15 @@ export interface ShownVoteDTO {
   totalParticipated: number;
   records: ShownVoteRecord[];
 }
+
+export interface LoginResDTO {
+  resultMessage:string;
+  userIdx:number;
+  uuid:string;
+  schoolId:string;
+  department:string;
+  imageURL:string;
+  jwtAccessToken:string;
+  jwtRefreshToken:string;
+}
+

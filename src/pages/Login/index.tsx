@@ -16,8 +16,9 @@ import {
 import axios, {AxiosResponse} from "axios";
 import { Link } from "react-router-dom";
 import {postFetcher} from "../../utils/fetchers";
-import {BaseResponse} from "../../types/db";
+import {BaseResponse, LoginResDTO} from "../../types/db";
 import {toast, ToastContainer} from "react-toastify";
+import useMySWR from "../../data/useMySWR";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Login = () => {
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const {data:loginInfo,mutate:loginMutate} = useMySWR();
 
   const onSubmit = useCallback(
     (e: any) => {
@@ -42,6 +44,9 @@ const Login = () => {
               setPassword("");
           }
           else{
+              console.log(response.data.result)
+              loginMutate(response.data.result)
+              console.log('ibnfo',loginInfo)
             navigate('/main')
           }
       })

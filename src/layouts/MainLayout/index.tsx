@@ -34,6 +34,7 @@ import { getFetcher } from "../../utils/fetchers";
 import ChatRoomModal from "../../components/ChatRoomModal";
 import { testUserIdx } from "../../pages/Main";
 import { TotalNotices } from "../../types/db";
+import ChatRoom from "../../components/ChatRoom";
 
 const emailExample = "123";
 
@@ -170,7 +171,7 @@ const MainLayout = () => {
         </Bottom>
       </MainBox>
       <ToastContainer />
-      {showChatRoomModal && <ChatRoomModal setShow={setShowChatRoomModal} />}
+      {/*{showChatRoomModal && <ChatRoomModal setShow={setShowChatRoomModal} />*/}
     </>
   );
 };
