@@ -1,12 +1,16 @@
-import React, { memo } from "react";
+import React, {memo, useContext} from "react";
 import gravatar from "gravatar";
 import { Column, Container } from "./style";
 import { DeportmentSpan, IdxSpan, NickNameSpan } from "../MemberBtn/style";
 import { toast } from "react-toastify";
 import CopySvg from "../../assets/icons/copy-outline.svg";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const MyProfileMenu = () => {
+
+    const { myData, setMyData } = useContext(GlobalContext);
+
   return (
     <Container>
       <img
@@ -17,7 +21,7 @@ const MyProfileMenu = () => {
         alt={"my-profile-img"}
       />
       <Column>
-        <NickNameSpan>유저 닉네임</NickNameSpan>
+        <NickNameSpan>{myData?.nickname}</NickNameSpan>
         <CopyToClipboard
           text={"유저 닉네임" + "@" + "유저Idx"}
           onCopy={() => {

@@ -10,8 +10,7 @@ import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import useSWRInfinite from "swr/infinite";
-import { infiniteFetcher } from "../../utils/fetchers";
-import {BaseResponse, ShownChat} from "../../types/db";
+import {BaseResponse} from "../../types/db";
 import { infiniteFetcher, postFetcher } from "../../utils/fetchers";
 import { ShownChat } from "../../types/db";
 import makeDateSection from "../../utils/makeDateSection";
@@ -22,7 +21,7 @@ import { testUserIdx } from "../../pages/Main";
 
 const chatSize = 20;
 const postIdx = 1;
-const userIdx = 12;
+const userIdx = 1;
 
 const ChatRoom = (data:{id:number}) => {
   const {
@@ -40,11 +39,10 @@ const ChatRoom = (data:{id:number}) => {
       dedupingInterval: 2000,
     }
   );
+
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [stomp, disconnect,socks] = useStomp();
-
   const [sock, stomp, disconnect] = useStomp();
 
   const isEmpty = chats?.[0].length === 0;
@@ -54,8 +52,8 @@ const ChatRoom = (data:{id:number}) => {
   const onReceiveChat = useCallback(
     (message: Message) => {
       const receivedBody:BaseResponse<ShownChat> = JSON.parse(message.body);
-      console.log(receivedBody,"hihi")
       const receivedChat: ShownChat = receivedBody.result;
+      console.log(receivedChat,"hihihi")
       if (receivedChat.senderIdx == testUserIdx) return;
       mutate((currentData: ShownChat[][] | undefined) => {
         const fstChatList: ShownChat[] = [receivedChat];
@@ -101,7 +99,9 @@ const ChatRoom = (data:{id:number}) => {
   );
 
   useEffect(() => {
-    scrollbarRef.current?.scrollToBottom();
+      setTimeout(() => {
+          scrollbarRef.current?.scrollToBottom();
+      }, 900);
   }, []);
 
   useEffect(() => {
@@ -111,10 +111,11 @@ const ChatRoom = (data:{id:number}) => {
       // @ts-ignore
       sessionUrl = sock._transport.url;
       const sessionParses = sessionUrl.split("/");
-      console.log(sessionParses);
+      console.log('parsed',sessionParses);
       postFetcher
-        .post(`/stomp/record/${postIdx}`, {
-          sessionId: sessionParses[6],
+        .post(`/stomp/record/${data.id}`, {
+            sessionId:sessionParses[6],
+            userIdx:1,
         })
         .then()
         .catch();
@@ -126,7 +127,7 @@ const ChatRoom = (data:{id:number}) => {
         stomp?.unsubscribe(`${postIdx}`);
       });
     };
-  }, [stomp]);
+  }, [stomp,sock,data]);
 
   const chatDateSections = makeDateSection(chats ? chats.flat().reverse() : []);
 

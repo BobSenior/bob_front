@@ -44,6 +44,7 @@ const Login = () => {
             setId("");
             setPassword("");
           } else {
+              //여기서 데이터 받아옴
             setMyData(response.data.result);
           }
         });
@@ -78,19 +79,13 @@ const Login = () => {
           <Finding_string onClick={() => navigate(`/finding`)}>
             아이디/비밀번호 찾기
           </Finding_string>
-          <BottomButton>로그인</BottomButton>
+          <BottomButton onClick={()=>navigate('/main')}>로그인</BottomButton>
         </Form>
       </FormSection>
       <LinkContainer>
         밥선배가 처음이신가요?&nbsp;
         <Link to="/signup">회원가입</Link>
       </LinkContainer>
-      <SocialLoginContainer>
-        <span>소셜 로그인</span>
-        <div>
-          <img src={kakaoLoginImg} alt={"카카오 소셜 로그인"} />
-        </div>
-      </SocialLoginContainer>
       <ToastContainer />
     </LoginPageWrapper>
   );

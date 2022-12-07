@@ -31,7 +31,7 @@ import { ToastContainer } from "react-toastify";
 import useSWR from "swr";
 import {fetcher, getFetcher} from "../../utils/fetchers";
 import { testUserIdx } from "../../pages/Main";
-import {BaseResponse, TotalNotices} from "../../types/db";
+import {BaseResponse} from "../../types/db";
 import { TotalNotices } from "../../types/db";
 import ChatRoomModal from "../../components/ChatRoomModal";
 
@@ -151,12 +151,6 @@ const MainLayout = () => {
             }}
           />
           <LayoutBtn
-            text={"채팅룸"}
-            onClick={() => {
-              setShowChatRoom(true);
-            }}
-          />
-          <LayoutBtn
             text={"검색"}
             onClick={(e) => {
               e.stopPropagation();
@@ -167,7 +161,6 @@ const MainLayout = () => {
           />
         </Bottom>
       </MainBox>
-      {showChatRoom && <ChatRoomModal setShow={setShowChatRoom} />}
       <ToastContainer />
     </>
   );
