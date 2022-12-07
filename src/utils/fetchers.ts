@@ -1,8 +1,9 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
+// axios.defaults.baseURL = "https://bobsenior.co.kr";
 
 export const fetcher = (url: string) => {
-  return axios( url)
+  return axios(url)
     .then((res) => res.data)
     .catch((error) => console.log(error));
 };

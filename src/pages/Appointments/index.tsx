@@ -33,7 +33,6 @@ const Appointments = () => {
 
   const {
     data: ParticipatingAppointment,
-    error: PAError,
     isValidating: PAIsValidating,
     setSize: PASetSize,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
@@ -50,7 +49,6 @@ const Appointments = () => {
   );
   const {
     data: WaitingAppointment,
-    error: WAError,
     isValidating: WAIsValidating,
     setSize: WASetSize,
   } = useSWRInfinite<AppointmentHeadDTO[]>(

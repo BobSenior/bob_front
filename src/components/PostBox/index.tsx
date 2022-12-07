@@ -54,15 +54,8 @@ const PostBox = ({ data }: props) => {
             />
           </MiddleContext>
           <BottomContext>
-            <BottomLeftDiv>
-              <span>
-                {data.meetingAt &&
-                  "시간: " +
-                    dayjsAll(data.meetingAt).appointmentDate() +
-                    dayjsAll(data.meetingAt).appointmentTime()}
-              </span>
-              <span>{data.location && "장소: " + data.location}</span>
-            </BottomLeftDiv>
+          <BottomLeftDiv>
+          </BottomLeftDiv>
             <BottomRightDiv>
               <span>대기자수: {data.waitingNum}</span>
               <span>{dayjsAll(data.writtenAt).fromNow}</span>

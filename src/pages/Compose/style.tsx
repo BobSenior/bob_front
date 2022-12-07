@@ -122,6 +122,7 @@ export const RadioBox = styled(motion.div)`
   justify-content: center;
   align-items: center;
   font-size: 0.8em;
+  cursor: pointer;
 `;
 
 export const TypeRadioWrapper = styled.div`

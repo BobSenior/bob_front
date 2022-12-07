@@ -2,10 +2,6 @@ import Modal from "../Modal";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { SearchContainer } from "../LocationSetModal/style";
 import { DepartmentBtn, Header, Wrapper } from "./style";
-import SearchSvg from "../../assets/icons/search-circle.svg";
-import { SendButton } from "../ChatBox/styles";
-import { HandleVariant } from "../../pages/Compose/style";
-import SendSvg from "../../assets/icons/send-sharp.svg";
 import { Scrollbars } from "react-custom-scrollbars-2";
 
 interface deportmentType {
@@ -109,14 +105,22 @@ const SchoolSetModal = ({ setShow, setDeportment }: Props) => {
                 <DepartmentBtn
                   value={value.department}
                   disabled={!value.clickable}
-                  onTap={() => {
-                    setDeportment(value.department);
-                    setShow(false);
-                  }}
-                  whileTap={{
-                    scale: 0.9,
-                    backgroundColor: "var(--basic-color)",
-                  }}
+                  onTap={
+                    value.clickable
+                      ? () => {
+                          setDeportment(value.department);
+                          setShow(false);
+                        }
+                      : undefined
+                  }
+                  whileTap={
+                    value.clickable
+                      ? {
+                          scale: 0.95,
+                          backgroundColor: "var(--basic-color)",
+                        }
+                      : undefined
+                  }
                 >
                   {value.department}
                 </DepartmentBtn>

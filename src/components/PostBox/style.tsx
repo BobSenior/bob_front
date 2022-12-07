@@ -112,3 +112,15 @@ export const PBox = styled.div`
   border-radius: 10px;
   user-select: none;
 `;
+
+export const UnreadChatSpan = styled.span`
+  background-color: rgb(255,97,74);  
+  border-radius: 25px;
+  font-size: small;
+  padding: 1px 3px;
+  min-width: 12px;
+  height: 15px;
+  text-align: center;
+  text-justify: inter-word;
+  color: white;
+`;

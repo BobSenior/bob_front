@@ -29,7 +29,9 @@ const Main = () => {
     error,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
-      return `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${testUserIdx}`;
+      return searchInput
+        ? null
+        : `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${testUserIdx}`;
     },
     infiniteFetcher,
     {

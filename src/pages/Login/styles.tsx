@@ -3,8 +3,15 @@ import { motion } from "framer-motion";
 
 export const Header = styled.header`
   margin-top: 15vh;
-  font-size: 3em;
   margin-bottom: 20px;
+  & a {
+    font-family: Slack-Larsseit, Helvetica Neue, Helvetica, Segoe UI, Tahoma,
+    Arial, sans-serif;
+    color: var(--basic-color);
+    font-weight: 1000;
+    text-decoration: none;
+    font-size: 3em;
+  }
 `;
 
 export const Form = styled.form`

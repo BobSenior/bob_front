@@ -81,7 +81,6 @@ export const Commit = styled(motion.button)`
   color: white;
   border-color: #23a1bd;
   border-radius: 15px;
-  font-weight: bold;
 `;
 
 export const NoOneSpanVote = styled.span`
@@ -129,16 +128,14 @@ export const MyTimeInfoDiv = styled.div`
 `;
 
 export const InviteBuyerButton = styled.button`
-    font-size:0.7em;
-    background-color: white;
-    width:100px;
-    border: 3px solid gray; 
+  background-color: white;
+  width:100px;
+  border: 3px solid gray; 
   font-weight: bold;
   border-radius: 10px;
   color: gray;
   font-size: 15px;
   cursor:pointer;
-
 `;
 
 export const MemberSection = styled.section`
@@ -146,7 +143,7 @@ export const MemberSection = styled.section`
     border-bottom: rgb(200, 200, 200) ridge 1px;
     font-size: 0.8em;
   }
-  width:500px;
+  width:100%;
   display: flex;
   flex-direction: column;
   justify-items: center;
