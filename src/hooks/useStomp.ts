@@ -7,7 +7,8 @@ const socks: { [key: string]: WebSocket } = {};
 const stomps: { [key: string]: StompJs.Client } = {};
 const useStomp = (): [
   stomp: StompJs.Client,
-  disconnect: (unsubscribe: () => void) => void
+  disconnect: (unsubscribe: () => void) => void,
+    socks:WebSocket
 ] => {
   const disconnect = useCallback(
     (onUnsubscribe: () => void) => {
@@ -27,7 +28,7 @@ const useStomp = (): [
     stomps["chat"] = StompJs.over(socks["chat"]);
   }
 
-  return [stomps["chat"], disconnect];
+  return [stomps["chat"], disconnect,socks["chat"]];
 };
 
 export default useStomp;

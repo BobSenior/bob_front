@@ -11,7 +11,7 @@ import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import useSWRInfinite from "swr/infinite";
 import { infiniteFetcher } from "../../utils/fetchers";
-import { ShownChat } from "../../types/db";
+import {BaseResponse, ShownChat} from "../../types/db";
 import makeDateSection from "../../utils/makeDateSection";
 import { Message } from "stompjs";
 import useStomp from "../../hooks/useStomp";
@@ -22,13 +22,13 @@ const chatSize = 20;
 const postIdx = 1;
 const userIdx = 12;
 
-const ChatRoom = () => {
+const ChatRoom = (data:{id:number}) => {
   const {
     data: chats,
     setSize,
     mutate,
   } = useSWRInfinite<ShownChat[]>(
-    (index) => `/chat/load/${postIdx}?page=${index}&size=${chatSize}`,
+    (index) => `/chat/load/${data.id}?page=${index}&size=${chatSize}`,
     infiniteFetcher,
     {
       revalidateOnMount: true,
@@ -41,7 +41,8 @@ const ChatRoom = () => {
   const [chat, setChat] = useState<string>("");
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [stomp, disconnect] = useStomp();
+  const [stomp, disconnect,socks] = useStomp();
+
 
   const isEmpty = chats?.[0].length === 0;
   const isReachingEnd =
@@ -49,8 +50,9 @@ const ChatRoom = () => {
 
   const onReceiveChat = useCallback(
     (message: Message) => {
-      const receivedBody = JSON.parse(message.body);
-      const receivedChat: ShownChat = receivedBody.data.result;
+      const receivedBody:BaseResponse<ShownChat> = JSON.parse(message.body);
+      console.log(receivedBody,"hihi")
+      const receivedChat: ShownChat = receivedBody.result;
       if (receivedChat.senderIdx == testUserIdx) return;
       mutate((currentData: ShownChat[][] | undefined) => {
         const fstChatList: ShownChat[] = [receivedChat];
@@ -75,7 +77,7 @@ const ChatRoom = () => {
         content: chat,
         senderIdx: userIdx,
       };
-      stomp?.send(`/app/stomp/${postIdx}`, {}, JSON.stringify({
+      stomp?.send(`/app/stomp/${data.id}`, {}, JSON.stringify({
           senderIdx:userIdx,
           data:chat
       }));
@@ -100,7 +102,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     stomp?.connect({}, () => {
-      stomp?.subscribe(`/topic/room/${postIdx}`, onReceiveChat);
+      stomp?.subscribe(`/topic/room/${data.id}`, onReceiveChat);
     });
     return () => {
       disconnect(() => {

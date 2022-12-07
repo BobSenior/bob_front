@@ -33,12 +33,13 @@ const AppointmentBox = ({ data }: props) => {
     mutate,
     error,
     isValidating,
-  } = useSWR(`/chat/unread/${data.postIdx}`, getFetcher, {
+  } = useSWR(`/chat/unread/${data.postIdx}?userIdx=1`, getFetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: true,
     revalidateOnMount: true,
   });
+
 
   return (
     <PBox>
@@ -47,7 +48,7 @@ const AppointmentBox = ({ data }: props) => {
         <PromiseContexts>
           <TopContext>
             <span>{data.title}</span>
-            <UnreadChatSpan>1</UnreadChatSpan>
+            <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>
           </TopContext>
           <MiddleContext>
             <MemberBtn

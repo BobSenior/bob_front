@@ -117,6 +117,7 @@ const AppointmentSpace = () => {
   const [coords, setCoords] = useState<ICoordinate | null>(null);
   const [meetingAt, setMeetingAt] = useState<string | null>(null);
   const [requestModal, setRequestModal] = useState<boolean>(false);
+  const [showingChat, setShowingChat] = useState<boolean>(false);
 
   console.log(records);
 
@@ -806,10 +807,11 @@ const AppointmentSpace = () => {
           <BottomButton onClick={() => navigate(`/main`)}>
             메인으로
           </BottomButton>
-          <BottomButton onClick={() => navigate(`/main/chat_test/${id}`)}>
+          <BottomButton onClick={() => setShowingChat(true)}>
             채팅방
           </BottomButton>
         </BottomButtonSection>
+        {appointment!== undefined && showingChat &&  <ChatRoomModal setShow={setShowingChat} id={appointment.result.postIdx}/>}
       </ComposeMain>
     </ComposeWrapper>
   );

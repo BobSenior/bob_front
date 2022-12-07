@@ -29,9 +29,9 @@ import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
 import useSWR from "swr";
-import { getFetcher } from "../../utils/fetchers";
+import {fetcher, getFetcher} from "../../utils/fetchers";
 import { testUserIdx } from "../../pages/Main";
-import { TotalNotices } from "../../types/db";
+import {BaseResponse, TotalNotices} from "../../types/db";
 
 const emailExample = "123";
 
@@ -40,9 +40,9 @@ const MainLayout = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
   const [alarmCount, setAlarmCount] = useState(0);
-  const { data: mainAlarms } = useSWR<TotalNotices>(
-    `/notice/total?userIdx=${testUserIdx}`,
-    getFetcher,
+  const { data: mainAlarms } = useSWR<BaseResponse<TotalNotices>>(
+    `/chat/unread/total?userIdx=1`,
+    fetcher,
     {
       refreshInterval: 5000,
     }
@@ -69,7 +69,7 @@ const MainLayout = () => {
   }, []);
 
   useEffect(() => {
-    setAlarmCount(mainAlarms?.totalCount ?? 0);
+    setAlarmCount(mainAlarms?.result?.totalCount ?? 0);
   }, [mainAlarms]);
 
   return (
