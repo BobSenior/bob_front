@@ -480,6 +480,9 @@ const AppointmentSpace = ()=>{
                         </MembersColumn>
                     </div>
                 }
+                //TODO : 투표 리스트 모
+
+
 
                 <CenterModal isVisible={onMakeVote} onClickForClose={()=>{setOnMakeVote(false); setNumRecord(2); setRecords(["",""]); setVoteMode(true)}}>
                     <VoteSection>
