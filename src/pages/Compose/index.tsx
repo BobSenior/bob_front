@@ -39,10 +39,10 @@ import { BottomButton } from "../Login/styles";
 import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import dayjsAll from "../../utils/dayjsAll";
-import {BaseResponse, ICoordinate, MakeNewPostReqDTO} from "../../types/db";
+import { BaseResponse, ICoordinate, MakeNewPostReqDTO } from "../../types/db";
 import GlobalContext from "../../hooks/GlobalContext";
-import {AxiosResponse} from "axios";
-import {useNavigate} from "react-router-dom";
+import { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface basicData {
   title: string;
@@ -97,7 +97,6 @@ const Compose = () => {
   const [onlyForSameMajor, setOnlyForSameMajor] = useState<boolean>(false);
   const [showLocationSetModal, setShowLocationSetModal] = useState(false);
   const [showMeetingAtSetModal, setShowMeetingAtSetModal] = useState(false);
-  const { myData, setMyData } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const isSubmittable = useMemo(() => {
@@ -110,7 +109,6 @@ const Compose = () => {
   const onSubmitComposeForm = (e: FormEvent) => {
     e.preventDefault();
     if (!isSubmittable || !myData) return;
-    console.log(meetingAt);
     const composePost: MakeNewPostReqDTO = {
       writerIdx: myData.userIdx,
       writerPosition: postTypes[postType][3],
@@ -131,10 +129,10 @@ const Compose = () => {
     };
     postFetcher
       .post(`/post/write`, composePost)
-      .then((res:AxiosResponse<BaseResponse<any>>) => {
-        console.log("제출");
-        if(res.data.isSuccess){
-          navigate('/main');
+      .then((res: AxiosResponse<BaseResponse<any>>) => {
+        if (res.data.isSuccess) {
+          console.log("제출");
+          navigate("/main");
         }
       })
       .catch((err) => console.log(err));

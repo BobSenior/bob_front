@@ -6,15 +6,14 @@ import { toast } from "react-toastify";
 import CopySvg from "../../assets/icons/copy-outline.svg";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import GlobalContext from "../../hooks/GlobalContext";
-import { Navigate } from "react-router-dom";
 
 const MyProfileMenu = () => {
-  const { myData, setMyData } = useContext(GlobalContext);
+  const { myData } = useContext(GlobalContext);
 
   return (
     <Container>
       <img
-        src={gravatar.url("userData.nickName", {
+        src={gravatar.url(myData?.nickname ?? "", {
           s: "55px",
           d: "identicon",
         })}
@@ -23,7 +22,7 @@ const MyProfileMenu = () => {
       <Column>
         <NickNameSpan>{myData?.nickname}</NickNameSpan>
         <CopyToClipboard
-          text={"유저 닉네임" + "@" + "유저Idx"}
+          text={myData?.nickname + "@" + myData?.userIdx}
           onCopy={() => {
             toast.success("복사완료!", {
               position: "bottom-left",
@@ -39,7 +38,7 @@ const MyProfileMenu = () => {
           }}
         >
           <IdxSpan>
-            @{"userIdx"}
+            @{myData?.userIdx}
             <img
               src={CopySvg}
               width={"12px"}
@@ -49,7 +48,9 @@ const MyProfileMenu = () => {
             />
           </IdxSpan>
         </CopyToClipboard>
-        <DeportmentSpan>학교명 학과명</DeportmentSpan>
+        <DeportmentSpan>
+          {myData?.school} {myData?.department}
+        </DeportmentSpan>
       </Column>
     </Container>
   );

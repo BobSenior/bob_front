@@ -1,17 +1,15 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { Column, Container, JoinDiv, Section } from "./style";
-import { redirect, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const Home = () => {
   const navigate = useNavigate();
   const { myData } = useContext(GlobalContext);
+  if (myData) return <Navigate to={"/main"} />;
 
-  if (myData) {
-    redirect("/main");
-  }
   return (
     <div style={{ width: "100%" }}>
       <Section>

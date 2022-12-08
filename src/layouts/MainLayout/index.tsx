@@ -5,7 +5,8 @@ import React, {
   lazy,
   MouseEvent,
   useMemo,
-  useEffect, useContext,
+  useEffect,
+  useContext,
 } from "react";
 import {
   Body,
@@ -19,7 +20,7 @@ const Plans = lazy(() => import("../../pages/Appointments"));
 const Compose = lazy(() => import("../../pages/Compose"));
 const AppointmentSpace = lazy(() => import("../../pages/AppointmentSpace"));
 const Main = lazy(() => import("../../pages/Main"));
-import {Navigate, redirect, Route, Routes, useNavigate} from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import gravatar from "gravatar";
 import Loading from "../../pages/Loading";
 import LayoutBtn from "../../assets/buttons/LayoutBtn";
@@ -28,25 +29,21 @@ import SearchBar from "../../components/SearchBar";
 import AlarmSvg from "../../assets/icons/notifications-outline.svg";
 import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
-import useSWR, {mutate} from "swr";
-import {fetcher, getFetcher} from "../../utils/fetchers";
-import {BaseResponse} from "../../types/db";
+import useSWR from "swr";
+import { fetcher } from "../../utils/fetchers";
+import { BaseResponse } from "../../types/db";
 import { TotalNotices } from "../../types/db";
-import ChatRoomModal from "../../components/ChatRoomModal";
 import GlobalContext from "../../hooks/GlobalContext";
 
-const emailExample = "123";
-
 const MainLayout = () => {
-
-  const { myData, setMyData } = useContext(GlobalContext);
+  const { myData } = useContext(GlobalContext);
+  if (!myData) return <Navigate to="/login" />;
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [showChatRoom, setShowChatRoom] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
   const [alarmCount, setAlarmCount] = useState(0);
   const { data: mainAlarms } = useSWR<BaseResponse<TotalNotices>>(
-    `/chat/unread/total?userIdx=${myData?.userIdx}`,
+    `/chat/unread/total?userIdx=${myData.userIdx}`,
     fetcher,
     {
       refreshInterval: 5000,
@@ -77,11 +74,6 @@ const MainLayout = () => {
     setAlarmCount(mainAlarms?.result?.totalCount ?? 0);
   }, [mainAlarms]);
 
-  if(!myData){
-    return <Navigate to="/login" />;
-  }
-
-
   return (
     <>
       <MainBox>
@@ -106,7 +98,7 @@ const MainLayout = () => {
             <button onClick={onClickAvatarBtn}>
               <img
                 className={"avatar-image"}
-                src={gravatar.url(emailExample, {
+                src={gravatar.url(myData.nickname, {
                   s: "30px",
                   d: "identicon",
                 })}

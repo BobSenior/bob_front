@@ -63,9 +63,7 @@ const errorAlarm = (message: string): void => {
 
 const PostDetailsBox = ({ postIdx, type }: props) => {
   const { myData } = useContext(GlobalContext);
-  if (!myData) {
-    return <Navigate to={"/login"} replace={true} />;
-  }
+  if (!myData) return <Navigate to={"/login"} />;
   const [postDetailData, setPostDetailData] = useState<PostViewDTO | null>(
     null
   );

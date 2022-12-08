@@ -1,39 +1,28 @@
-import React, { FormEvent, useCallback, useMemo, useState } from "react";
+import React, {
+  FormEvent,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import {
-  ComposeForm,
   ComposeMain,
   ComposeWrapper,
-  Handle,
   HandleVariant,
-  Label,
   LAM_Variant,
-  LAMButton,
   LAMDetailsSpan,
-  MainSpan,
   ResultSpan,
-  SpanVariant,
-  SwitchDiv,
-  SwitchSpan,
-  SwitchVariant,
-  SwitchWrapper,
-  TextArea,
 } from "../Compose/style";
 import { Input } from "../../components/SearchBar/style";
-import { HashTagContainer } from "../../components/PostBox/style";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
-import RangeInput from "../../components/RangeInput";
-import LayoutBtn from "../../assets/buttons/LayoutBtn";
-import { Bottom } from "../../layouts/MainLayout/style";
-import { useLinkClickHandler, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   AddButton,
   BottomButton,
   BottomButtonSection,
   BoxSection,
   Commit,
-  FixLabel,
   InviteBuyerButton,
-  KickButton,
   LAMButtonVote,
   LargeMembersDiv,
   LocationWrapper,
@@ -42,18 +31,11 @@ import {
   MyPlaceInfoDiv,
   MyTimeInfoDiv,
   NoOneSpanVote,
-  PlaceButton,
   PlusButton,
-  PrevButton,
   RecordInputBox,
-  RecordLabel,
-  RemainsButton,
-  SpaceInput,
   Title,
   TitleWrapper,
   TLSection,
-  Top,
-  UserButtonWrapper,
   VoteRecordSection,
   VoteSection,
   VoteSequence,
@@ -62,15 +44,10 @@ import HorizonLine from "../../components/Horizon";
 import useSWR from "swr";
 import { AppointmentViewDTO, BaseResponse, ICoordinate } from "../../types/db";
 import { fetcher, postFetcher } from "../../utils/fetchers";
-import app from "../../App";
 import {
   MembersColumn,
-  MembersDiv,
   NoOneSpan,
   PickerImg,
-  PlaceInfoDiv,
-  Section,
-  TimeInfoDiv,
   TNPSection,
 } from "../../components/PostDetailsBox/style";
 import PickerSvg from "../../assets/icons/location-outline.svg";
@@ -78,25 +55,20 @@ import dayjsAll from "../../utils/dayjsAll";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import MemberBtn from "../../components/MemberBtn";
 import VoteRecordBtn from "../../components/VoteRecordBtn";
-import { CommitButton } from "../../layouts/AppointmentLayout/style";
 import { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import AppointmentMemberBtn from "../../components/AppointmentMemberBtn";
-import Modal from "../../components/Modal";
 import CenterModal from "../../components/CenterModal";
-import { Simulate } from "react-dom/test-utils";
-import input = Simulate.input;
 import RecordBox from "../../components/RecordBox";
-import RecordFixBox from "../../components/RecordFixBox";
 import LocationSetModal from "../../components/LocationSetModal";
 import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import RequestListModal from "../../components/RequestListModal";
-import MapDisplayModal from "../../components/MapDisplayModal";
-import useMySWR from "../../data/useMySWR";
 import ChatRoomModal from "../../components/ChatRoomModal";
+import GlobalContext from "../../hooks/GlobalContext";
 
 const AppointmentSpace = () => {
   const { id } = useParams();
+  const { myData } = useContext(GlobalContext);
   const { data: appointment, mutate } = useSWR<
     BaseResponse<AppointmentViewDTO>
   >(`/appointment/${id}?userIdx=1`, fetcher);
@@ -811,7 +783,12 @@ const AppointmentSpace = () => {
             채팅방
           </BottomButton>
         </BottomButtonSection>
-        {appointment!== undefined && showingChat &&  <ChatRoomModal setShow={setShowingChat} id={appointment.result.postIdx}/>}
+        {appointment !== undefined && showingChat && (
+          <ChatRoomModal
+            setShow={setShowingChat}
+            id={appointment.result.postIdx}
+          />
+        )}
       </ComposeMain>
     </ComposeWrapper>
   );
