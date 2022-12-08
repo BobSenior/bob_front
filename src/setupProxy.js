@@ -4,10 +4,10 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 module.exports = function (app) {
   app.use(
     createProxyMiddleware(["/api", "ws:"], {
-      target: "https://bobsenior.co.kr",
+      target: "http://localhost:8080",
       changeOrigin: true,
       ws: true,
-      pathRewrite: { "/api": "", "ws:": "wss://bobsenior.co.kr" },
+      pathRewrite: { "/api": "", "ws:": "ws://localhost:8080" },
     })
   );
 };

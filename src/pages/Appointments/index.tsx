@@ -44,7 +44,7 @@ const Appointments = () => {
     setSize: PASetSize,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
-      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=1`;
+      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${myData.userIdx}`;
     },
     infiniteFetcher,
     {
