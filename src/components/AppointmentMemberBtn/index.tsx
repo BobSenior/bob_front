@@ -26,7 +26,7 @@ const MemberBtn = (userData: {
     schoolId: number;
     isOwner:boolean;
 }) => {
-    const { myData, setMyData } = useContext(GlobalContext);
+    const myData = JSON.parse(sessionStorage.getItem("myData")??"")
     const [showMemberInfoPopUp, setShowMemberInfoPopUp] =
         useState<boolean>(false);
     const nameSpanRef = useRef<HTMLSpanElement>(null);

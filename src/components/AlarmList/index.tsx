@@ -11,7 +11,7 @@ import GlobalContext from "../../hooks/GlobalContext";
 const ListAlarm = (props: {
   setShow: Dispatch<React.SetStateAction<number>>;
 }) => {
-  const { myData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const { data: alarms } = useSWR<ShownNotice[]>(
     `/notice/list?userIdx=${myData?.userIdx}`,
     getFetcher

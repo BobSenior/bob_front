@@ -32,7 +32,8 @@ const MenuList = ({ setShow }: Props) => {
         text={"로그아웃"}
         fontSize={"1em"}
         onClick={() => {
-          setMyData(undefined);
+          sessionStorage.clear();
+          navigate('/login');
         }}
       />
     </ListModalContainer>

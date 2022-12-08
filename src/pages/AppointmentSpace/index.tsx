@@ -69,7 +69,9 @@ import app from "../../App";
 
 const AppointmentSpace = () => {
   const { id } = useParams();
-  const { myData } = useContext(GlobalContext);
+
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+
   const { data: appointment, mutate } = useSWR<
     BaseResponse<AppointmentViewDTO>
   >(`/appointment/${id}?userIdx=${myData?.userIdx}`, fetcher);
@@ -92,8 +94,6 @@ const AppointmentSpace = () => {
   const [requestModal, setRequestModal] = useState<boolean>(false);
   const [showingChat, setShowingChat] = useState<boolean>(false);
 
-  console.log(records);
-
   const navigate = useNavigate();
 
   const getData = (number: number) => {
@@ -102,41 +102,6 @@ const AppointmentSpace = () => {
   };
 
   const buyersSpans = useMemo(() => {
-    if (!appointment) return null;
-
-    if (appointment.result.type === 'dutch') {
-      return appointment.result.buyers
-          .filter((value, index) => index % 2 === 0)
-          .map((member) => {
-            return (
-                <MemberBtn
-                    userIdx={member.userIdx}
-                    nickName={member.nickname}
-                    department={member.department}
-                    schoolId={member.schoolId}
-                    key={generateUniqueID()}
-                />
-            );
-          });
-    }
-
-    if (appointment.result.buyers.length === 0)
-      return <NoOneSpan>아무도 없어요.</NoOneSpan>;
-
-    return appointment.result.buyers.map((member) => {
-      return (
-          <MemberBtn
-              userIdx={member.userIdx}
-              nickName={member.nickname}
-              department={member.department}
-              schoolId={member.schoolId}
-              key={generateUniqueID()}
-          />
-      );
-    });
-  }, [appointment]);
-
-  /*const buyersSpans = useMemo(() => {
     if (!appointment) return null;
     else if (appointment.result.buyers.length === 0)
       return <NoOneSpan>아무도 없어요.</NoOneSpan>;
@@ -154,7 +119,7 @@ const AppointmentSpace = () => {
         />
       );
     });
-  }, [appointment]);*/
+  }, [appointment]);
 
   const remainsBuyer = useMemo(() => {
     if (!appointment) return null;

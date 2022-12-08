@@ -11,7 +11,7 @@ interface Props {
 
 
 const Chat = ({ chatData }: Props) => {
-  const { myData, setMyData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const chatOwner = chatData.senderIdx === myData?.userIdx ? "Sender" : "Receiver";
 
   return (

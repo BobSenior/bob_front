@@ -62,7 +62,7 @@ const errorAlarm = (message: string): void => {
 };
 
 const PostDetailsBox = ({ postIdx, type }: props) => {
-  const { myData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   if (!myData) return <Navigate to={"/login"} />;
   const [postDetailData, setPostDetailData] = useState<PostViewDTO | null>(
     null
@@ -142,44 +142,44 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
   }, [postDetailData]);
 
   const onClickParticipationButton = useCallback(
-    (e: MouseEvent<HTMLElement>) => {
-      e.stopPropagation();
-      if (!postDetailData) return;
+      (e: MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        if (!postDetailData) return;
 
-      if (postDetailData.isRequested) {
-        postFetcher
-          .post(`/post/request/reverse`, {
+        if (postDetailData.isRequested) {
+          postFetcher
+              .post(`/post/request/reverse`, {
             userIdx: myData.userIdx,
             postIdx: postIdx,
           })
-          .then((res) => {
+        .then((res) => {
             if (res.data.isSuccess) {
               setPostDetailData((prevState) => {
                 if (!prevState) return null;
-                return { ...prevState, requested: !prevState.isRequested };
+                return { ...prevState, isRequested: !prevState.isRequested };
               });
             } else errorAlarm(res.data.message);
           })
-          .catch((err) => console.error(err));
-      } else {
-        postFetcher
-          .post("/post/request", {
-            userIdx: myData.userIdx,
-            postIdx: postIdx,
-            position: requestType,
-          })
-          .then((res) => {
-            if (res.data.isSuccess) {
-              setPostDetailData((prevState) => {
-                if (!prevState) return null;
-                return { ...prevState, requested: !prevState.isRequested };
-              });
-            } else errorAlarm(res.data.message);
-          })
-          .catch((err) => console.error(err));
-      }
-    },
-    [postDetailData]
+              .catch((err) => console.error(err));
+        } else {
+          postFetcher
+              .post("/post/request", {
+                userIdx: myData.userIdx,
+                postIdx: postIdx,
+                position: requestType,
+              })
+              .then((res) => {
+                if (res.data.isSuccess) {
+                  setPostDetailData((prevState) => {
+                    if (!prevState) return null;
+                    return { ...prevState, isRequested: !prevState.isRequested };
+                  });
+                } else errorAlarm(res.data.message);
+              })
+              .catch((err) => console.error(err));
+        }
+      },
+      [postDetailData, myData, requestType]
   );
 
   const onClickPlaceInfoDiv = useCallback(

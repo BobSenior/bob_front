@@ -82,7 +82,7 @@ const getHashTag = (str: string | null): string[] | null => {
 };
 
 const Compose = () => {
-  const { myData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const [formData, setFormData] = useState<basicData>({
     title: "",
     contexts: "",
@@ -127,6 +127,11 @@ const Compose = () => {
       content: formData.contexts,
       tags: hashtags,
     };
+    console.log( location +
+        "$" +
+        coords?.latitude.toString() +
+        "$" +
+        coords?.longitude.toString(),"coooordscheck");
     postFetcher
       .post(`/post/write`, composePost)
       .then((res: AxiosResponse<BaseResponse<any>>) => {

@@ -24,12 +24,12 @@ interface props {
 
 const statusMatcher = {
   모집중: "active",
-  약속잡는중: "",
-  만남대기중: "",
+  약속잡는중: "finish",
+  만남대기중: "fix",
 };
 
 const AppointmentBox = ({ data }: props) => {
-  const { myData, setMyData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const {
     data: UnreadChatCount,
     mutate,

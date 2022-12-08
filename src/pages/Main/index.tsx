@@ -23,7 +23,7 @@ const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
-  const { myData, setMyData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const {
     data: PostHeads,
     isValidating,

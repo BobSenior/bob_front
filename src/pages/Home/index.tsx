@@ -7,8 +7,6 @@ import GlobalContext from "../../hooks/GlobalContext";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { myData } = useContext(GlobalContext);
-  if (myData) return <Navigate to={"/main"} />;
 
   return (
     <div style={{ width: "100%" }}>

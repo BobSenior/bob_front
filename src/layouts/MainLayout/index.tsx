@@ -36,7 +36,7 @@ import { TotalNotices } from "../../types/db";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const MainLayout = () => {
-  const { myData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   if (!myData) return <Navigate to="/login" />;
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);

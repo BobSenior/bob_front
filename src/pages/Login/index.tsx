@@ -19,7 +19,6 @@ import GlobalContext from "../../hooks/GlobalContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { myData, setMyData } = useContext(GlobalContext);
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -39,16 +38,16 @@ const Login = () => {
             setId("");
             setPassword("");
           } else {
+              console.log(response.data.result)
             //여기서 데이터 받아옴
-            setMyData(response.data.result);
-            navigate('/main');
+              sessionStorage.setItem("myData", JSON.stringify(response.data.result))
+              navigate('/main');
           }
         });
     },
     [id, password]
   );
 
-  if (myData) return (<Navigate to={"/main"} />);
 
   return (
     <LoginPageWrapper>
@@ -74,7 +73,7 @@ const Login = () => {
               setPassword(e.target.value);
             }}
           />
-          <BottomButton onClick={() => navigate("/main")}>로그인</BottomButton>
+          <BottomButton>로그인</BottomButton>
         </Form>
       </FormSection>
       <LinkContainer>
