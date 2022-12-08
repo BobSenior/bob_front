@@ -136,6 +136,14 @@ const SignUp = () => {
       schoolId: Year,
       nickName: nickname,
       department: department,
+    }).then((e:AxiosResponse<BaseResponse<any>>)=>{
+      if(!e.data.isSuccess){
+        toast.error(e.data.message);
+        setEmail("");
+      }
+      else{
+        setPageNum(4);
+      }
     });
     //이메일 check, 학교이메일인지 검증도 여기서
     //만약 성립시 server에 요청까지
@@ -323,11 +331,12 @@ const SignUp = () => {
             <div
               style={{
                 position: "relative",
-                width: "60%",
-                marginLeft: "20%",
+                width: "80%",
+                marginLeft: "10%",
                 textAlign: "center",
-                fontSize: "18px",
+                fontSize: "22px",
                 fontWeight: "bold",
+                marginBottom:"8px"
               }}
             >
               인증 이메일이 전송되었습니다!
@@ -335,12 +344,13 @@ const SignUp = () => {
             <div
               style={{
                 position: "relative",
-                width: "60%",
-                marginLeft: "20%",
+                width: "80%",
+                marginLeft: "10%",
                 textAlign: "center",
                 fontSize: "18px",
                 fontWeight: "bold",
                 paddingTop: "12px",
+                marginBottom:"10px"
               }}
             >
               이메일에서 회원가입을 완료해주세요!
