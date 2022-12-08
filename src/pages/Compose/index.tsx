@@ -132,7 +132,7 @@ const Compose = () => {
       .then((res: AxiosResponse<BaseResponse<any>>) => {
         if (res.data.isSuccess) {
           console.log("제출");
-          navigate("/main");
+          navigate(`/main/appointment/${res.data.result}`);
         }
       })
       .catch((err) => console.log(err));

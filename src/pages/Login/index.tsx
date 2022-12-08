@@ -74,9 +74,6 @@ const Login = () => {
               setPassword(e.target.value);
             }}
           />
-          <Finding_string onClick={() => navigate(`/finding`)}>
-            아이디/비밀번호 찾기
-          </Finding_string>
           <BottomButton onClick={() => navigate("/main")}>로그인</BottomButton>
         </Form>
       </FormSection>

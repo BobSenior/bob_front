@@ -1,7 +1,7 @@
 import React, {
   FormEvent,
   useCallback,
-  useContext,
+  useContext, useEffect,
   useMemo,
   useState,
 } from "react";
@@ -65,13 +65,14 @@ import MeetingAtSetModal from "../../components/MeetingAtSetModal";
 import RequestListModal from "../../components/RequestListModal";
 import ChatRoomModal from "../../components/ChatRoomModal";
 import GlobalContext from "../../hooks/GlobalContext";
+import app from "../../App";
 
 const AppointmentSpace = () => {
   const { id } = useParams();
   const { myData } = useContext(GlobalContext);
   const { data: appointment, mutate } = useSWR<
     BaseResponse<AppointmentViewDTO>
-  >(`/appointment/${id}?userIdx=1`, fetcher);
+  >(`/appointment/${id}?userIdx=${myData?.userIdx}`, fetcher);
   const [selected, setSelected] = useState<number>(0);
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [onInvite, setOnInvite] = useState<boolean>(false);
@@ -102,22 +103,58 @@ const AppointmentSpace = () => {
 
   const buyersSpans = useMemo(() => {
     if (!appointment) return null;
+
+    if (appointment.result.type === 'dutch') {
+      return appointment.result.buyers
+          .filter((value, index) => index % 2 === 0)
+          .map((member) => {
+            return (
+                <MemberBtn
+                    userIdx={member.userIdx}
+                    nickName={member.nickname}
+                    department={member.department}
+                    schoolId={member.schoolId}
+                    key={generateUniqueID()}
+                />
+            );
+          });
+    }
+
+    if (appointment.result.buyers.length === 0)
+      return <NoOneSpan>아무도 없어요.</NoOneSpan>;
+
+    return appointment.result.buyers.map((member) => {
+      return (
+          <MemberBtn
+              userIdx={member.userIdx}
+              nickName={member.nickname}
+              department={member.department}
+              schoolId={member.schoolId}
+              key={generateUniqueID()}
+          />
+      );
+    });
+  }, [appointment]);
+
+  /*const buyersSpans = useMemo(() => {
+    if (!appointment) return null;
     else if (appointment.result.buyers.length === 0)
       return <NoOneSpan>아무도 없어요.</NoOneSpan>;
 
     return appointment.result.buyers.map((member) => {
       return (
-        <AppointmentMemberBtn
+        <MemberBtn
           userIdx={member.userIdx}
           nickName={member.nickname}
           department={member.department}
           schoolId={member.schoolId}
-          isOwner={appointment.result.writerIdx === 1}
+          isLeader={appointment.result.writerIdx === myData?.userIdx}
+          //onClick={onClickKickUser(member.userIdx)}
           key={generateUniqueID()}
         />
       );
     });
-  }, [appointment]);
+  }, [appointment]);*/
 
   const remainsBuyer = useMemo(() => {
     if (!appointment) return null;
@@ -176,29 +213,47 @@ const AppointmentSpace = () => {
 
   const receiversSpans = useMemo(() => {
     if (!appointment) return null;
-    else if (appointment.result.receivers.length === 0) return null;
+
+    if (appointment.result.type === 'dutch') {
+      return appointment.result.buyers
+          .filter((value, index) => index % 2 === 1)
+          .map((member) => {
+            return (
+                <MemberBtn
+                    userIdx={member.userIdx}
+                    nickName={member.nickname}
+                    department={member.department}
+                    schoolId={member.schoolId}
+                    key={generateUniqueID()}
+                />
+            );
+          });
+    }
+
+    if (appointment.result.receivers.length === 0)
+      return <NoOneSpan>아무도 없어요.</NoOneSpan>;
 
     return appointment.result.receivers.map((member) => {
       return (
-        <MemberBtn
-          userIdx={member.userIdx}
-          nickName={member.nickname}
-          department={member.department}
-          schoolId={member.schoolId}
-          key={generateUniqueID()}
-        />
+          <MemberBtn
+              userIdx={member.userIdx}
+              nickName={member.nickname}
+              department={member.department}
+              schoolId={member.schoolId}
+              key={generateUniqueID()}
+          />
       );
     });
   }, [appointment]);
 
   const voteSpan = useMemo(() => {
-    let userIdx = 1;
+    let userIdx = myData?.userIdx;
     if (!appointment) return null;
     else if (
       appointment.result.records === null ||
       appointment.result.records.length === 0
     ) {
-      if (appointment.result.writerIdx === userIdx) {
+      if (appointment.result.writerIdx === myData?.userIdx) {
         return (
           <MakeVoteButton onClick={() => setOnMakeVote(true)}>
             새 투표 만들기
@@ -221,7 +276,7 @@ const AppointmentSpace = () => {
         />
       );
     });
-  }, [appointment, selected]);
+  }, [appointment, selected,myData]);
 
   const voteRecordSpan = useMemo(() => {
     if (!appointment) return null;
@@ -238,14 +293,15 @@ const AppointmentSpace = () => {
   const ReqList = useMemo(() => {
     if (!appointment) return null;
     if (!id) return null;
+    if(!myData) return null;
     return (
       <RequestListModal
         postIdx={id}
-        currUserIdx={1}
+        currUserIdx={myData.userIdx}
         mutator={mutate}
       ></RequestListModal>
     );
-  }, [appointment, id]);
+  }, [appointment, id,myData]);
 
   const VoteFixRecordSpan = useMemo(() => {
     if (!appointment) return null;
@@ -256,7 +312,7 @@ const AppointmentSpace = () => {
     return (
       <>
         <div>{"장소 :" + words[0]}</div>
-        <div>{"시간 : " + words[1]}</div>
+        <div>{"시간 : " + words[3]}</div>
       </>
     );
   }, [appointment]);
@@ -264,11 +320,10 @@ const AppointmentSpace = () => {
   const onSubmitVote = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      const postIdx = 1;
       postFetcher
         .post(`/vote/${id}`, {
           voteIdx: appointment?.result.voteIdx,
-          userIdx: 1,
+          userIdx: myData?.userIdx,
           voteSelect: selected,
         })
         .then((reason: AxiosResponse<BaseResponse<any>>) => {
@@ -286,9 +341,10 @@ const AppointmentSpace = () => {
   );
 
   const onClickExit = useCallback(() => {
+    if(!myData) return null;
     postFetcher
       .post(`/appointment/leave/${id}`, {
-        userIdx: 1,
+        userIdx: myData?.userIdx,
       })
       .then((reason: AxiosResponse<BaseResponse<any>>) => {
         if (!reason.data.isSuccess) {
@@ -297,7 +353,7 @@ const AppointmentSpace = () => {
           navigate("/main");
         }
       });
-  }, [appointment]);
+  }, [appointment,myData]);
 
   const onClickUsePrevLocation = useCallback(() => {
     if (!appointment) return null;
@@ -315,7 +371,6 @@ const AppointmentSpace = () => {
         latitude: appointment.result.latitude,
         longitude: appointment.result.longitude,
       });
-      console.log("setted = ", coords);
     }
   }, [appointment]);
 
@@ -332,7 +387,7 @@ const AppointmentSpace = () => {
   const onClickInviteBuyer = useCallback(() => {
     postFetcher
       .post(`/appointment/invite/${id}`, {
-        inviterIdx: 1,
+        inviterIdx: myData?.userIdx,
         invitedUUID: inputUUID,
         position: invitedPosition,
       })
@@ -348,7 +403,7 @@ const AppointmentSpace = () => {
         setInputUUID("");
         mutate();
       });
-  }, [appointment, inputUUID, invitedPosition]);
+  }, [appointment, inputUUID, invitedPosition,myData]);
 
   const onClickMakeVote = useCallback(() => {
     //TODO : vote생성 검증하기
@@ -387,7 +442,7 @@ const AppointmentSpace = () => {
     if (flag) {
       postFetcher
         .post(`/vote/init/${id}`, {
-          makerIdx: 1,
+          makerIdx: myData?.userIdx,
           title: voteTitle,
           contents: records,
           location: voteMode
@@ -446,7 +501,7 @@ const AppointmentSpace = () => {
   const onClickTerminateVote = useCallback(() => {
     postFetcher
       .post(`/vote/terminate/${id}`, {
-        terminatorIdx: 1,
+        terminatorIdx: myData?.userIdx,
         voteIdx: appointment?.result.voteIdx,
       })
       .then((response: AxiosResponse<BaseResponse<any>>) => {
@@ -458,6 +513,26 @@ const AppointmentSpace = () => {
         mutate();
       });
   }, [appointment, selected]);
+
+  const onClickKickUser = useCallback((kicked:number)=>{
+    if(!myData) return null;
+    postFetcher.post(
+        `/appointment/kick/${id}`,{
+          kickerIdx:myData.userIdx,
+          kickedIdx:kicked
+    }
+    ).then((response:AxiosResponse<BaseResponse<any>>)=>{
+      if(!response.data.isSuccess){
+        toast.error(response.data.message)
+      }
+      else{
+        console.log('hello');
+      }
+    })
+  },[])
+
+
+
 
   return (
     <ComposeWrapper>
@@ -496,30 +571,45 @@ const AppointmentSpace = () => {
 
         <MemberSection>
           <h1 style={{ fontSize: "33px" }}>Members</h1>
-          <LargeMembersDiv>
-            <MembersColumn style={{ paddingLeft: "10px" }}>
-              <h4>buyers</h4>
-              {appointment ? (
-                <>
-                  <>{buyersSpans}</>
-                  <>{remainsBuyer}</>
-                </>
-              ) : (
-                <Skeleton count={2} height={"0.95em"} width={"75px"} />
-              )}
-            </MembersColumn>
-            <MembersColumn>
-              <h4>receivers</h4>
-              {appointment ? (
-                <>
-                  <>{receiversSpans}</>
-                  <>{remainsReceiver}</>
-                </>
-              ) : (
-                <Skeleton count={2} height={"0.95em"} width={"75px"} />
-              )}
-            </MembersColumn>
-          </LargeMembersDiv>
+          {appointment?.result.type!=='dutch'?
+              <LargeMembersDiv>
+                <MembersColumn style={{ paddingLeft: "10px" }}>
+                  <h4>buyers</h4>
+                  {appointment ? (
+                      <>
+                        <>{buyersSpans}</>
+                        <>{remainsBuyer}</>
+                      </>
+                  ) : (
+                      <Skeleton count={2} height={"0.95em"} width={"75px"} />
+                  )}
+                </MembersColumn>
+                <MembersColumn>
+                  <h4>receivers</h4>
+                  {appointment ? (
+                      <>
+                        <>{receiversSpans}</>
+                        <>{remainsReceiver}</>
+                      </>
+                  ) : (
+                      <Skeleton count={2} height={"0.95em"} width={"75px"} />
+                  )}
+                </MembersColumn>
+              </LargeMembersDiv>:
+              <LargeMembersDiv>
+                <MembersColumn style={{ paddingLeft: "100%" }}>
+                  {appointment ? (
+                      <>
+                        <>{buyersSpans}</>
+                        <>{remainsBuyer}</>
+                      </>
+                  ) : (
+                      <Skeleton count={2} height={"0.95em"} width={"75px"} />
+                  )}
+                </MembersColumn>
+              </LargeMembersDiv>
+          }
+
 
           <CenterModal
             isVisible={onMakeVote}
@@ -731,7 +821,7 @@ const AppointmentSpace = () => {
             {ReqList}
           </CenterModal>
         </MemberSection>
-        {appointment?.result.writerIdx === 1 && (
+        {appointment?.result.writerIdx === myData?.userIdx && (
           <BottomButton onClick={() => setRequestModal(true)}>
             신청 목록
           </BottomButton>
@@ -763,8 +853,8 @@ const AppointmentSpace = () => {
                     >
                       투표하기
                     </Commit>
-                    {(appointment.result.writerIdx === 1 ||
-                      appointment.result.voteOwnerIdx === 1) && (
+                    {(appointment.result.writerIdx === myData?.userIdx ||
+                      appointment.result.voteOwnerIdx === myData?.userIdx) && (
                       <Commit onClick={onClickTerminateVote}>투표 종료</Commit>
                     )}
                   </>

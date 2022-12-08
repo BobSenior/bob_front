@@ -247,12 +247,12 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
                   whileTap={{ scale: 0.85 }}
                   onClick={onClickPlaceInfoDiv}
                 >
-                  {postDetailData.location ?? (
+                  {postDetailData.location ? (
                     <>
                       <PickerImg src={PickerSvg} />
                       <span>{postDetailData.location}</span>
                     </>
-                  )}
+                  ):<div>정해지지 않았어요!</div>}
                 </PlaceInfoDiv>
                 <TimeInfoDiv>
                   {postDetailData.meetingAt && (
