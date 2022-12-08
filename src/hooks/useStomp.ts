@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import SockJs from "sockjs-client";
 import StompJs from "stompjs";
 
-const url = "http://localhost:8080/ws/chat";
+const url = "https://bobsenior.co.kr/ws/chat";
 const socks: { [key: string]: WebSocket } = {};
 const stomps: { [key: string]: StompJs.Client } = {};
 const useStomp = (): [

@@ -1,7 +1,9 @@
 import React, {
-  FormEvent, MouseEvent,
+  FormEvent,
+  MouseEvent,
   useCallback,
-  useContext, useEffect,
+  useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -71,7 +73,7 @@ import MapDisplayModal from "../../components/MapDisplayModal";
 const AppointmentSpace = () => {
   const { id } = useParams();
 
-  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  const myData = JSON.parse(sessionStorage.getItem("myData") ?? "");
 
   const { data: appointment, mutate } = useSWR<
     BaseResponse<AppointmentViewDTO>
@@ -111,13 +113,15 @@ const AppointmentSpace = () => {
     return appointment.result.buyers.map((member) => {
       return (
         <MemberBtn
-            uuid={member.uuid}
+          uuid={member.uuid}
           userIdx={member.userIdx}
           nickName={member.nickname}
           department={member.department}
           schoolId={member.schoolId}
           isLeader={appointment.result.writerIdx === myData?.userIdx}
-          onClick={()=>{onClickKickUser(member.userIdx)}}
+          onClick={() => {
+            onClickKickUser(member.userIdx);
+          }}
           key={generateUniqueID()}
         />
       );
@@ -186,19 +190,21 @@ const AppointmentSpace = () => {
 
     return appointment.result.receivers.map((member) => {
       return (
-          <MemberBtn
-              uuid={member.uuid}
-              userIdx={member.userIdx}
-              nickName={member.nickname}
-              department={member.department}
-              schoolId={member.schoolId}
-              isLeader={appointment.result.writerIdx === myData?.userIdx}
-              onClick={()=>{onClickKickUser(member.userIdx)}}
-              key={generateUniqueID()}
-          />
+        <MemberBtn
+          uuid={member.uuid}
+          userIdx={member.userIdx}
+          nickName={member.nickname}
+          department={member.department}
+          schoolId={member.schoolId}
+          isLeader={appointment.result.writerIdx === myData?.userIdx}
+          onClick={() => {
+            onClickKickUser(member.userIdx);
+          }}
+          key={generateUniqueID()}
+        />
       );
     });
-  }, [appointment,myData]);
+  }, [appointment, myData]);
 
   const voteSpan = useMemo(() => {
     let userIdx = myData?.userIdx;
@@ -230,7 +236,7 @@ const AppointmentSpace = () => {
         />
       );
     });
-  }, [appointment, selected,myData]);
+  }, [appointment, selected, myData]);
 
   const voteRecordSpan = useMemo(() => {
     if (!appointment) return null;
@@ -247,7 +253,7 @@ const AppointmentSpace = () => {
   const ReqList = useMemo(() => {
     if (!appointment) return null;
     if (!id) return null;
-    if(!myData) return null;
+    if (!myData) return null;
     return (
       <RequestListModal
         postIdx={id}
@@ -255,7 +261,7 @@ const AppointmentSpace = () => {
         mutator={mutate}
       ></RequestListModal>
     );
-  }, [appointment, id,myData]);
+  }, [appointment, id, myData]);
 
   const VoteFixRecordSpan = useMemo(() => {
     if (!appointment) return null;
@@ -275,7 +281,7 @@ const AppointmentSpace = () => {
     (e: FormEvent) => {
       e.preventDefault();
       postFetcher
-        .post(`/vote/${id}`, {
+        .post("/api" + `/vote/${id}`, {
           voteIdx: appointment?.result.voteIdx,
           userIdx: myData?.userIdx,
           voteSelect: selected,
@@ -295,9 +301,9 @@ const AppointmentSpace = () => {
   );
 
   const onClickExit = useCallback(() => {
-    if(!myData) return null;
+    if (!myData) return null;
     postFetcher
-      .post(`/appointment/leave/${id}`, {
+      .post("/api" + `/appointment/leave/${id}`, {
         userIdx: myData?.userIdx,
       })
       .then((reason: AxiosResponse<BaseResponse<any>>) => {
@@ -307,7 +313,7 @@ const AppointmentSpace = () => {
           navigate("/main");
         }
       });
-  }, [appointment,myData]);
+  }, [appointment, myData]);
 
   const onClickUsePrevLocation = useCallback(() => {
     if (!appointment) return null;
@@ -340,7 +346,7 @@ const AppointmentSpace = () => {
 
   const onClickInviteBuyer = useCallback(() => {
     postFetcher
-      .post(`/appointment/invite/${id}`, {
+      .post("/api" + `/appointment/invite/${id}`, {
         inviterIdx: myData?.userIdx,
         invitedUUID: inputUUID,
         position: invitedPosition,
@@ -357,7 +363,7 @@ const AppointmentSpace = () => {
         setInputUUID("");
         mutate();
       });
-  }, [appointment, inputUUID, invitedPosition,myData]);
+  }, [appointment, inputUUID, invitedPosition, myData]);
 
   const onClickMakeVote = useCallback(() => {
     //TODO : vote생성 검증하기
@@ -395,7 +401,7 @@ const AppointmentSpace = () => {
     console.log(flag);
     if (flag) {
       postFetcher
-        .post(`/vote/init/${id}`, {
+        .post("/api" + `/vote/init/${id}`, {
           makerIdx: myData?.userIdx,
           title: voteTitle,
           contents: records,
@@ -453,24 +459,23 @@ const AppointmentSpace = () => {
   ]);
 
   const onClickPlaceInfoDiv = useCallback(
-      (e: MouseEvent<HTMLElement>) => {
-        e.stopPropagation();
-        if (
-            appointment &&
-            appointment.result.location &&
-            appointment.result.latitude &&
-            appointment.result.longitude
-        ) {
-          setShowMapDisplayModal(true);
-        }
-      },
-      [appointment]
+    (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      if (
+        appointment &&
+        appointment.result.location &&
+        appointment.result.latitude &&
+        appointment.result.longitude
+      ) {
+        setShowMapDisplayModal(true);
+      }
+    },
+    [appointment]
   );
-
 
   const onClickTerminateVote = useCallback(() => {
     postFetcher
-      .post(`/vote/terminate/${id}`, {
+      .post("/api" + `/vote/terminate/${id}`, {
         terminatorIdx: myData?.userIdx,
         voteIdx: appointment?.result.voteIdx,
       })
@@ -484,27 +489,26 @@ const AppointmentSpace = () => {
       });
   }, [appointment, selected]);
 
-  const onClickKickUser = useCallback((kicked:number)=>{
-    console.log('kick')
-    if(!myData) return null;
-    postFetcher.post(
-        `/appointment/kick/${id}`,{
-          kickerIdx:myData.userIdx,
-          kickedIdx:kicked
-    }
-    ).then((response:AxiosResponse<BaseResponse<any>>)=>{
-      if(!response.data.isSuccess){
-        toast.error(response.data.message)
-      }
-      else{
-        toast.info("유저를 강퇴하였습니다!");
-        mutate();
-      }
-    })
-  },[appointment])
-
-
-
+  const onClickKickUser = useCallback(
+    (kicked: number) => {
+      console.log("kick");
+      if (!myData) return null;
+      postFetcher
+        .post("/api" + `/appointment/kick/${id}`, {
+          kickerIdx: myData.userIdx,
+          kickedIdx: kicked,
+        })
+        .then((response: AxiosResponse<BaseResponse<any>>) => {
+          if (!response.data.isSuccess) {
+            toast.error(response.data.message);
+          } else {
+            toast.info("유저를 강퇴하였습니다!");
+            mutate();
+          }
+        });
+    },
+    [appointment]
+  );
 
   return (
     <ComposeWrapper>
@@ -525,17 +529,24 @@ const AppointmentSpace = () => {
           {appointment ? (
             <LocationWrapper>
               <MyPlaceInfoDiv
-                  onClick={onClickPlaceInfoDiv}
-                  whileTap={{ scale: 0.85 }}>
+                onClick={onClickPlaceInfoDiv}
+                whileTap={{ scale: 0.85 }}
+              >
                 <PickerImg src={PickerSvg} />
-                <span>{appointment.result.location?appointment.result.location:"아직 정해지지 않았어요!"}</span>
+                <span>
+                  {appointment.result.location
+                    ? appointment.result.location
+                    : "아직 정해지지 않았어요!"}
+                </span>
               </MyPlaceInfoDiv>
               <MyTimeInfoDiv>
-                <span>{appointment.result.meetingAt?
-                    dayjsAll(appointment.result.meetingAt).appointmentDate() +
-                  " " +
-                  dayjsAll(appointment.result.meetingAt).appointmentTime()
-                    :"아직 정해지지 않았어요!"}</span>
+                <span>
+                  {appointment.result.meetingAt
+                    ? dayjsAll(appointment.result.meetingAt).appointmentDate() +
+                      " " +
+                      dayjsAll(appointment.result.meetingAt).appointmentTime()
+                    : "아직 정해지지 않았어요!"}
+                </span>
               </MyTimeInfoDiv>
             </LocationWrapper>
           ) : (
@@ -549,61 +560,60 @@ const AppointmentSpace = () => {
 
         <MemberSection>
           <h1 style={{ fontSize: "33px" }}>Members</h1>
-          {appointment?.result.type!=='dutch'?
-              <LargeMembersDiv>
-                <MembersColumn style={{ paddingLeft: "10px" }}>
-                  <h4>buyers</h4>
-                  {appointment ? (
-                      <>
-                        <>{buyersSpans}</>
-                        <>{remainsBuyer}</>
-                      </>
-                  ) : (
-                      <Skeleton count={2} height={"0.95em"} width={"75px"} />
-                  )}
-                </MembersColumn>
-                <MembersColumn>
-                  <h4>receivers</h4>
-                  {appointment ? (
-                      <>
-                        <>{receiversSpans}</>
-                        <>{remainsReceiver}</>
-                      </>
-                  ) : (
-                      <Skeleton count={2} height={"0.95em"} width={"75px"} />
-                  )}
-                </MembersColumn>
-              </LargeMembersDiv>:
-              <LargeMembersDiv>
-                <MembersColumn style={{ paddingLeft: "100%" }}>
-                  {appointment ? (
-                      <>
-                        <>{buyersSpans}</>
-                        <>{remainsBuyer}</>
-                      </>
-                  ) : (
-                      <Skeleton count={2} height={"0.95em"} width={"75px"} />
-                  )}
-                </MembersColumn>
-              </LargeMembersDiv>
-          }
+          {appointment?.result.type !== "dutch" ? (
+            <LargeMembersDiv>
+              <MembersColumn style={{ paddingLeft: "10px" }}>
+                <h4>buyers</h4>
+                {appointment ? (
+                  <>
+                    <>{buyersSpans}</>
+                    <>{remainsBuyer}</>
+                  </>
+                ) : (
+                  <Skeleton count={2} height={"0.95em"} width={"75px"} />
+                )}
+              </MembersColumn>
+              <MembersColumn>
+                <h4>receivers</h4>
+                {appointment ? (
+                  <>
+                    <>{receiversSpans}</>
+                    <>{remainsReceiver}</>
+                  </>
+                ) : (
+                  <Skeleton count={2} height={"0.95em"} width={"75px"} />
+                )}
+              </MembersColumn>
+            </LargeMembersDiv>
+          ) : (
+            <LargeMembersDiv>
+              <MembersColumn style={{ paddingLeft: "100%" }}>
+                {appointment ? (
+                  <>
+                    <>{buyersSpans}</>
+                    <>{remainsBuyer}</>
+                  </>
+                ) : (
+                  <Skeleton count={2} height={"0.95em"} width={"75px"} />
+                )}
+              </MembersColumn>
+            </LargeMembersDiv>
+          )}
 
           {showMapDisplayModal &&
-              appointment &&
-              appointment.result.latitude &&
-              appointment.result.longitude &&
-              appointment.result.location && (
-                  <MapDisplayModal
-                      setShow={setShowMapDisplayModal}
-                      coordinate={{
-                        latitude: appointment.result.latitude,
-                        longitude: appointment.result.longitude,
-                      }}
-                      location={appointment.result.location}
-                  />
-              )}
-
-
+            appointment &&
+            appointment.result.latitude &&
+            appointment.result.longitude &&
+            appointment.result.location && (
+              <MapDisplayModal
+                setShow={setShowMapDisplayModal}
+                coordinate={{
+                  latitude: appointment.result.latitude,
+                  longitude: appointment.result.longitude,
+                }}
+                location={appointment.result.location}
+              />
+            )}
 
           <CenterModal
             isVisible={onMakeVote}

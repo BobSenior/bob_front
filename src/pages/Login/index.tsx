@@ -10,9 +10,8 @@ import {
   LoginPageWrapper,
   FormSection,
 } from "./styles";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
-import { normalPostFetcher, postFetcher } from "../../utils/fetchers";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -26,8 +25,8 @@ const Login = () => {
     (e: FormEvent) => {
       e.preventDefault();
       setLogInError(false);
-      normalPostFetcher
-        .post(`/login`, {
+      axios
+        .post(`/api/login`, {
           userId: id,
           password: password,
         })

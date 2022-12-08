@@ -25,6 +25,7 @@
     "dayjs": "^1.11.6",
     "framer-motion": "^7.6.1",
     "gravatar": "^1.8.2",
+    "http-proxy-middleware": "^2.0.6",
     "net": "^1.0.2",
     "react": "^18.2.0",
     "react-calendar": "^4.0.0",
@@ -70,6 +71,5 @@
     "@types/socket.io-client": "^1.4.35",
     "prettier": "2.7.1",
     "react-loader-spinner": "^5.3.4"
-  },
-  "proxy": "http://localhost:3000/signup"
+  }
 }

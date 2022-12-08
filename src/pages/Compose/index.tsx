@@ -82,7 +82,7 @@ const getHashTag = (str: string | null): string[] | null => {
 };
 
 const Compose = () => {
-  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  const myData = JSON.parse(sessionStorage.getItem("myData") ?? "");
   const [formData, setFormData] = useState<basicData>({
     title: "",
     contexts: "",
@@ -114,12 +114,12 @@ const Compose = () => {
       writerPosition: postTypes[postType][3],
       title: formData.title,
       location: location
-          ? location +
+        ? location +
           "$" +
           coords?.latitude.toString() +
           "$" +
           coords?.longitude.toString()
-          : null,
+        : null,
       meetingAt: meetingAt,
       type: postTypes[postType][2],
       receiverNum: BNR ? BNR.receivers : 0,
@@ -128,13 +128,16 @@ const Compose = () => {
       content: formData.contexts,
       tags: hashtags,
     };
-    console.log( location +
+    console.log(
+      location +
         "$" +
         coords?.latitude.toString() +
         "$" +
-        coords?.longitude.toString(),"coooordscheck");
+        coords?.longitude.toString(),
+      "coooordscheck"
+    );
     postFetcher
-      .post(`/post/write`, composePost)
+      .post("/api" + `/post/write`, composePost)
       .then((res: AxiosResponse<BaseResponse<any>>) => {
         if (res.data.isSuccess) {
           console.log("제출");

@@ -24,7 +24,7 @@ const RequestListModal = (data: {
   const onClickAccept = useCallback(
     (userIdx: number) => {
       postFetcher
-        .post(`/appointment/determine/${data.postIdx}`, {
+        .post("/api" + `/appointment/determine/${data.postIdx}`, {
           makerIdx: data.currUserIdx,
           requesterIdx: userIdx,
           accept: true,
@@ -44,7 +44,7 @@ const RequestListModal = (data: {
   const onClickReject = useCallback(
     (userIdx: number) => {
       postFetcher
-        .post(`/appointment/determine/${data.postIdx}`, {
+        .post("/api" + `/appointment/determine/${data.postIdx}`, {
           makerIdx: data.currUserIdx,
           requesterIdx: userIdx,
           accept: false,

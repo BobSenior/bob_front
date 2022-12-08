@@ -18,7 +18,7 @@ import SearchSvg from "../../assets/icons/search-circle.svg";
 import axios, { AxiosResponse } from "axios";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
-import { normalPostFetcher } from "../../utils/fetchers";
+import { normalPostFetcher, postFetcher } from "../../utils/fetchers";
 import SchoolSetModal from "../../components/DeportmentSetModal";
 import validator from "validator";
 import BobImg from "../../assets/images/bob.png";
@@ -74,7 +74,7 @@ const SignUp = () => {
   const verify_Exist_Id = useCallback(() => {
     if (validator.isAlphanumeric(inputId)) {
       axios
-        .get(`/id/dupli?id=${inputId}`)
+        .get(`/api/id/dupli?id=${inputId}`)
         .then((response: AxiosResponse<BaseResponse<any>>) => {
           if (!response.data.isSuccess) {
             toast.error(response.data.message);
@@ -88,7 +88,7 @@ const SignUp = () => {
 
   const verify_Nickname_Id = useCallback(() => {
     axios
-      .get(`/nickname/dupli?nickname=${nickname}`)
+      .get(`/api/nickname/dupli?nickname=${nickname}`)
       .then((response: AxiosResponse<BaseResponse<any>>) => {
         if (!response.data.isSuccess) {
           toast.error(response.data.message);
@@ -128,7 +128,7 @@ const SignUp = () => {
   }, [inputId, password, checkPassword]);
 
   const onSubmit3 = useCallback(() => {
-    normalPostFetcher.post(`/signUp`, {
+    postFetcher.post(`/api/signUp`, {
       email: email,
       userId: inputId,
       password: password,

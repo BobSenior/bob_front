@@ -24,7 +24,7 @@ import { Navigate } from "react-router-dom";
 const chatSize = 20;
 
 const ChatRoom = (data: { id: number }) => {
-    const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  const myData = JSON.parse(sessionStorage.getItem("myData") ?? "");
   if (!myData) return <Navigate to={"/login"} />;
   const {
     data: chats,
@@ -118,7 +118,7 @@ const ChatRoom = (data: { id: number }) => {
       const sessionParses = sessionUrl.split("/");
       console.log("parsed", sessionParses);
       postFetcher
-        .post(`/stomp/record/${data.id}`, {
+        .post(`/api/stomp/record/${data.id}`, {
           sessionId: sessionParses[6],
           userIdx: myData?.userIdx,
         })

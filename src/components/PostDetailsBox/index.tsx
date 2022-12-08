@@ -152,7 +152,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
 
       if (postDetailData.requested) {
         postFetcher
-          .post(`/post/request/reverse`, {
+          .post("/api" + `/post/request/reverse`, {
             userIdx: myData.userIdx,
             postIdx: postIdx,
           })
@@ -167,7 +167,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
           .catch((err) => console.error(err));
       } else {
         postFetcher
-          .post("/post/request", {
+          .post("/api" + "/post/request", {
             userIdx: myData.userIdx,
             postIdx: postIdx,
             position: requestType,

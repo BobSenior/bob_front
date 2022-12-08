@@ -12,13 +12,13 @@ import {
   SearchInputDiv,
 } from "./style";
 import PostBox from "../../components/PostBox";
-import { AppointmentHeadDTO } from "../../types/db";
+import { AppointmentHeadDTO, MyDataDTO } from "../../types/db";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import countColumns from "../../utils/countColumns";
 import { Oval } from "react-loader-spinner";
 import useSWRInfinite from "swr/infinite";
 import { infiniteFetcher } from "../../utils/fetchers";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const pageSize = 10;
@@ -28,7 +28,14 @@ const Main = () => {
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
-  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  let myData: MyDataDTO | null = null;
+  try {
+    myData = JSON.parse(sessionStorage.getItem("myData") ?? "");
+  } catch (error) {
+    console.log(error);
+    return <Navigate to={"login"} />;
+  }
+
   const {
     data: PostHeads,
     isValidating,
