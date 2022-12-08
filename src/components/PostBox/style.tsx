@@ -71,6 +71,7 @@ export const PromiseContexts = styled.div`
   flex-grow: 1;
   row-gap: 3px;
   align-content: stretch;
+  min-height: 76px;
 `;
 
 export const PromiseHead = styled.div`

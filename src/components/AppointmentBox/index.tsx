@@ -44,16 +44,21 @@ const AppointmentBox = ({ data }: props) => {
 
 
   return (
-    <PBox>
-      <PromiseHead>
-        <PromiseImg />
-        <PromiseContexts>
-          <TopContext>
-            <span>{data.title}</span>
-            <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>
+      <PBox>
+        <PromiseHead>
+          <PromiseContexts>
+            <TopContext>
+            <span>
+              <span>[{data.type === "dutch" ? "같이먹자" : "사주세요"}]</span>
+              {data.title}
+            </span>
+            {UnreadChatCount && (
+                <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>
+            )}
           </TopContext>
           <MiddleContext>
             <MemberBtn
+                uuid={data.writer.uuid}
               userIdx={data.writer.userIdx}
               nickName={data.writer.nickname}
               department={data.writer.department}

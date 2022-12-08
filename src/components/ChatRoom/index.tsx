@@ -124,7 +124,6 @@ const ChatRoom = (data: { id: number }) => {
         })
         .then()
         .catch();
-      stomp?.subscribe(`/topic/room/${data.id}`, onReceiveChat);
     });
 
     return () => {

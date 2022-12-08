@@ -58,12 +58,13 @@ export interface PostViewDTO {
   receiver: SimplifiedUserProfileDTO[];
   contents: string;
   tagHead: string[];
-  isRequested: boolean;
+  requested: boolean;
 }
 
 export interface SimplifiedUserProfileDTO {
   userIdx: number;
   nickname: string;
+  uuid:string;
   department: string;
   schoolId: number;
   school: string;

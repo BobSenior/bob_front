@@ -80,6 +80,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
         .map((member) => {
           return (
             <MemberBtn
+                uuid={member.uuid}
               userIdx={member.userIdx}
               nickName={member.nickname}
               department={member.department}
@@ -96,6 +97,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
     return postDetailData.receiver.map((member) => {
       return (
         <MemberBtn
+            uuid={member.uuid}
           userIdx={member.userIdx}
           nickName={member.nickname}
           department={member.department}
@@ -115,6 +117,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
         .map((member) => {
           return (
             <MemberBtn
+                uuid={member.uuid}
               userIdx={member.userIdx}
               nickName={member.nickname}
               department={member.department}
@@ -131,6 +134,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
     return postDetailData.buyer.map((member) => {
       return (
         <MemberBtn
+            uuid={member.uuid}
           userIdx={member.userIdx}
           nickName={member.nickname}
           department={member.department}
@@ -146,7 +150,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
         e.stopPropagation();
         if (!postDetailData) return;
 
-        if (postDetailData.isRequested) {
+        if (postDetailData.requested) {
           postFetcher
               .post(`/post/request/reverse`, {
             userIdx: myData.userIdx,
@@ -156,7 +160,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
             if (res.data.isSuccess) {
               setPostDetailData((prevState) => {
                 if (!prevState) return null;
-                return { ...prevState, isRequested: !prevState.isRequested };
+                return { ...prevState, requested: false };
               });
             } else errorAlarm(res.data.message);
           })
@@ -172,7 +176,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
                 if (res.data.isSuccess) {
                   setPostDetailData((prevState) => {
                     if (!prevState) return null;
-                    return { ...prevState, isRequested: !prevState.isRequested };
+                    return { ...prevState, requested: true };
                   });
                 } else errorAlarm(res.data.message);
               })
@@ -244,15 +248,15 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
             {postDetailData ? (
               <>
                 <PlaceInfoDiv
-                  whileTap={{ scale: 0.85 }}
-                  onClick={onClickPlaceInfoDiv}
+                    whileTap={{ scale: 0.85 }}
+                    onClick={onClickPlaceInfoDiv}
                 >
-                  {postDetailData.location ? (
-                    <>
-                      <PickerImg src={PickerSvg} />
+                  <PickerImg src={PickerSvg} />
+                  {postDetailData.location != 'null' ? (
                       <span>{postDetailData.location}</span>
-                    </>
-                  ):<div>정해지지 않았어요!</div>}
+                  ) : (
+                      <span>정해지지 않았어요.</span>
+                  )}
                 </PlaceInfoDiv>
                 <TimeInfoDiv>
                   {postDetailData.meetingAt && (
@@ -324,27 +328,25 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
             </HashTagContainer>
           </Section>
           <Footer>
-            {postDetailData && postDetailData.isRequested ? (
-              <ColoredBtn
-                width={"100%"}
-                height={"35px"}
-                animate={
-                  postDetailData && postDetailData.isRequested ? "In" : "Out"
-                }
-                variants={InNOut}
-                useTap={!!postDetailData}
-                useHover={!!postDetailData}
-                onClick={onClickParticipationButton}
-                disable={!postDetailData}
-              >
-                <span>신청취소</span>
-              </ColoredBtn>
+            {postDetailData?.requested ? (
+                <ColoredBtn
+                    width={"100%"}
+                    height={"35px"}
+                    animate={postDetailData.requested ? "In" : "Out"}
+                    variants={InNOut}
+                    useTap={!!postDetailData}
+                    useHover={!!postDetailData}
+                    onClick={onClickParticipationButton}
+                    disable={!postDetailData}
+                >
+                  <span>신청취소</span>
+                </ColoredBtn>
             ) : type === DUTCH ? (
               <ColoredBtn
                 width={"100%"}
                 height={"35px"}
                 animate={
-                  postDetailData && postDetailData.isRequested ? "In" : "Out"
+                  postDetailData && postDetailData.requested ? "In" : "Out"
                 }
                 variants={InNOut}
                 useTap={!!postDetailData}
@@ -361,7 +363,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
                   width={"100%"}
                   height={"35px"}
                   animate={
-                    postDetailData && postDetailData.isRequested ? "In" : "Out"
+                    postDetailData && postDetailData.requested ? "In" : "Out"
                   }
                   variants={InNOut}
                   useTap={!!postDetailData}
@@ -376,7 +378,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
                   width={"100%"}
                   height={"35px"}
                   animate={
-                    postDetailData && postDetailData.isRequested ? "In" : "Out"
+                    postDetailData && postDetailData.requested ? "In" : "Out"
                   }
                   variants={InNOut}
                   useTap={!!postDetailData}

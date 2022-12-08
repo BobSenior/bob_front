@@ -35,18 +35,21 @@ const PostBox = ({ data }: props) => {
   }, []);
 
   return (
-    <PBox onClick={onClickShowDetails}>
-      <PromiseHead>
-        <PromiseImg />
-        <PromiseContexts>
-          <TopContext>
-            <span>{data.title}</span>
-            <span
-              style={{ fontSize: "xx-small" }}
-            >{`${data.currNum}/${data.totalNum}`}</span>
-          </TopContext>
+      <PBox onClick={onClickShowDetails}>
+        <PromiseHead>
+          <PromiseContexts>
+            <TopContext>
+            <span>
+              <span>[{data.type === "dutch" ? "같이먹자" : "사주세요"}]</span>
+              {data.title}
+            </span>
+              <span
+                  style={{ fontSize: "xx-small" }}
+              >{`${data.currNum}/${data.totalNum}`}</span>
+                </TopContext>
           <MiddleContext>
             <MemberBtn
+                uuid={data.writer.uuid}
               userIdx={data.writer.userIdx}
               nickName={data.writer.nickname}
               department={data.writer.department}

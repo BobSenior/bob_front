@@ -1,5 +1,5 @@
 import React, {
-  FormEvent,
+  FormEvent, MouseEvent,
   useCallback,
   useContext, useEffect,
   useMemo,
@@ -66,6 +66,7 @@ import RequestListModal from "../../components/RequestListModal";
 import ChatRoomModal from "../../components/ChatRoomModal";
 import GlobalContext from "../../hooks/GlobalContext";
 import app from "../../App";
+import MapDisplayModal from "../../components/MapDisplayModal";
 
 const AppointmentSpace = () => {
   const { id } = useParams();
@@ -93,6 +94,7 @@ const AppointmentSpace = () => {
   const [meetingAt, setMeetingAt] = useState<string | null>(null);
   const [requestModal, setRequestModal] = useState<boolean>(false);
   const [showingChat, setShowingChat] = useState<boolean>(false);
+  const [showMapDisplayModal, setShowMapDisplayModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -109,12 +111,13 @@ const AppointmentSpace = () => {
     return appointment.result.buyers.map((member) => {
       return (
         <MemberBtn
+            uuid={member.uuid}
           userIdx={member.userIdx}
           nickName={member.nickname}
           department={member.department}
           schoolId={member.schoolId}
           isLeader={appointment.result.writerIdx === myData?.userIdx}
-          //onClick={onClickKickUser(member.userIdx)}
+          onClick={()=>{onClickKickUser(member.userIdx)}}
           key={generateUniqueID()}
         />
       );
@@ -178,38 +181,24 @@ const AppointmentSpace = () => {
 
   const receiversSpans = useMemo(() => {
     if (!appointment) return null;
-
-    if (appointment.result.type === 'dutch') {
-      return appointment.result.buyers
-          .filter((value, index) => index % 2 === 1)
-          .map((member) => {
-            return (
-                <MemberBtn
-                    userIdx={member.userIdx}
-                    nickName={member.nickname}
-                    department={member.department}
-                    schoolId={member.schoolId}
-                    key={generateUniqueID()}
-                />
-            );
-          });
-    }
-
     if (appointment.result.receivers.length === 0)
       return <NoOneSpan>아무도 없어요.</NoOneSpan>;
 
     return appointment.result.receivers.map((member) => {
       return (
           <MemberBtn
+              uuid={member.uuid}
               userIdx={member.userIdx}
               nickName={member.nickname}
               department={member.department}
               schoolId={member.schoolId}
+              isLeader={appointment.result.writerIdx === myData?.userIdx}
+              onClick={()=>{onClickKickUser(member.userIdx)}}
               key={generateUniqueID()}
           />
       );
     });
-  }, [appointment]);
+  }, [appointment,myData]);
 
   const voteSpan = useMemo(() => {
     let userIdx = myData?.userIdx;
@@ -272,7 +261,7 @@ const AppointmentSpace = () => {
     if (!appointment) return null;
     if (!appointment.result.fixVote) return null;
     if (!appointment.result.voteTitle) return null;
-    console.log("title", appointment.result.voteTitle);
+
     let words = appointment.result.voteTitle.split("$");
     return (
       <>
@@ -463,6 +452,22 @@ const AppointmentSpace = () => {
     meetingAt,
   ]);
 
+  const onClickPlaceInfoDiv = useCallback(
+      (e: MouseEvent<HTMLElement>) => {
+        e.stopPropagation();
+        if (
+            appointment &&
+            appointment.result.location &&
+            appointment.result.latitude &&
+            appointment.result.longitude
+        ) {
+          setShowMapDisplayModal(true);
+        }
+      },
+      [appointment]
+  );
+
+
   const onClickTerminateVote = useCallback(() => {
     postFetcher
       .post(`/vote/terminate/${id}`, {
@@ -480,6 +485,7 @@ const AppointmentSpace = () => {
   }, [appointment, selected]);
 
   const onClickKickUser = useCallback((kicked:number)=>{
+    console.log('kick')
     if(!myData) return null;
     postFetcher.post(
         `/appointment/kick/${id}`,{
@@ -491,10 +497,11 @@ const AppointmentSpace = () => {
         toast.error(response.data.message)
       }
       else{
-        console.log('hello');
+        toast.info("유저를 강퇴하였습니다!");
+        mutate();
       }
     })
-  },[])
+  },[appointment])
 
 
 
@@ -517,12 +524,18 @@ const AppointmentSpace = () => {
         <TLSection css={TNPSection}>
           {appointment ? (
             <LocationWrapper>
-              <MyPlaceInfoDiv whileTap={{ scale: 0.85 }}>
+              <MyPlaceInfoDiv
+                  onClick={onClickPlaceInfoDiv}
+                  whileTap={{ scale: 0.85 }}>
                 <PickerImg src={PickerSvg} />
-                <span>{appointment.result.location}</span>
+                <span>{appointment.result.location?appointment.result.location:"아직 정해지지 않았어요!"}</span>
               </MyPlaceInfoDiv>
               <MyTimeInfoDiv>
-                <span></span>
+                <span>{appointment.result.meetingAt?
+                    dayjsAll(appointment.result.meetingAt).appointmentDate() +
+                  " " +
+                  dayjsAll(appointment.result.meetingAt).appointmentTime()
+                    :"아직 정해지지 않았어요!"}</span>
               </MyTimeInfoDiv>
             </LocationWrapper>
           ) : (
@@ -574,6 +587,22 @@ const AppointmentSpace = () => {
                 </MembersColumn>
               </LargeMembersDiv>
           }
+
+          {showMapDisplayModal &&
+              appointment &&
+              appointment.result.latitude &&
+              appointment.result.longitude &&
+              appointment.result.location && (
+                  <MapDisplayModal
+                      setShow={setShowMapDisplayModal}
+                      coordinate={{
+                        latitude: appointment.result.latitude,
+                        longitude: appointment.result.longitude,
+                      }}
+                      location={appointment.result.location}
+                  />
+              )}
+
 
 
           <CenterModal
