@@ -30,7 +30,6 @@ import AlarmList from "../../components/AlarmList";
 import { ToastContainer } from "react-toastify";
 import useSWR, {mutate} from "swr";
 import {fetcher, getFetcher} from "../../utils/fetchers";
-import { testUserIdx } from "../../pages/Main";
 import {BaseResponse} from "../../types/db";
 import { TotalNotices } from "../../types/db";
 import ChatRoomModal from "../../components/ChatRoomModal";

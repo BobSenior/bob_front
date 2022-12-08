@@ -6,13 +6,12 @@ import { ShownNotice } from "../../types/db";
 import React, {Dispatch, useContext} from "react";
 import { getFetcher } from "../../utils/fetchers";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
-import { testUserIdx } from "../../pages/Main";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const ListAlarm = (props: {
   setShow: Dispatch<React.SetStateAction<number>>;
 }) => {
-  const { myData, setMyData } = useContext(GlobalContext);
+  const { myData } = useContext(GlobalContext);
   const { data: alarms } = useSWR<ShownNotice[]>(
     `/notice/list?userIdx=${myData?.userIdx}`,
     getFetcher
@@ -27,9 +26,16 @@ const ListAlarm = (props: {
     >
       <AlarmListWrapper>
         <Scrollbars>
-          {alarms && alarms.length > 0 ? (alarms.map((content) => (
-            <AlarmInfoDiv key={generateUniqueID()} data={content} />
-          ))): (<NoAlarmDiv> <span>알람이 없습니다.</span></NoAlarmDiv>)}
+          {alarms && alarms.length > 0 ? (
+            alarms.map((content) => (
+              <AlarmInfoDiv key={generateUniqueID()} data={content} />
+            ))
+          ) : (
+            <NoAlarmDiv>
+              {" "}
+              <span>알람이 없습니다.</span>
+            </NoAlarmDiv>
+          )}
         </Scrollbars>
       </AlarmListWrapper>
     </ListModalContainer>

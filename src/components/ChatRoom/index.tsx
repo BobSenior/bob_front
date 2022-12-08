@@ -1,30 +1,31 @@
 import React, {
-    useCallback,
-    useState,
-    useRef,
-    useEffect,
-    FormEvent, useContext,
+  useCallback,
+  useState,
+  useRef,
+  useEffect,
+  FormEvent,
+  useContext,
 } from "react";
 import { ChatRoomContainer } from "./style";
 import ChatList from "../ChatList";
 import ChatBox from "../ChatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import useSWRInfinite from "swr/infinite";
-import {BaseResponse} from "../../types/db";
+import { BaseResponse } from "../../types/db";
 import { infiniteFetcher, postFetcher } from "../../utils/fetchers";
 import { ShownChat } from "../../types/db";
 import makeDateSection from "../../utils/makeDateSection";
 import { Message } from "stompjs";
 import useStomp from "../../hooks/useStomp";
 import dayjs from "dayjs";
-import { testUserIdx } from "../../pages/Main";
 import GlobalContext from "../../hooks/GlobalContext";
+import { Navigate } from "react-router-dom";
 
 const chatSize = 20;
-const postIdx = 1;
-const userIdx = 1;
 
-const ChatRoom = (data:{id:number}) => {
+const ChatRoom = (data: { id: number }) => {
+  const { myData } = useContext(GlobalContext);
+  if (!myData) return <Navigate to={"/login"} />;
   const {
     data: chats,
     setSize,
@@ -45,7 +46,6 @@ const ChatRoom = (data:{id:number}) => {
   const scrollbarRef = useRef<Scrollbars>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [sock, stomp, disconnect] = useStomp();
-  const { myData, setMyData } = useContext(GlobalContext);
 
   const isEmpty = chats?.[0].length === 0;
   const isReachingEnd =
@@ -53,10 +53,9 @@ const ChatRoom = (data:{id:number}) => {
 
   const onReceiveChat = useCallback(
     (message: Message) => {
-      const receivedBody:BaseResponse<ShownChat> = JSON.parse(message.body);
+      const receivedBody: BaseResponse<ShownChat> = JSON.parse(message.body);
       const receivedChat: ShownChat = receivedBody.result;
-      console.log(receivedChat,"hihihi")
-      if (receivedChat.senderIdx == testUserIdx) return;
+      if (receivedChat.senderIdx == myData.userIdx) return;
       mutate((currentData: ShownChat[][] | undefined) => {
         const fstChatList: ShownChat[] = [receivedChat];
         if (currentData) return [fstChatList, ...currentData];
@@ -72,19 +71,22 @@ const ChatRoom = (data:{id:number}) => {
 
   const onSubmitChat = useCallback(
     (e: FormEvent) => {
-        if(!myData) return null;
       e.preventDefault();
-      if (!chat.trim()) return;
-      const sendChat:ShownChat = {
+      if (!myData || !chat.trim()) return;
+      const sendChat: ShownChat = {
         nickname: myData.nickname,
         writtenAt: dayjs().toString(),
         content: chat,
         senderIdx: myData.userIdx,
       };
-      stomp?.send(`/app/stomp/${data.id}`, {}, JSON.stringify({
+      stomp?.send(
+        `/app/stomp/${data.id}`,
+        {},
+        JSON.stringify({
           senderIdx: myData.userIdx,
-          data:chat
-      }));
+          data: chat,
+        })
+      );
       mutate((currentData: ShownChat[][] | undefined) => {
         const fstChatList: ShownChat[] = [sendChat];
         if (currentData) return [fstChatList, ...currentData];
@@ -102,19 +104,19 @@ const ChatRoom = (data:{id:number}) => {
   );
 
   useEffect(() => {
-      setTimeout(() => {
-          scrollbarRef.current?.scrollToBottom();
-      }, 900);
+    setTimeout(() => {
+      scrollbarRef.current?.scrollToBottom();
+    }, 900);
   }, []);
 
   useEffect(() => {
     let sessionUrl: string = "";
     stomp?.connect({}, () => {
-      stomp?.subscribe(`/topic/room/${postIdx}`, onReceiveChat);
+      stomp?.subscribe(`/topic/room/${data.id}`, onReceiveChat);
       // @ts-ignore
       sessionUrl = sock._transport.url;
       const sessionParses = sessionUrl.split("/");
-      console.log('parsed',sessionParses);
+      console.log("parsed", sessionParses);
       postFetcher
         .post(`/stomp/record/${data.id}`, {
             sessionId:sessionParses[6],
@@ -127,10 +129,10 @@ const ChatRoom = (data:{id:number}) => {
 
     return () => {
       disconnect(() => {
-        stomp?.unsubscribe(`${postIdx}`);
+        stomp?.unsubscribe(`${data.id}`);
       });
     };
-  }, [stomp,sock,data]);
+  }, [stomp, sock, data]);
 
   const chatDateSections = makeDateSection(chats ? chats.flat().reverse() : []);
 

@@ -1,4 +1,4 @@
-import React, {memo, useContext} from "react";
+import React, { memo, useContext } from "react";
 import gravatar from "gravatar";
 import { Column, Container } from "./style";
 import { DeportmentSpan, IdxSpan, NickNameSpan } from "../MemberBtn/style";
@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import CopySvg from "../../assets/icons/copy-outline.svg";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import GlobalContext from "../../hooks/GlobalContext";
+import { Navigate } from "react-router-dom";
 
 const MyProfileMenu = () => {
-
-    const { myData, setMyData } = useContext(GlobalContext);
+  const { myData, setMyData } = useContext(GlobalContext);
 
   return (
     <Container>

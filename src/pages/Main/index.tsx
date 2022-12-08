@@ -1,4 +1,5 @@
-import React, {useCallback, useContext, useEffect, useMemo, useState} from "react";
+import React, {useCallback,
+  useContext, useEffect, useMemo, useState} from "react";
 import {
   PageSpinnerWrapper,
   PromisesColumn,
@@ -15,7 +16,6 @@ import { infiniteFetcher } from "../../utils/fetchers";
 import { useParams } from "react-router-dom";
 import GlobalContext from "../../hooks/GlobalContext";
 
-export const testUserIdx = 1;
 const pageSize = 10;
 
 const Main = () => {

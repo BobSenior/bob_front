@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   memo,
+  useContext,
 } from "react";
 import {
   ContentSection,
@@ -27,21 +28,18 @@ import { PostViewDTO } from "../../types/db";
 import PickerSvg from "../../assets/icons/location-outline.svg";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import MemberBtn from "../MemberBtn";
-import {
-  getFetcher,
-  postDetailsFetcher,
-  postFetcher,
-} from "../../utils/fetchers";
+import { postDetailsFetcher, postFetcher } from "../../utils/fetchers";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { HashTagContainer } from "../PostBox/style";
 import HashTag from "../HashTag";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
-import { testUserIdx } from "../../pages/Main";
 import { toast } from "react-toastify";
 import MapDisplayModal from "../MapDisplayModal";
 import TitleTagSpan from "../TitleTagSpan";
 import dayjsAll from "../../utils/dayjsAll";
+import GlobalContext from "../../hooks/GlobalContext";
+import { Navigate } from "react-router-dom";
 
 interface props {
   postIdx: number;
@@ -64,6 +62,10 @@ const errorAlarm = (message: string): void => {
 };
 
 const PostDetailsBox = ({ postIdx, type }: props) => {
+  const { myData } = useContext(GlobalContext);
+  if (!myData) {
+    return <Navigate to={"/login"} replace={true} />;
+  }
   const [postDetailData, setPostDetailData] = useState<PostViewDTO | null>(
     null
   );
@@ -148,8 +150,8 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
 
       if (postDetailData.isRequested) {
         postFetcher
-          .post(`/api/post/request/reverse`, {
-            userIdx: testUserIdx,
+          .post(`/post/request/reverse`, {
+            userIdx: myData.userIdx,
             postIdx: postIdx,
           })
           .then((res) => {
@@ -163,8 +165,8 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
           .catch((err) => console.error(err));
       } else {
         postFetcher
-          .post("/api/post/request", {
-            userIdx: testUserIdx,
+          .post("/post/request", {
+            userIdx: myData.userIdx,
             postIdx: postIdx,
             position: requestType,
           })
@@ -198,7 +200,7 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
   );
 
   useEffect(() => {
-    postDetailsFetcher(`/post/${postIdx}?userIdx=${testUserIdx}`)
+    postDetailsFetcher(`/post/${postIdx}?userIdx=${myData.userIdx}`)
       .then((res) => {
         setPostDetailData(res);
       })
@@ -338,6 +340,22 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
                 disable={!postDetailData}
               >
                 <span>신청취소</span>
+              </ColoredBtn>
+            ) : type === DUTCH ? (
+              <ColoredBtn
+                width={"100%"}
+                height={"35px"}
+                animate={
+                  postDetailData && postDetailData.isRequested ? "In" : "Out"
+                }
+                variants={InNOut}
+                useTap={!!postDetailData}
+                useHover={!!postDetailData}
+                onTapStart={() => setRequestType("buyer")}
+                onClick={onClickParticipationButton}
+                disable={!postDetailData}
+              >
+                <span>참가신청</span>
               </ColoredBtn>
             ) : (
               <>
