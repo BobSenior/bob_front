@@ -12,10 +12,9 @@ import {
 } from "./styles";
 import { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
-import { postFetcher } from "../../utils/fetchers";
+import { normalPostFetcher, postFetcher } from "../../utils/fetchers";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
-import GlobalContext from "../../hooks/GlobalContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,7 +26,7 @@ const Login = () => {
     (e: FormEvent) => {
       e.preventDefault();
       setLogInError(false);
-      postFetcher
+      normalPostFetcher
         .post(`/login`, {
           userId: id,
           password: password,
@@ -38,16 +37,16 @@ const Login = () => {
             setId("");
             setPassword("");
           } else {
-              console.log(response.data.result)
-            //여기서 데이터 받아옴
-              sessionStorage.setItem("myData", JSON.stringify(response.data.result))
-              navigate('/main');
+            sessionStorage.setItem(
+              "myData",
+              JSON.stringify(response.data.result)
+            );
+            navigate("/main");
           }
         });
     },
     [id, password]
   );
-
 
   return (
     <LoginPageWrapper>

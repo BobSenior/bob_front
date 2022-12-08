@@ -21,6 +21,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { normalPostFetcher } from "../../utils/fetchers";
 import SchoolSetModal from "../../components/DeportmentSetModal";
 import validator from "validator";
+import BobImg from "../../assets/images/bob.png";
 
 const selectList = [
   "연도를 선택해주세요!",
@@ -318,7 +319,7 @@ const SignUp = () => {
         )}
         {pageNum == 4 && (
           <Column>
-            <img src={"../../../public/bob.png"} />
+            <img src={BobImg} />
             <div
               style={{
                 position: "relative",
