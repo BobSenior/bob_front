@@ -54,7 +54,7 @@ interface IBNR {
   receivers: number;
 }
 
-export const postTypes = [
+const postTypes = [
   [
     "같이먹자",
     "같이 밥 먹을 사람을 구해요. 모두 더치페이해요.",
@@ -82,7 +82,7 @@ const getHashTag = (str: string | null): string[] | null => {
 };
 
 const Compose = () => {
-  const { myData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const [formData, setFormData] = useState<basicData>({
     title: "",
     contexts: "",
@@ -114,26 +114,31 @@ const Compose = () => {
       writerPosition: postTypes[postType][3],
       title: formData.title,
       location: location
-        ? location +
+          ? location +
           "$" +
           coords?.latitude.toString() +
           "$" +
           coords?.longitude.toString()
-        : null,
+          : null,
       meetingAt: meetingAt,
       type: postTypes[postType][2],
-      receiverNum: BNR ? BNR.receivers : null,
+      receiverNum: BNR ? BNR.receivers : 0,
       buyerNum: BNR ? BNR.buyers : maxMember,
       constraint: onlyForSameMajor ? myData.department : "아무나",
       content: formData.contexts,
       tags: hashtags,
     };
+    console.log( location +
+        "$" +
+        coords?.latitude.toString() +
+        "$" +
+        coords?.longitude.toString(),"coooordscheck");
     postFetcher
       .post(`/post/write`, composePost)
       .then((res: AxiosResponse<BaseResponse<any>>) => {
         if (res.data.isSuccess) {
           console.log("제출");
-          navigate("/main");
+          navigate(`/main/appointment/${res.data.result}`);
         }
       })
       .catch((err) => console.log(err));

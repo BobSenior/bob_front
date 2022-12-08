@@ -12,14 +12,13 @@ import {
 } from "./styles";
 import { AxiosResponse } from "axios";
 import { Link } from "react-router-dom";
-import { normalPostFetcher } from "../../utils/fetchers";
+import { postFetcher } from "../../utils/fetchers";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { myData, setMyData } = useContext(GlobalContext);
   const [logInError, setLogInError] = useState(false);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +27,7 @@ const Login = () => {
     (e: FormEvent) => {
       e.preventDefault();
       setLogInError(false);
-      normalPostFetcher
+      postFetcher
         .post(`/login`, {
           userId: id,
           password: password,
@@ -39,21 +38,16 @@ const Login = () => {
             setId("");
             setPassword("");
           } else {
+              console.log(response.data.result)
             //여기서 데이터 받아옴
-            toast(response.data.result.resultMessage);
-            setMyData(response.data.result);
-            sessionStorage.setItem(
-              "myData",
-              JSON.stringify(response.data.result)
-            );
-            navigate("/main");
+              sessionStorage.setItem("myData", JSON.stringify(response.data.result))
+              navigate('/main');
           }
         });
     },
     [id, password]
   );
 
-  if (myData) return <Navigate to={"/main"} />;
 
   return (
     <LoginPageWrapper>
@@ -79,10 +73,7 @@ const Login = () => {
               setPassword(e.target.value);
             }}
           />
-          <Finding_string onClick={() => navigate(`/finding`)}>
-            아이디/비밀번호 찾기
-          </Finding_string>
-          <BottomButton onClick={() => navigate("/main")}>로그인</BottomButton>
+          <BottomButton>로그인</BottomButton>
         </Form>
       </FormSection>
       <LinkContainer>

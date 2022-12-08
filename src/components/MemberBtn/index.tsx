@@ -21,6 +21,7 @@ import CopySvg from "../../assets/icons/copy-outline.svg";
 import { toast } from "react-toastify";
 
 const MemberBtn = (userData: {
+  uuid:string;
   userIdx: number;
   nickName: string;
   department: string;
@@ -36,6 +37,7 @@ const MemberBtn = (userData: {
   const closeEvent = () => {
     setShowMemberInfoPopUp(false);
   };
+
 
   useEffect(() => {
     if (nameSpanRef.current) {
@@ -125,7 +127,7 @@ const MemberBtn = (userData: {
                 <ProfileScriptBox>
                   <NickNameSpan>{userData.nickName}</NickNameSpan>
                   <CopyToClipboard
-                    text={userData.nickName + "@" + userData.userIdx}
+                    text={userData.uuid}
                     onCopy={() => {
                       toast.success("복사완료!", {
                         position: "bottom-left",
@@ -141,7 +143,7 @@ const MemberBtn = (userData: {
                     }}
                   >
                     <IdxSpan>
-                      @{userData.userIdx}
+                      uuid 복사하기
                       <img
                         src={CopySvg}
                         width={"12px"}

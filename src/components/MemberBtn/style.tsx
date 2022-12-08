@@ -50,6 +50,7 @@ export const MemberRemoveBtn = styled.button`
   align-items: center;
   background-color: var(--basic-color);
   border-radius: 7px;
+  cursor:pointer;
 `;
 
 export const MemberInfoDiv = styled(motion.div)`

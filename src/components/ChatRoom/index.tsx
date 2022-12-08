@@ -24,7 +24,7 @@ import { Navigate } from "react-router-dom";
 const chatSize = 20;
 
 const ChatRoom = (data: { id: number }) => {
-  const { myData } = useContext(GlobalContext);
+    const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   if (!myData) return <Navigate to={"/login"} />;
   const {
     data: chats,

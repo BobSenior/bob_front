@@ -9,7 +9,7 @@ import {
   UnreadChatSpan,
 } from "../PostBox/style";
 import { AppointmentHeadDTO } from "../../types/db";
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import MemberBtn from "../MemberBtn";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import EnterSvg from "../../assets/icons/enter-outline.svg";
@@ -29,34 +29,36 @@ const statusMatcher = {
 };
 
 const AppointmentBox = ({ data }: props) => {
-  const { myData } = useContext(GlobalContext);
-  const { data: UnreadChatCount } = useSWR(
-    // `/chat/unread/${data.postIdx}?userIdx=${myData?.userIdx}`,
-    null,
-    getFetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
-    }
-  );
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  const {
+    data: UnreadChatCount,
+    mutate,
+    error,
+    isValidating,
+  } = useSWR(`/chat/unread/${data.postIdx}?userIdx=${myData?.userIdx}`, getFetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    revalidateOnMount: true,
+  });
+
 
   return (
-    <PBox>
-      <PromiseHead>
-        <PromiseContexts>
-          <TopContext>
+      <PBox>
+        <PromiseHead>
+          <PromiseContexts>
+            <TopContext>
             <span>
               <span>[{data.type === "dutch" ? "같이먹자" : "사주세요"}]</span>
               {data.title}
             </span>
-            {/*{UnreadChatCount.number > 0 && (*/}
-            {/*  <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>*/}
-            {/*)}*/}
+            {UnreadChatCount && (
+                <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>
+            )}
           </TopContext>
           <MiddleContext>
             <MemberBtn
+                uuid={data.writer.uuid}
               userIdx={data.writer.userIdx}
               nickName={data.writer.nickname}
               department={data.writer.department}

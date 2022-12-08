@@ -8,7 +8,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import GlobalContext from "../../hooks/GlobalContext";
 
 const MyProfileMenu = () => {
-  const { myData } = useContext(GlobalContext);
+    const myData = JSON.parse(sessionStorage.getItem("myData")??"")
 
   return (
     <Container>

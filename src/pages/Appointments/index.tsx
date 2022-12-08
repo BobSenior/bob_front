@@ -31,7 +31,7 @@ const pageParams = {
 const pageSize = 10;
 
 const Appointments = () => {
-  const { myData } = useContext(GlobalContext);
+  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
