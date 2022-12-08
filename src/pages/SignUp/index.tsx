@@ -18,8 +18,9 @@ import SearchSvg from "../../assets/icons/search-circle.svg";
 import axios, { AxiosResponse } from "axios";
 import { BaseResponse } from "../../types/db";
 import { toast, ToastContainer } from "react-toastify";
-import { postFetcher } from "../../utils/fetchers";
+import { normalPostFetcher } from "../../utils/fetchers";
 import SchoolSetModal from "../../components/DeportmentSetModal";
+import validator from "validator";
 
 const selectList = [
   "연도를 선택해주세요!",
@@ -70,8 +71,7 @@ const SignUp = () => {
   };
 
   const verify_Exist_Id = useCallback(() => {
-    //여기서 id verification쏴주면 될듯...
-    if (true) {
+    if (validator.isAlphanumeric(inputId)) {
       axios
         .get(`/id/dupli?id=${inputId}`)
         .then((response: AxiosResponse<BaseResponse<any>>) => {
@@ -127,7 +127,7 @@ const SignUp = () => {
   }, [inputId, password, checkPassword]);
 
   const onSubmit3 = useCallback(() => {
-    postFetcher.post(`/signUp`, {
+    normalPostFetcher.post(`/signUp`, {
       email: email,
       userId: inputId,
       password: password,

@@ -9,7 +9,7 @@ import {
   UnreadChatSpan,
 } from "../PostBox/style";
 import { AppointmentHeadDTO } from "../../types/db";
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import MemberBtn from "../MemberBtn";
 import ColoredBtn from "../../assets/buttons/ColoredBtn";
 import EnterSvg from "../../assets/icons/enter-outline.svg";
@@ -24,33 +24,36 @@ interface props {
 
 const statusMatcher = {
   모집중: "active",
-  약속잡는중: "",
-  만남대기중: "",
+  약속잡는중: "finish",
+  만남대기중: "fix",
 };
 
 const AppointmentBox = ({ data }: props) => {
-  const { myData, setMyData } = useContext(GlobalContext);
-  const {
-    data: UnreadChatCount,
-    mutate,
-    error,
-    isValidating,
-  } = useSWR(`/chat/unread/${data.postIdx}?userIdx=${myData?.userIdx}`, getFetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: true,
-    revalidateOnMount: true,
-  });
-
+  const { myData } = useContext(GlobalContext);
+  const { data: UnreadChatCount } = useSWR(
+    // `/chat/unread/${data.postIdx}?userIdx=${myData?.userIdx}`,
+    null,
+    getFetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true,
+    }
+  );
 
   return (
     <PBox>
       <PromiseHead>
-        <PromiseImg />
         <PromiseContexts>
           <TopContext>
-            <span>{data.title}</span>
-            <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>
+            <span>
+              <span>[{data.type === "dutch" ? "같이먹자" : "사주세요"}]</span>
+              {data.title}
+            </span>
+            {/*{UnreadChatCount.number > 0 && (*/}
+            {/*  <UnreadChatSpan>{UnreadChatCount}</UnreadChatSpan>*/}
+            {/*)}*/}
           </TopContext>
           <MiddleContext>
             <MemberBtn

@@ -1,5 +1,10 @@
-import React, {useCallback,
-  useContext, useEffect, useMemo, useState} from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   PageSpinnerWrapper,
   PromisesColumn,
@@ -33,7 +38,7 @@ const Main = () => {
     (pageIndex: number) => {
       return searchInput
         ? `/post/search?page=${pageIndex}&size=${pageSize}&userIdx=${myData?.userIdx}&searchString=${searchInput}`
-        : `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=${myData?.userIdx}`;
+        : `/post/list?page=${pageIndex}&size=${pageSize}&userIdx=12`;
     },
     infiniteFetcher,
     {

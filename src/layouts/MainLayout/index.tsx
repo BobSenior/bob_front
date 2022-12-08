@@ -37,13 +37,14 @@ import GlobalContext from "../../hooks/GlobalContext";
 
 const MainLayout = () => {
   const { myData } = useContext(GlobalContext);
-  if (!myData) return <Navigate to="/login" />;
+  // if (!myData) return <Navigate to="/login" />;
   const navigate = useNavigate();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showListModal, setShowListModal] = useState(0);
   const [alarmCount, setAlarmCount] = useState(0);
   const { data: mainAlarms } = useSWR<BaseResponse<TotalNotices>>(
-    `/chat/unread/total?userIdx=${myData.userIdx}`,
+    // `/chat/unread/total?userIdx=${myData?.userIdx}`,
+    null,
     fetcher,
     {
       refreshInterval: 5000,
@@ -98,7 +99,7 @@ const MainLayout = () => {
             <button onClick={onClickAvatarBtn}>
               <img
                 className={"avatar-image"}
-                src={gravatar.url(myData.nickname, {
+                src={gravatar.url(myData?.nickname ?? "", {
                   s: "30px",
                   d: "identicon",
                 })}

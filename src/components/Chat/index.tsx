@@ -1,5 +1,5 @@
 import { ChatContainer, ChatUserDiv, ChatWrapper } from "./styles";
-import React, {memo, useContext} from "react";
+import React, { memo, useContext } from "react";
 import gravatar from "gravatar";
 import dayjsAll from "../../utils/dayjsAll";
 import { ShownChat } from "../../types/db";
@@ -9,10 +9,10 @@ interface Props {
   chatData: ShownChat;
 }
 
-
 const Chat = ({ chatData }: Props) => {
-  const { myData, setMyData } = useContext(GlobalContext);
-  const chatOwner = chatData.senderIdx === myData?.userIdx ? "Sender" : "Receiver";
+  const { myData } = useContext(GlobalContext);
+  const chatOwner =
+    chatData.senderIdx === myData?.userIdx ? "Sender" : "Receiver";
 
   return (
     <ChatWrapper

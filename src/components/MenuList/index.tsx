@@ -33,6 +33,7 @@ const MenuList = ({ setShow }: Props) => {
         fontSize={"1em"}
         onClick={() => {
           setMyData(undefined);
+          sessionStorage.clear();
         }}
       />
     </ListModalContainer>

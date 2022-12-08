@@ -71,5 +71,5 @@
     "prettier": "2.7.1",
     "react-loader-spinner": "^5.3.4"
   },
-  "proxy": "http://localhost:8080"
+  "proxy": "http://localhost:3000/signup"
 }

@@ -54,7 +54,7 @@ interface IBNR {
   receivers: number;
 }
 
-const postTypes = [
+export const postTypes = [
   [
     "같이먹자",
     "같이 밥 먹을 사람을 구해요. 모두 더치페이해요.",
@@ -113,12 +113,13 @@ const Compose = () => {
       writerIdx: myData.userIdx,
       writerPosition: postTypes[postType][3],
       title: formData.title,
-      location:
-        location +
-        "$" +
-        coords?.latitude.toString() +
-        "$" +
-        coords?.longitude.toString(),
+      location: location
+        ? location +
+          "$" +
+          coords?.latitude.toString() +
+          "$" +
+          coords?.longitude.toString()
+        : null,
       meetingAt: meetingAt,
       type: postTypes[postType][2],
       receiverNum: BNR ? BNR.receivers : null,
@@ -201,9 +202,10 @@ const Compose = () => {
   useEffect(() => {
     if (postType === 0) {
       setBNR(null);
+    } else {
+      const halfNum = Math.round(maxMember / 2);
+      setBNR({ buyers: halfNum, receivers: maxMember - halfNum });
     }
-    const halfNum = Math.round(maxMember / 2);
-    setBNR({ buyers: halfNum, receivers: maxMember - halfNum });
   }, [maxMember, postType]);
 
   return (

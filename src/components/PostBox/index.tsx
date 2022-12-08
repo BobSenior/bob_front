@@ -37,10 +37,12 @@ const PostBox = ({ data }: props) => {
   return (
     <PBox onClick={onClickShowDetails}>
       <PromiseHead>
-        <PromiseImg />
         <PromiseContexts>
           <TopContext>
-            <span>{data.title}</span>
+            <span>
+              <span>[{data.type === "dutch" ? "같이먹자" : "사주세요"}]</span>
+              {data.title}
+            </span>
             <span
               style={{ fontSize: "xx-small" }}
             >{`${data.currNum}/${data.totalNum}`}</span>
@@ -54,8 +56,7 @@ const PostBox = ({ data }: props) => {
             />
           </MiddleContext>
           <BottomContext>
-          <BottomLeftDiv>
-          </BottomLeftDiv>
+            <BottomLeftDiv></BottomLeftDiv>
             <BottomRightDiv>
               <span>대기자수: {data.waitingNum}</span>
               <span>{dayjsAll(data.writtenAt).fromNow}</span>
