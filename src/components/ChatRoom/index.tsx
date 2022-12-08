@@ -100,7 +100,7 @@ const ChatRoom = (data: { id: number }) => {
         })
         .catch((err) => console.log(err));
     },
-    [chat, textAreaRef,myData]
+    [chat, textAreaRef, myData]
   );
 
   useEffect(() => {
@@ -119,8 +119,8 @@ const ChatRoom = (data: { id: number }) => {
       console.log("parsed", sessionParses);
       postFetcher
         .post(`/stomp/record/${data.id}`, {
-            sessionId:sessionParses[6],
-            userIdx:myData?.userIdx,
+          sessionId: sessionParses[6],
+          userIdx: myData?.userIdx,
         })
         .then()
         .catch();

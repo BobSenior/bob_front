@@ -115,7 +115,7 @@ export const PBox = styled.div`
 `;
 
 export const UnreadChatSpan = styled.span`
-  background-color: rgb(255,97,74);  
+  background-color: rgb(255, 97, 74);
   border-radius: 25px;
   font-size: small;
   padding: 1px 3px;

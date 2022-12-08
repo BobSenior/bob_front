@@ -3,7 +3,7 @@ import AlarmInfoDiv from "../AlarmInfoDiv";
 import Scrollbars from "react-custom-scrollbars-2";
 import useSWR from "swr";
 import { ShownNotice } from "../../types/db";
-import React, {Dispatch, useContext} from "react";
+import React, { Dispatch, useContext } from "react";
 import { getFetcher } from "../../utils/fetchers";
 import { generateUniqueID } from "web-vitals/dist/modules/lib/generateUniqueID";
 import GlobalContext from "../../hooks/GlobalContext";
