@@ -1,18 +1,15 @@
-
 import styled from "@emotion/styled/macro";
 import { motion } from "framer-motion";
 import TextAreaAutosize from "react-textarea-autosize";
-
-
 
 export const Top = styled.header`
   position: fixed;
   display: flex;
   justify-content: space-around;
-  top:40px;
+  top: 40px;
   bottom: 0;
   width: 80%;
-  left:10%;
+  left: 10%;
   height: 60px;
   z-index: 100;
   background-color: white;
@@ -22,14 +19,14 @@ export const Top = styled.header`
 `;
 
 export const TitleWrapper = styled.label`
-    width: 80%;
+  width: 80%;
   margin-bottom: 10px;
 `;
 
 export const Title = styled.label`
   text-align: left;
   font-size: 25px;
-  font-weight:bold;
+  font-weight: bold;
   padding-top: 100px;
   & span {
     font-size: 0.9em;
@@ -42,7 +39,7 @@ export const LocationWrapper = styled.label`
   border-radius: 15px;
   flex-direction: row;
   width: 100%;
-  height:100px;
+  height: 100px;
   display: flex;
 `;
 
@@ -50,7 +47,7 @@ export const VoteSequence = styled.label`
   text-align: center;
   font-size: 22px;
   color: gray;
-  font-weight:bold;
+  font-weight: bold;
   padding-top: 10px;
   padding-bottom: 10px;
   & span {
@@ -64,15 +61,15 @@ export const BoxSection = styled.section`
   flex-direction: column;
   align-items: center;
   width: 80%;
-  left:10%;
-  border : 5px solid black;
+  left: 10%;
+  border: 2px solid black;
   border-radius: 15px;
   margin-bottom: 50px;
 `;
 
 export const Commit = styled(motion.button)`
   height: 40px;
-  width:100px;
+  min-width: 100px;
   margin-top: 20px;
   margin-bottom: 20px;
   cursor: pointer;
@@ -97,7 +94,7 @@ export const TLSection = styled.section`
     height: 100px;
   }
   width: 80%;
-  height:60px;
+  height: 60px;
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -109,7 +106,7 @@ export const MyPlaceInfoDiv = styled(motion.div)`
   display: flex;
   align-items: center;
   gap: 5px;
-  padding-left:15%;
+  padding-left: 15%;
   padding-right: 100px;
   background-color: rgba(255, 255, 255, 30%);
   border-radius: 7px;
@@ -119,9 +116,9 @@ export const MyPlaceInfoDiv = styled(motion.div)`
 
 export const MyTimeInfoDiv = styled.div`
   align-items: center;
-  padding-top:20px;
+  padding-top: 20px;
   text-align: center;
-  width:60%;
+  width: 60%;
   font-weight: bold;
   background-color: rgba(255, 255, 255, 30%);
   border-radius: 7px;
@@ -129,13 +126,13 @@ export const MyTimeInfoDiv = styled.div`
 
 export const InviteBuyerButton = styled.button`
   background-color: white;
-  width:100px;
-  border: 3px solid gray; 
+  width: 100px;
+  border: 3px solid gray;
   font-weight: bold;
   border-radius: 10px;
   color: gray;
   font-size: 15px;
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 export const MemberSection = styled.section`
@@ -143,7 +140,7 @@ export const MemberSection = styled.section`
     border-bottom: rgb(200, 200, 200) ridge 1px;
     font-size: 0.8em;
   }
-  width:100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -186,7 +183,7 @@ export const BottomButton = styled.button`
   color: white;
   border-color: #23a1bd;
   height: 50px;
-  width:40%;
+  width: 40%;
   margin-left: 5%;
   margin-right: 5%;
   cursor: pointer;
@@ -212,16 +209,16 @@ export const MakeVoteButton = styled.button`
 export const UserButtonWrapper = styled.label`
   display: flex;
   flex-direction: row;
-`
+`;
 
 export const KickButton = styled.button`
   background-color: red;
-  
+
   width: 20px;
   height: 20px;
   border-radius: 8px;
   margin-left: 5px;
-`
+`;
 
 export const AddButton = styled.button`
   background-color: #23a1bd;
@@ -233,22 +230,22 @@ export const AddButton = styled.button`
 `;
 
 export const VoteRecordSection = styled.section`
-  width:100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 export const VoteSection = styled.section`
-  width:90%;
-  margin-left:5%;
-  display:flex;
+  width: 90%;
+  margin-left: 5%;
+  display: flex;
   flex-direction: column;
   background-color: navajowhite;
   border-radius: 5px;
 `;
 
 export const PlusButton = styled.button`
- border-radius: 100px;
+  border-radius: 100px;
   margin-top: 10px;
   width: 30px;
   height: 30px;
@@ -260,7 +257,7 @@ export const PlusButton = styled.button`
 `;
 
 export const RecordLabel = styled.label`
-display: flex;
+  display: flex;
   flex-direction: row;
   margin-left: 10px;
   margin-bottom: 8px;
@@ -269,7 +266,7 @@ display: flex;
 
 export const RecordInputBox = styled.input`
   margin-left: 10px;
-  width: 60%;
+  min-width: 60px;
   height: 30px;
   border: gray solid 1px;
   border-radius: 3px;
@@ -283,8 +280,8 @@ export const FixLabel = styled.label`
 `;
 
 export const PlaceButton = styled.button`
-  margin-left:5%;
-  margin-right:5%;
+  margin-left: 5%;
+  margin-right: 5%;
   width: 40%;
   height: 30px;
   border-radius: 15px;
@@ -293,8 +290,8 @@ export const PlaceButton = styled.button`
 export const RemainsButton = styled.button`
   width: 40%;
   border-radius: 15px;
-  margin-left:5%;
-  margin-right:5%; 
+  margin-left: 5%;
+  margin-right: 5%;
 `;
 
 export const SpaceInput = styled.label`
@@ -309,10 +306,10 @@ export const SpaceInput = styled.label`
 
 export const LAMButtonVote = styled(motion.div)`
   border-radius: 3px;
-  margin-left:8%;
+  margin-left: 8%;
   margin-top: 15px;
   margin-bottom: 20px;
-  width: 80%;
+  width: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;

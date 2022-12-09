@@ -721,7 +721,7 @@ const AppointmentSpace = () => {
                 {voteMode ? (
                   voteRecordSpan
                 ) : (
-                  <label style={{ width: "100%" }}>
+                  <label>
                     <label
                       style={{
                         fontWeight: "bold",

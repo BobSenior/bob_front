@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const Progress = styled.div`
-  width: 100%;
+  //width: 100%;
   height: 15px;
   background-color: gray;
   border-radius: 10px;
@@ -16,7 +16,7 @@ export const Dealt = styled.div<{ dealt: number }>`
 import { motion } from "framer-motion";
 
 export const VoteSpan = styled.span`
-  padding-left: 300px;
+  padding-left: 200px;
   font-size: xx-small;
   color: rgb(50, 50, 50);
 `;
