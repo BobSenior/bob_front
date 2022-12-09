@@ -260,11 +260,14 @@ const PostDetailsBox = ({ postIdx, type }: props) => {
                 </PlaceInfoDiv>
                 <TimeInfoDiv>
                   {postDetailData.meetingAt && (
-                    <span>
-                      {dayjsAll(postDetailData.meetingAt).appointmentDate() +
-                        " " +
-                        dayjsAll(postDetailData.meetingAt).appointmentTime()}
-                    </span>
+                    <>
+                      <span>
+                        {dayjsAll(postDetailData.meetingAt).appointmentDate()}
+                      </span>
+                      <span>
+                        {dayjsAll(postDetailData.meetingAt).appointmentTime()}
+                      </span>
+                    </>
                   )}
                 </TimeInfoDiv>
               </>

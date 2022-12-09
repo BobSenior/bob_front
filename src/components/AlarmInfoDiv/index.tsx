@@ -31,7 +31,7 @@ const AlarmInfos: { [type: string]: AlarmType } = {
     url: () => `/main/plans/waiting`,
     postDetail: (postIdx) => `#${postIdx}`,
   },
-  PAIAccept: {
+  accept: {
     svg: HappyFaceSvg,
     context: "새 약속에 참가했습니다.",
     url: (postIdx) => `/main/appointment/${postIdx}`,
@@ -55,7 +55,6 @@ const AlarmInfoDiv = ({ data }: Props) => {
   return (
     <NavLink
       to={AlarmInfos[data.type].url(data.postIdx)}
-      end={true}
       style={{ textDecoration: "none", color: "black" }}
     >
       <AlarmInfoWrapper>

@@ -11,12 +11,12 @@ import GlobalContext from "../../hooks/GlobalContext";
 const ListAlarm = (props: {
   setShow: Dispatch<React.SetStateAction<number>>;
 }) => {
-  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  const myData = JSON.parse(sessionStorage.getItem("myData") ?? "");
   const { data: alarms } = useSWR<ShownNotice[]>(
     `/notice/list?userIdx=${myData?.userIdx}`,
     getFetcher
   );
-
+  console.log(alarms);
   return (
     <ListModalContainer
       initial={{ opacity: 0, scale: 0, y: -150, x: 50 }}

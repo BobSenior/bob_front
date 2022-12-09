@@ -31,7 +31,7 @@ const pageParams = {
 const pageSize = 10;
 
 const Appointments = () => {
-  const myData = JSON.parse(sessionStorage.getItem("myData")??"")
+  const myData = JSON.parse(sessionStorage.getItem("myData") ?? "");
   const [numOfColumns, setNumOfColumns] = useState<number>(
     countColumns({ totalWidth: window.innerWidth })
   );
@@ -44,7 +44,7 @@ const Appointments = () => {
     setSize: PASetSize,
   } = useSWRInfinite<AppointmentHeadDTO[]>(
     (pageIndex: number) => {
-      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=1`;
+      return `/appointment/ongoing?size=${pageSize}&page=${pageIndex}&userIdx=${myData.userIdx}`;
     },
     infiniteFetcher,
     {

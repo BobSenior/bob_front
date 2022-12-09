@@ -533,10 +533,10 @@ const AppointmentSpace = () => {
                 whileTap={{ scale: 0.85 }}
               >
                 <PickerImg src={PickerSvg} />
-                <span>
+                <span style={{ width: "max-content" }}>
                   {appointment.result.location
                     ? appointment.result.location
-                    : "아직 정해지지 않았어요!"}
+                    : "미정"}
                 </span>
               </MyPlaceInfoDiv>
               <MyTimeInfoDiv>
@@ -545,7 +545,7 @@ const AppointmentSpace = () => {
                     ? dayjsAll(appointment.result.meetingAt).appointmentDate() +
                       " " +
                       dayjsAll(appointment.result.meetingAt).appointmentTime()
-                    : "아직 정해지지 않았어요!"}
+                    : "미정"}
                 </span>
               </MyTimeInfoDiv>
             </LocationWrapper>
